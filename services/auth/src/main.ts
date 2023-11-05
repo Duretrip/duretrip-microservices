@@ -28,20 +28,6 @@ async function bootstrap() {
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true
     });
-    const swaggerConfig = new DocumentBuilder()
-      .setTitle(apiConfig.name)
-      .setDescription(apiConfig.description)
-      .setVersion(apiConfig.version)
-      .addBearerAuth()
-      .build();
-    const customOptions: SwaggerCustomOptions = {
-      swaggerOptions: {
-        persistAuthorization: true
-      },
-      customSiteTitle: apiConfig.description
-    };
-    const document = SwaggerModule.createDocument(app, swaggerConfig);
-    SwaggerModule.setup('api-docs', app, document, customOptions);
   } else {
     const whitelist = [apiConfig.get<string>('frontendUrl')];
     app.enableCors({
@@ -55,6 +41,20 @@ async function bootstrap() {
       credentials: true
     });
   }
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle(apiConfig.name)
+    .setDescription(apiConfig.description)
+    .setVersion(apiConfig.version)
+    .addBearerAuth()
+    .build();
+  const customOptions: SwaggerCustomOptions = {
+    swaggerOptions: {
+      persistAuthorization: true
+    },
+    customSiteTitle: apiConfig.description
+  };
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api-docs', app, document, customOptions);
   useContainer(app.select(AppModule), {
     fallbackOnErrors: true
   });
