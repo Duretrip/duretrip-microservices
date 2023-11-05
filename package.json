@@ -1,0 +1,11 @@
+{
+    "name": "durretrip",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "bash -c ./start.sh"
+    },
+    "dependencies": {
+      "your-dependencies-here": "^1.0.0"
+    }
+  }
+  

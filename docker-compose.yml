@@ -1,0 +1,47 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - mynetwork
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
+    command: --default-authentication-plugin=mysql_native_password
+
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: rabbitmq_container
+    ports:
+      - "5672:5672" # RabbitMQ default port
+      - "15672:15672" # RabbitMQ management plugin
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  redis1:
+    image: "redis:latest"
+    container_name: redis1_container
+    ports:
+      - "6381:6379"
+    environment:
+      - REDIS_PASSWORD=password
+
+  redis2:
+    image: "redis:latest"
+    container_name: redis2_container
+    ports:
+      - "6380:6379" # Map to a different port
+    environment:
+      - REDIS_PASSWORD=redis_password_2
+
+volumes:
+  mysql_data:
+
+networks:
+  mynetwork:

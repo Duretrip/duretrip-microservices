@@ -1,0 +1,11 @@
+db:
+  host: 'localhost'
+  type: 'mysql'
+  port: 3306
+  username: 'root'
+  password: 'Rise@2023'
+  synchronize: false
+  database: 'early_career'
+
+jwt:
+  secret: 'iamasecret'

@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: auth_new
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
