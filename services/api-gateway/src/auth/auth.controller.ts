@@ -6,7 +6,7 @@ function generateUniqueId() {
   return uuidv4();
 }
 @Controller()
-export class GatewayController {
+export class AuthController {
   constructor(private readonly rabbitMQService: RabbitmqService) {}
 
   @Post('/login')
