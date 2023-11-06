@@ -8,10 +8,11 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install app dependencies
-RUN npm install --force
+RUN npm install
+RUN npm install -g pm2
 
 # Copy the rest of your application code to the container
 COPY . .
 
-# Command to run the application (adjust as needed)
-CMD ["npm", "start"]
+# Use pm2 to start the application from package.json
+CMD ["pm2-runtime", "npm", "--", "start"]

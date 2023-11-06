@@ -1,5 +1,16 @@
 version: '3'
 services:
+  postgres:
+    image: postgres:16.0-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - boilerplate-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: Rise@2023
+      POSTGRES_DB: boilerplate
+      
   mysql:
     image: mysql:latest
     container_name: mysql_container
@@ -40,8 +51,17 @@ services:
     environment:
       - REDIS_PASSWORD=redis_password_2
 
+  maildev:
+    build:
+      context: .
+      dockerfile: maildev.Dockerfile
+    ports:
+      - 1080:1080
+      - 1025:1025
+
 volumes:
   mysql_data:
-
+  boilerplate-db:
+  
 networks:
   mynetwork:

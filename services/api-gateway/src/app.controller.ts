@@ -26,8 +26,10 @@ export class AppController {
         map((axiosResponse) => axiosResponse.data)
       );
     } catch (error) {
+      console.log('error');
+      
       // Handle error
-      return 'Error: ' + error.message;
+      // throw ('Error: ' + error.message);
     }
   }
 
