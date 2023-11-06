@@ -23,9 +23,9 @@ async function bootstrap() {
   //     exclude: ['/'],
   //   },
   // );
-  app.enableVersioning({
-    type: VersioningType.URI,
-  });
+  // app.enableVersioning({
+  //   type: VersioningType.URI,
+  // });
   app.useGlobalPipes(new ValidationPipe(validationOptions));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
