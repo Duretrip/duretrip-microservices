@@ -28,8 +28,8 @@ let HttpExceptionFilter = class HttpExceptionFilter {
         }
     }
 };
-HttpExceptionFilter = __decorate([
+exports.HttpExceptionFilter = HttpExceptionFilter;
+exports.HttpExceptionFilter = HttpExceptionFilter = __decorate([
     (0, common_1.Catch)(common_1.HttpException)
 ], HttpExceptionFilter);
-exports.HttpExceptionFilter = HttpExceptionFilter;
 //# sourceMappingURL=exception.interceptor.js.map

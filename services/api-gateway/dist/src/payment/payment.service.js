@@ -11,10 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentService = void 0;
-const constants_1 = require("@dure-trips/shared/constants");
+const constants_1 = require("../../libs/shared/src/constants");
 const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
 let PaymentService = class PaymentService {
@@ -25,10 +24,10 @@ let PaymentService = class PaymentService {
         return this.paymentClient.send(constants_1.EventPatterns.process_payment, data);
     }
 };
-PaymentService = __decorate([
+exports.PaymentService = PaymentService;
+exports.PaymentService = PaymentService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.TokenInjections.PAYMENT_MICROSERVICE)),
-    __metadata("design:paramtypes", [typeof (_a = typeof microservices_1.ClientProxy !== "undefined" && microservices_1.ClientProxy) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [microservices_1.ClientProxy])
 ], PaymentService);
-exports.PaymentService = PaymentService;
 //# sourceMappingURL=payment.service.js.map

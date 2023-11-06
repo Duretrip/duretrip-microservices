@@ -20,15 +20,15 @@ let AppController = class AppController {
         return this.appService.getData();
     }
 };
+exports.AppController = AppController;
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getData", null);
-AppController = __decorate([
+exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])
 ], AppController);
-exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map

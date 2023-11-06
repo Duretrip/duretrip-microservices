@@ -37,12 +37,12 @@ let KafkaModule = KafkaModule_1 = class KafkaModule {
         };
     }
 };
-KafkaModule = KafkaModule_1 = __decorate([
+exports.KafkaModule = KafkaModule;
+exports.KafkaModule = KafkaModule = KafkaModule_1 = __decorate([
     (0, common_1.Module)({
         imports: [],
         providers: [kafka_service_1.KafkaService],
         exports: [kafka_service_1.KafkaService],
     })
 ], KafkaModule);
-exports.KafkaModule = KafkaModule;
 //# sourceMappingURL=kafka.module.js.map

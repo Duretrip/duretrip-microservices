@@ -11,10 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
-const constants_1 = require("@dure-trips/shared/constants");
+const constants_1 = require("../../libs/shared/src/constants");
 const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
 let AuthService = class AuthService {
@@ -40,10 +39,10 @@ let AuthService = class AuthService {
         return this.authClient.send(constants_1.EventPatterns.forgot_password, forgotPasswordDto);
     }
 };
-AuthService = __decorate([
+exports.AuthService = AuthService;
+exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.TokenInjections.AUTH_MICROSERVICE)),
-    __metadata("design:paramtypes", [typeof (_a = typeof microservices_1.ClientProxy !== "undefined" && microservices_1.ClientProxy) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [microservices_1.ClientProxy])
 ], AuthService);
-exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

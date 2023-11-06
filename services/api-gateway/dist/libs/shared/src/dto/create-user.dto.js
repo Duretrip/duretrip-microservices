@@ -15,6 +15,7 @@ const class_validator_1 = require("class-validator");
 const decorators_1 = require("../decorators");
 class CreateUserDto {
 }
+exports.CreateUserDto = CreateUserDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -56,5 +57,4 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "email", void 0);
-exports.CreateUserDto = CreateUserDto;
 //# sourceMappingURL=create-user.dto.js.map

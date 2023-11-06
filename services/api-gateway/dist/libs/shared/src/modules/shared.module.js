@@ -11,12 +11,12 @@ const common_1 = require("@nestjs/common");
 const shared_service_1 = require("../services/shared.service");
 let SharedModule = class SharedModule {
 };
-SharedModule = __decorate([
+exports.SharedModule = SharedModule;
+exports.SharedModule = SharedModule = __decorate([
     (0, common_1.Module)({
         imports: [],
         providers: [shared_service_1.SharedService],
         exports: [shared_service_1.SharedService],
     })
 ], SharedModule);
-exports.SharedModule = SharedModule;
 //# sourceMappingURL=shared.module.js.map

@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
-    "outDir": "../../dist/apps/api-gateway"
+    "declaration": true,
+    "outDir": "../../dist/libs/shared"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/mail/templates/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

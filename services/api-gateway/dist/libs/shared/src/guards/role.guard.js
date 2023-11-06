@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoleGuard = void 0;
 const common_1 = require("@nestjs/common");
@@ -27,12 +26,12 @@ let RoleGuard = class RoleGuard {
             return true;
         }
         const { user } = context.switchToHttp().getRequest();
-        return requiredRoles.some((role) => { var _a; return (_a = user.roles) === null || _a === void 0 ? void 0 : _a.includes(role); });
+        return requiredRoles.some((role) => user.roles?.includes(role));
     }
 };
-RoleGuard = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof core_1.Reflector !== "undefined" && core_1.Reflector) === "function" ? _a : Object])
-], RoleGuard);
 exports.RoleGuard = RoleGuard;
+exports.RoleGuard = RoleGuard = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [core_1.Reflector])
+], RoleGuard);
 //# sourceMappingURL=role.guard.js.map

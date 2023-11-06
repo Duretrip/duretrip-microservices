@@ -14,6 +14,7 @@ const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class ExistingUserDTO {
 }
+exports.ExistingUserDTO = ExistingUserDTO;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEmail)(),
@@ -26,5 +27,4 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ExistingUserDTO.prototype, "password", void 0);
-exports.ExistingUserDTO = ExistingUserDTO;
 //# sourceMappingURL=existing-user.dto.js.map

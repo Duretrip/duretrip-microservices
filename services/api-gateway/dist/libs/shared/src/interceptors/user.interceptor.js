@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserInterceptor = void 0;
 const common_1 = require("@nestjs/common");
@@ -42,10 +41,10 @@ let UserInterceptor = class UserInterceptor {
         }), (0, rxjs_1.catchError)(() => next.handle()));
     }
 };
-UserInterceptor = __decorate([
+exports.UserInterceptor = UserInterceptor;
+exports.UserInterceptor = UserInterceptor = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.TokenInjections.AUTH_MICROSERVICE)),
-    __metadata("design:paramtypes", [typeof (_a = typeof microservices_1.ClientProxy !== "undefined" && microservices_1.ClientProxy) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [microservices_1.ClientProxy])
 ], UserInterceptor);
-exports.UserInterceptor = UserInterceptor;
 //# sourceMappingURL=user.interceptor.js.map

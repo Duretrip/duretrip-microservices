@@ -10,8 +10,8 @@ exports.SharedService = void 0;
 const common_1 = require("@nestjs/common");
 let SharedService = class SharedService {
 };
-SharedService = __decorate([
+exports.SharedService = SharedService;
+exports.SharedService = SharedService = __decorate([
     (0, common_1.Injectable)()
 ], SharedService);
-exports.SharedService = SharedService;
 //# sourceMappingURL=shared.service.js.map

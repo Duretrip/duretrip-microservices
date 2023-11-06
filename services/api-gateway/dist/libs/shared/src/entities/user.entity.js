@@ -18,6 +18,7 @@ class UserEntity {
         Object.assign(this, data);
     }
 }
+exports.UserEntity = UserEntity;
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Number)
@@ -63,5 +64,4 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Date)
 ], UserEntity.prototype, "updatedAt", void 0);
-exports.UserEntity = UserEntity;
 //# sourceMappingURL=user.entity.js.map

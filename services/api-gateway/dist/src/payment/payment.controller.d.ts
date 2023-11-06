@@ -4,5 +4,5 @@ import { UserRequest } from '@dure-trips/shared/interfaces';
 export declare class PaymentController {
     private readonly paymentService;
     constructor(paymentService: PaymentService);
-    makePayment(req: UserRequest, makePaymetDto: MakePaymentDto): any;
+    makePayment(req: UserRequest, makePaymetDto: MakePaymentDto): import("rxjs").Observable<any>;
 }

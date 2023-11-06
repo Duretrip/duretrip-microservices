@@ -8,5 +8,5 @@ export declare class PaymentService {
         firstName: string;
         lastName: string;
         email: string;
-    }): any;
+    }): import("rxjs").Observable<any>;
 }

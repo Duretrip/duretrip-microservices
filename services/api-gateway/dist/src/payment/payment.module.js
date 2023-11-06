@@ -10,11 +10,12 @@ exports.PaymentModule = void 0;
 const common_1 = require("@nestjs/common");
 const payment_controller_1 = require("./payment.controller");
 const payment_service_1 = require("./payment.service");
-const constants_1 = require("@dure-trips/shared/constants");
-const rabbitmq_module_1 = require("@dure-trips/shared/modules/rabbitmq.module");
+const constants_1 = require("../../libs/shared/src/constants");
+const rabbitmq_module_1 = require("../../libs/shared/src/modules/rabbitmq.module");
 let PaymentModule = class PaymentModule {
 };
-PaymentModule = __decorate([
+exports.PaymentModule = PaymentModule;
+exports.PaymentModule = PaymentModule = __decorate([
     (0, common_1.Module)({
         imports: [
             rabbitmq_module_1.RabbitmqModule.register({
@@ -30,5 +31,4 @@ PaymentModule = __decorate([
         providers: [payment_service_1.PaymentService],
     })
 ], PaymentModule);
-exports.PaymentModule = PaymentModule;
 //# sourceMappingURL=payment.module.js.map

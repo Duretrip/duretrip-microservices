@@ -15,7 +15,8 @@ const auth_module_1 = require("./auth/auth.module");
 const payment_module_1 = require("./payment/payment.module");
 let AppModule = class AppModule {
 };
-AppModule = __decorate([
+exports.AppModule = AppModule;
+exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             auth_module_1.AuthModule,
@@ -29,5 +30,4 @@ AppModule = __decorate([
         providers: [app_service_1.AppService],
     })
 ], AppModule);
-exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

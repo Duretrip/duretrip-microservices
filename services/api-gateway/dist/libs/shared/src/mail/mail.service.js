@@ -12,13 +12,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var MailService_1;
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MailService = void 0;
 const common_1 = require("@nestjs/common");
-const constants_1 = require("@dure-trips/shared/constants");
-const bull_1 = require("bull");
-const bull_2 = require("@nestjs/bull");
+const constants_1 = require("../constants");
+const bull_1 = require("@nestjs/bull");
 let MailService = MailService_1 = class MailService {
     constructor(_mailQueue) {
         this._mailQueue = _mailQueue;
@@ -47,10 +45,10 @@ let MailService = MailService_1 = class MailService {
         }
     }
 };
-MailService = MailService_1 = __decorate([
-    (0, common_1.Injectable)(),
-    __param(0, (0, bull_2.InjectQueue)(constants_1.MAIL_QUEUE)),
-    __metadata("design:paramtypes", [typeof (_a = typeof bull_1.Queue !== "undefined" && bull_1.Queue) === "function" ? _a : Object])
-], MailService);
 exports.MailService = MailService;
+exports.MailService = MailService = MailService_1 = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, bull_1.InjectQueue)(constants_1.MAIL_QUEUE)),
+    __metadata("design:paramtypes", [Object])
+], MailService);
 //# sourceMappingURL=mail.service.js.map

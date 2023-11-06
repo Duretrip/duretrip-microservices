@@ -5,10 +5,10 @@ var Role;
 (function (Role) {
     Role["ADMIN"] = "admin";
     Role["USER"] = "user";
-})(Role = exports.Role || (exports.Role = {}));
+})(Role || (exports.Role = Role = {}));
 var UserStatusEnum;
 (function (UserStatusEnum) {
     UserStatusEnum["ACTIVE"] = "active";
     UserStatusEnum["INACTIVE"] = "inactive";
-})(UserStatusEnum = exports.UserStatusEnum || (exports.UserStatusEnum = {}));
+})(UserStatusEnum || (exports.UserStatusEnum = UserStatusEnum = {}));
 //# sourceMappingURL=user.ennum.js.map

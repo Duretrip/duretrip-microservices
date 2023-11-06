@@ -9,15 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var MailProcessor_1;
-var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MailProcessor = void 0;
 const common_1 = require("@nestjs/common");
-const bull_1 = require("bull");
-const bull_2 = require("@nestjs/bull");
+const bull_1 = require("@nestjs/bull");
 const mailer_1 = require("@nestjs-modules/mailer");
 const config_1 = require("@nestjs/config");
-const constants_1 = require("@dure-trips/shared/constants");
+const constants_1 = require("../constants");
 let MailProcessor = MailProcessor_1 = class MailProcessor {
     constructor(_mailerService, _configService) {
         this._mailerService = _mailerService;
@@ -70,40 +68,41 @@ let MailProcessor = MailProcessor_1 = class MailProcessor {
         }
     }
 };
+exports.MailProcessor = MailProcessor;
 __decorate([
-    (0, bull_2.OnQueueActive)(),
+    (0, bull_1.OnQueueActive)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof bull_1.Job !== "undefined" && bull_1.Job) === "function" ? _c : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], MailProcessor.prototype, "onActive", null);
 __decorate([
-    (0, bull_2.OnQueueCompleted)(),
+    (0, bull_1.OnQueueCompleted)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_d = typeof bull_1.Job !== "undefined" && bull_1.Job) === "function" ? _d : Object, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], MailProcessor.prototype, "onComplete", null);
 __decorate([
-    (0, bull_2.OnQueueFailed)(),
+    (0, bull_1.OnQueueFailed)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_e = typeof bull_1.Job !== "undefined" && bull_1.Job) === "function" ? _e : Object, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], MailProcessor.prototype, "onError", null);
 __decorate([
-    (0, bull_2.Process)(constants_1.CONFIRM_REGISTRATION),
+    (0, bull_1.Process)(constants_1.CONFIRM_REGISTRATION),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_f = typeof bull_1.Job !== "undefined" && bull_1.Job) === "function" ? _f : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MailProcessor.prototype, "confirmRegistration", null);
 __decorate([
-    (0, bull_2.Process)(constants_1.FORGOT_PASSWORD),
+    (0, bull_1.Process)(constants_1.FORGOT_PASSWORD),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_g = typeof bull_1.Job !== "undefined" && bull_1.Job) === "function" ? _g : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MailProcessor.prototype, "forgotPassword", null);
-MailProcessor = MailProcessor_1 = __decorate([
+exports.MailProcessor = MailProcessor = MailProcessor_1 = __decorate([
     (0, common_1.Injectable)(),
-    (0, bull_2.Processor)(constants_1.MAIL_QUEUE),
-    __metadata("design:paramtypes", [typeof (_a = typeof mailer_1.MailerService !== "undefined" && mailer_1.MailerService) === "function" ? _a : Object, typeof (_b = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _b : Object])
+    (0, bull_1.Processor)(constants_1.MAIL_QUEUE),
+    __metadata("design:paramtypes", [mailer_1.MailerService,
+        config_1.ConfigService])
 ], MailProcessor);
-exports.MailProcessor = MailProcessor;
 //# sourceMappingURL=mail.processor.js.map

@@ -2,7 +2,7 @@ import { TokenInjections, EventPatterns } from '@dure-trips/shared/constants';
 import { CreateUserDto, ExistingUserDTO } from '@dure-trips/shared/dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ForgetPasswordDto } from 'apps/auth-microservice/src/dtos/forget-password.dto';
+import { ForgetPasswordDto } from './dtos/forget-password.dto';
 
 @Injectable()
 export class AuthService {

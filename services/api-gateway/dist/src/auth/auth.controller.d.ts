@@ -1,12 +1,12 @@
 import { AuthService } from './auth.service';
 import { CreateUserDto, ExistingUserDTO } from '@dure-trips/shared/dto';
-import { ForgetPasswordDto } from 'apps/auth-microservice/src/dtos/forget-password.dto';
+import { ForgetPasswordDto } from './dtos/forget-password.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    createUser(createUserDto: CreateUserDto): any;
-    login(existingUserDTO: ExistingUserDTO): Promise<any>;
-    getAllUsers(): any;
-    findOne(id: number): Promise<any>;
-    forgotPassword(forgetPasswordDto: ForgetPasswordDto): any;
+    createUser(createUserDto: CreateUserDto): import("rxjs").Observable<any>;
+    login(existingUserDTO: ExistingUserDTO): Promise<import("rxjs").Observable<any>>;
+    getAllUsers(): import("rxjs").Observable<any>;
+    findOne(id: number): Promise<import("rxjs").Observable<any>>;
+    forgotPassword(forgetPasswordDto: ForgetPasswordDto): import("rxjs").Observable<any>;
 }

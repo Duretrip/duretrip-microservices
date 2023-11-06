@@ -25,8 +25,8 @@ let KafkaService = class KafkaService {
         };
     }
 };
-KafkaService = __decorate([
+exports.KafkaService = KafkaService;
+exports.KafkaService = KafkaService = __decorate([
     (0, common_1.Injectable)()
 ], KafkaService);
-exports.KafkaService = KafkaService;
 //# sourceMappingURL=kafka.service.js.map

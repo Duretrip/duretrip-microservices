@@ -71,7 +71,8 @@ let RabbitmqModule = RabbitmqModule_1 = class RabbitmqModule {
         };
     }
 };
-RabbitmqModule = RabbitmqModule_1 = __decorate([
+exports.RabbitmqModule = RabbitmqModule;
+exports.RabbitmqModule = RabbitmqModule = RabbitmqModule_1 = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({
@@ -83,5 +84,4 @@ RabbitmqModule = RabbitmqModule_1 = __decorate([
         exports: [rabbitmq_service_1.RabbitmqService],
     })
 ], RabbitmqModule);
-exports.RabbitmqModule = RabbitmqModule;
 //# sourceMappingURL=rabbitmq.module.js.map

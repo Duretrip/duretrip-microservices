@@ -10,12 +10,13 @@ exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
-const constants_1 = require("@dure-trips/shared/constants");
-const rabbitmq_module_1 = require("@dure-trips/shared/modules/rabbitmq.module");
-const mail_1 = require("@dure-trips/shared/mail");
+const constants_1 = require("../../libs/shared/src/constants");
+const rabbitmq_module_1 = require("../../libs/shared/src/modules/rabbitmq.module");
+const mail_1 = require("../../libs/shared/src/mail");
 let AuthModule = class AuthModule {
 };
-AuthModule = __decorate([
+exports.AuthModule = AuthModule;
+exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
             rabbitmq_module_1.RabbitmqModule.register({
@@ -28,5 +29,4 @@ AuthModule = __decorate([
         providers: [auth_service_1.AuthService],
     })
 ], AuthModule);
-exports.AuthModule = AuthModule;
 //# sourceMappingURL=auth.module.js.map

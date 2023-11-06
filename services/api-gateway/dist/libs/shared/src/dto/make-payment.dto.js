@@ -14,11 +14,11 @@ const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class MakePaymentDto {
 }
+exports.MakePaymentDto = MakePaymentDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Number)
 ], MakePaymentDto.prototype, "amount", void 0);
-exports.MakePaymentDto = MakePaymentDto;
 //# sourceMappingURL=make-payment.dto.js.map

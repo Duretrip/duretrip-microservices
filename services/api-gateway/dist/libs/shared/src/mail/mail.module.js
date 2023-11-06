@@ -12,13 +12,14 @@ const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
 const config_1 = require("@nestjs/config");
 const bull_1 = require("@nestjs/bull");
-const constants_1 = require("@dure-trips/shared/constants");
-const modules_1 = require("@dure-trips/shared/modules");
+const constants_1 = require("../constants");
+const modules_1 = require("../modules");
 const mail_service_1 = require("./mail.service");
 const mail_processor_1 = require("./mail.processor");
 let MailModule = class MailModule {
 };
-MailModule = __decorate([
+exports.MailModule = MailModule;
+exports.MailModule = MailModule = __decorate([
     (0, common_1.Module)({
         imports: [
             modules_1.RabbitmqModule,
@@ -71,5 +72,4 @@ MailModule = __decorate([
         exports: [mail_service_1.MailService],
     })
 ], MailModule);
-exports.MailModule = MailModule;
 //# sourceMappingURL=mail.module.js.map

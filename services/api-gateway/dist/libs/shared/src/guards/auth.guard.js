@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
@@ -46,10 +45,10 @@ let AuthGuard = class AuthGuard {
         }));
     }
 };
-AuthGuard = __decorate([
+exports.AuthGuard = AuthGuard;
+exports.AuthGuard = AuthGuard = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.TokenInjections.AUTH_MICROSERVICE)),
-    __metadata("design:paramtypes", [typeof (_a = typeof microservices_1.ClientProxy !== "undefined" && microservices_1.ClientProxy) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [microservices_1.ClientProxy])
 ], AuthGuard);
-exports.AuthGuard = AuthGuard;
 //# sourceMappingURL=auth.guard.js.map

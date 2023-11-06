@@ -16,11 +16,11 @@ let AuthModule = class AuthModule {
         consumer.apply(cookieParser()).forRoutes('*');
     }
 };
-AuthModule = __decorate([
+exports.AuthModule = AuthModule;
+exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [rmq_module_1.RmqModule.register({ name: services_1.AUTH_SERVICE })],
         exports: [rmq_module_1.RmqModule],
     })
 ], AuthModule);
-exports.AuthModule = AuthModule;
 //# sourceMappingURL=auth.module.js.map

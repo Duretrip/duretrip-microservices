@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JwtAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
@@ -35,14 +34,13 @@ let JwtAuthGuard = class JwtAuthGuard {
         }));
     }
     getAuthentication(context) {
-        var _a;
         let authentication;
         if (context.getType() === 'rpc') {
             authentication = context.switchToRpc().getData().Authentication;
         }
         else if (context.getType() === 'http') {
-            authentication = (_a = context.switchToHttp().getRequest()
-                .cookies) === null || _a === void 0 ? void 0 : _a.Authentication;
+            authentication = context.switchToHttp().getRequest()
+                .cookies?.Authentication;
         }
         if (!authentication) {
             throw new common_1.UnauthorizedException('No value was provided for Authentication');
@@ -58,10 +56,10 @@ let JwtAuthGuard = class JwtAuthGuard {
         }
     }
 };
-JwtAuthGuard = __decorate([
+exports.JwtAuthGuard = JwtAuthGuard;
+exports.JwtAuthGuard = JwtAuthGuard = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.TokenInjections.AUTH_MICROSERVICE)),
-    __metadata("design:paramtypes", [typeof (_a = typeof microservices_1.ClientProxy !== "undefined" && microservices_1.ClientProxy) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [microservices_1.ClientProxy])
 ], JwtAuthGuard);
-exports.JwtAuthGuard = JwtAuthGuard;
 //# sourceMappingURL=jwt-auth.guard.js.map
