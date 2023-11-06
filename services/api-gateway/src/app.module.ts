@@ -1,21 +1,12 @@
 import { Module } from '@nestjs/common';
-
 import { AppController } from './app.controller';
-import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { PaymentModule } from './payment/payment.module';
+import { GatewayModule } from './gateway/gateway.module';
+import { RabbitmqService } from './rabbitmq/rabbitmq.service';
 
 @Module({
-  imports: [
-    AuthModule,
-    PaymentModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: './.env',
-    }),
-  ],
+  imports: [GatewayModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RabbitmqService],
 })
 export class AppModule {}
