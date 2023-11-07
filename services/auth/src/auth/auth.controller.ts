@@ -10,6 +10,7 @@ import {
   Patch,
   Delete,
   SerializeOptions,
+  UseFilters,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -24,12 +25,16 @@ import { LoginResponseType } from './types/login-response.type';
 import { User } from '../users/entities/user.entity';
 import { NullableType } from '../utils/types/nullable.type';
 import { RabbitmqService } from '../rabbitmq/rabbitmq.service';
+import { AllExceptionsFilter } from 'src/allExceptionsFilter';
+import { error } from 'console';
 
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
   version: '1',
 })
+
+@UseFilters(AllExceptionsFilter)
 export class AuthController {
   constructor(
     private readonly service: AuthService,
@@ -41,13 +46,20 @@ export class AuthController {
           const payload = message.payload;
           // Implement your login logic here
           // Send a response to the API Gateway
-          // const response = await this.service.register(payload)
-          const response = "weldone bro"
-          await this.rabbitMQService.publishMessage('api-gateway-queue', {
-            correlationId: message.correlationId,
-            action: 'user_created',
-            response,
-          });
+          this.service.register(payload)
+            .then(response => {
+              this.rabbitMQService.publishMessage('api-gateway-queue', {
+                correlationId: message?.correlationId,
+                action: 'user_created',
+                response,
+              });
+            }).catch(error => {
+              this.rabbitMQService.publishMessage('api-gateway-queue', {
+                correlationId: message?.correlationId,
+                action: 'user_creation_error',
+                message: error.message,
+              });
+            })
         }
       })
     } catch (error) {
@@ -68,9 +80,8 @@ export class AuthController {
 
   @Post('email/register')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<string> {
-    await this.service.register(createUserDto);
-    return 'message';
+  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<void> {
+    return await this.service.register(createUserDto);
   }
 
   @Post('email/confirm')

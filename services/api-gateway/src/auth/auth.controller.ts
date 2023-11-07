@@ -7,17 +7,14 @@ function generateUniqueId() {
 }
 @Controller()
 export class AuthController {
-  constructor(private readonly rabbitMQService: RabbitmqService) {
-    try {
-      this.rabbitMQService.consumeMessages('api-gateway-queue', async (message) => {
-        if (message.action === 'user_created') {
-          console.log({ messageFomAuth: message });
-        }
-      })
-    } catch (error) {
-      console.log({ error: JSON.stringify(error) });
-    }
-  }
+  constructor(private readonly rabbitMQService: RabbitmqService) { }
+
+  // {
+  //   email:'',
+  //   password:'',
+  //   firstName: '',
+  //   lastName: ''
+  // }
 
   @Post('email/register')
   async login(@Body() credentials: any, @Req() req, @Res() res) {
@@ -29,28 +26,21 @@ export class AuthController {
       payload: credentials,
       correlationId,
     };
-    console.log({ message });
-
 
     // Publish the login message to the RabbitMQ queue
-    await this.rabbitMQService.publishMessage('auth-queue', message).then(res => {
-      console.log({ res });
-    }).catch(err => {
-      console.log('their father failed');
-    })
-
+    await this.rabbitMQService.publishMessage('auth-queue', message);
 
     // Listen for the response with the specified correlation ID
     this.rabbitMQService.waitForResponse(correlationId).then((response) => {
-      if (response) {
-        // Handle the login response received from the Auth service
-        res.status(200).json(response);
-        console.log(response);
+      if (message.action === 'user_created') {
+        console.log('positive', response);
+        res.status(200).json('User created successfully');
       } else {
-        res
-          .status(500)
-          .json({ message: 'Register request sent, waiting for response...' });
+        console.log('negative', response);
+        res.status(response.status ? response?.status : 500).json({ message: response.message ? response.message : 'An error occured' });
       }
-    });
+    }).catch(err => {
+      res.status(500).json({ message: 'Internal Server Error' });
+    })
   }
 }
