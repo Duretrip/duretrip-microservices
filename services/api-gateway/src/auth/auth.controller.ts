@@ -35,8 +35,11 @@ export class AuthController {
       if (response) {
         // Handle the login response received from the Auth service
         res.status(200).json(response);
+        console.log(response);
       } else {
-        res.status(500).json({ message: 'Register request sent, waiting for response...' });
+        res
+          .status(500)
+          .json({ message: 'Register request sent, waiting for response...' });
       }
     });
   }

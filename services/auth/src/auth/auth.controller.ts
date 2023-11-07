@@ -33,20 +33,24 @@ import { RabbitmqService } from '../rabbitmq/rabbitmq.service';
 export class AuthController {
   constructor(
     private readonly service: AuthService,
-    private readonly rabbitMQService: RabbitmqService
+    private readonly rabbitMQService: RabbitmqService,
   ) {
-    this.rabbitMQService.consumeMessages('auth-queue', async (message) => {
-      if (message.action === 'email_register') {
-        const payload = message.payload;
-        // Implement your login logic here
-        // Send a response to the API Gateway
-        const response = await this.service.register(payload);
-        this.rabbitMQService.publishMessage('api-gateway-queue', {
-          correlationId: message.correlationId,
-          response,
-        });
-      }
-    });
+    this.rabbitMQService
+      .consumeMessages('auth-queue', async (message) => {
+        if (message.action === 'email_register') {
+          const payload = message.payload;
+          // Implement your login logic here
+          // Send a response to the API Gateway
+          const response = await this.service.register(payload);
+          this.rabbitMQService
+            .publishMessage('api-gateway-queue', {
+              correlationId: message.correlationId,
+              response,
+            })
+            .catch(() => console.log('err'));
+        }
+      })
+      .catch(() => console.log('err'));
   }
 
   @SerializeOptions({
@@ -62,8 +66,9 @@ export class AuthController {
 
   @Post('email/register')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<void> {
-    return this.service.register(createUserDto);
+  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<string> {
+    await this.service.register(createUserDto);
+    return 'message';
   }
 
   @Post('email/confirm')

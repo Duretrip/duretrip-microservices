@@ -28,7 +28,8 @@ services:
     # command: --default-authentication-plugin=mysql_native_password
 
   rabbitmq:
-    image: "rabbitmq:3.13.0-rc.2-management-alpine"
+    image: rabbitmq:3-management
+    # image: "rabbitmq:3.13.0-rc.2-management-alpine"
     container_name: rabbitmq
     ports:
       - "5672:5672" # RabbitMQ default port

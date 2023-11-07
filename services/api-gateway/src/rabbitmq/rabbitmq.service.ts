@@ -31,6 +31,7 @@ export class RabbitmqService {
     return new Promise((resolve) => {
       // Listen for responses with the specified correlationId
       this.channel.consume('api-gateway-queue', (msg) => {
+        console.log(msg);
         const message = JSON.parse(msg.content.toString());
         if (message.correlationId === correlationId) {
           resolve(message.response);
