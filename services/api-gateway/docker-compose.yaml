@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
   main:
-    container_name: api-gateway
+    container_name: auth
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     ports:
-      - 8005:8005
+      - 8006:8006
     env_file:
       - .env.dev

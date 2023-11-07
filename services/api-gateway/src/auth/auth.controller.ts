@@ -1,46 +1,136 @@
-import { Controller, Post, Body, Req, Res } from '@nestjs/common';
-import { RabbitmqService } from '../rabbitmq/rabbitmq.service';
-import { v4 as uuidv4 } from 'uuid';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Request,
+  Post,
+  UseGuards,
+  Patch,
+  Delete,
+  SerializeOptions,
+  UseFilters,
+} from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthEmailLoginDto } from './dto/auth-email-login.dto';
+import { AuthForgotPasswordDto } from './dto/auth-forgot-password.dto';
+import { AuthConfirmEmailDto } from './dto/auth-confirm-email.dto';
+import { AuthResetPasswordDto } from './dto/auth-reset-password.dto';
+import { AuthUpdateDto } from './dto/auth-update.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
+import { LoginResponseType } from './types/login-response.type';
+import { User } from '../users/entities/user.entity';
+import { NullableType } from '../utils/types/nullable.type';
 
-function generateUniqueId() {
-  return uuidv4();
-}
-@Controller()
+@ApiTags('Auth')
+@Controller({
+  path: 'auth',
+  version: '1',
+})
+
 export class AuthController {
-  constructor(private readonly rabbitMQService: RabbitmqService) { }
+  constructor(
+    private readonly service: AuthService,
+  ) {}
 
-  // {
-  //   email:'',
-  //   password:'',
-  //   firstName: '',
-  //   lastName: ''
-  // }
+  @SerializeOptions({
+    groups: ['me'],
+  })
+  @Post('email/login')
+  @HttpCode(HttpStatus.OK)
+  public login(
+    @Body() loginDto: AuthEmailLoginDto,
+  ): Promise<LoginResponseType> {
+    return this.service.validateLogin(loginDto);
+  }
 
   @Post('email/register')
-  async login(@Body() credentials: any, @Req() req, @Res() res) {
-    const correlationId = generateUniqueId();
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<void> {
+    return await this.service.register(createUserDto);
+  }
 
-    // Translate the HTTP request into a message
-    const message = {
-      action: 'email_register',
-      payload: credentials,
-      correlationId,
-    };
+  @Post('email/confirm')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async confirmEmail(
+    @Body() confirmEmailDto: AuthConfirmEmailDto,
+  ): Promise<void> {
+    return await this.service.confirmEmail(confirmEmailDto.hash);
+  }
 
-    // Publish the login message to the RabbitMQ queue
-    await this.rabbitMQService.publishMessage('auth-queue', message);
+  @Post('forgot/password')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async forgotPassword(
+    @Body() forgotPasswordDto: AuthForgotPasswordDto,
+  ): Promise<void> {
+    return this.service.forgotPassword(forgotPasswordDto.email);
+  }
 
-    // Listen for the response with the specified correlation ID
-    this.rabbitMQService.waitForResponse(correlationId).then((response) => {
-      if (message.action === 'user_created') {
-        console.log('positive', response);
-        res.status(200).json('User created successfully');
-      } else {
-        console.log('negative', response);
-        res.status(response.status ? response?.status : 500).json({ message: response.message ? response.message : 'An error occured' });
-      }
-    }).catch(err => {
-      res.status(500).json({ message: 'Internal Server Error' });
-    })
+  @Post('reset/password')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  resetPassword(@Body() resetPasswordDto: AuthResetPasswordDto): Promise<void> {
+    return this.service.resetPassword(
+      resetPasswordDto.hash,
+      resetPasswordDto.password,
+    );
+  }
+
+  @ApiBearerAuth()
+  @SerializeOptions({
+    groups: ['me'],
+  })
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.OK)
+  public me(@Request() request): Promise<NullableType<User>> {
+    return this.service.me(request.user);
+  }
+
+  @ApiBearerAuth()
+  @SerializeOptions({
+    groups: ['me'],
+  })
+  @Post('refresh')
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @HttpCode(HttpStatus.OK)
+  public refresh(@Request() request): Promise<Omit<LoginResponseType, 'user'>> {
+    return this.service.refreshToken({
+      sessionId: request.user.sessionId,
+    });
+  }
+
+  @ApiBearerAuth()
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async logout(@Request() request): Promise<void> {
+    await this.service.logout({
+      sessionId: request.user.sessionId,
+    });
+  }
+
+  @ApiBearerAuth()
+  @SerializeOptions({
+    groups: ['me'],
+  })
+  @Patch('me')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.OK)
+  public update(
+    @Request() request,
+    @Body() userDto: AuthUpdateDto,
+  ): Promise<NullableType<User>> {
+    return this.service.update(request.user, userDto);
+  }
+
+  @ApiBearerAuth()
+  @Delete('me')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async delete(@Request() request): Promise<void> {
+    return this.service.softDelete(request.user);
   }
 }

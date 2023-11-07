@@ -6,11 +6,9 @@ export class RabbitmqService {
   private connection: amqp.Connection;
   private channel: amqp.Channel;
 
-  constructor() {
-    this.connectToRabbitMQ();
-  }
+  constructor() {}
 
-  private async connectToRabbitMQ() {
+  public async connectToRabbitMQ() {
     this.connection = await amqp.connect(process.env.RABBITMQ_CONECTION_URL); // Replace with your RabbitMQ server URL
     this.channel = await this.connection.createChannel();
   }
@@ -32,8 +30,9 @@ export class RabbitmqService {
       // Listen for responses with the specified correlationId
       this.channel.consume('api-gateway-queue', (msg) => {
         const message = JSON.parse(msg.content.toString());
+        console.log({message});
         if (message.correlationId === correlationId) {
-          resolve(message.response);
+          resolve(message);
           // Acknowledge the message
           this.channel.ack(msg);
         }
