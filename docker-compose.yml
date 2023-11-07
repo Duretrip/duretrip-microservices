@@ -26,16 +26,20 @@ services:
     command: --default-authentication-plugin=mysql_native_password
 
   rabbitmq:
-    image: "rabbitmq:management"
-    container_name: rabbitmq_container
+    image: "rabbitmq:3.13.0-rc.2-management-alpine"
+    container_name: rabbitmq
     ports:
       - "5672:5672" # RabbitMQ default port
       - "15672:15672" # RabbitMQ management plugin
     environment:
-      RABBITMQ_DEFAULT_USER: Zijela
-      RABBITMQ_DEFAULT_PASS: Zijela2023
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     volumes:
-      - ./init-rabbitmq.sh:/docker-entrypoint-initdb.d/init-rabbitmq.sh
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+      - ./init-rabbitmq.sh:/usr/local/bin/init-rabbitmq.sh
+    entrypoint: /bin/sh
+    command: -c "chmod +x /usr/local/bin/init-rabbitmq.sh && /usr/local/bin/init-rabbitmq.sh"
+
 
   redis1:
     image: "redis:latest"
