@@ -33,7 +33,6 @@ sleep 10
 # # Generate the password hash
 # hashed_password=$(rabbitmqctl eval 'io:format("~s~n", [rabbit_auth_backend_internal:hash_password(<<"Zijela2023">>)]).')
 
-echo hashed_password
 rabbitmqctl add_user Zijela Zijela2023
 rabbitmqctl set_user_tags Zijela administrator
 rabbitmqctl set_permissions -p / Zijela ".*" ".*" ".*"
