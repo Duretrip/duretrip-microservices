@@ -32,8 +32,10 @@ services:
       - "5672:5672" # RabbitMQ default port
       - "15672:15672" # RabbitMQ management plugin
     environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_USER: Zijela
+      RABBITMQ_DEFAULT_PASS: Zijela2023
+    volumes:
+      - ./init-rabbitmq.sh:/docker-entrypoint-initdb.d/init-rabbitmq.sh
 
   redis1:
     image: "redis:latest"

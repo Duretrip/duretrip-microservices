@@ -28,6 +28,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { AllConfigType } from './config/config.type';
 import { SessionModule } from './session/session.module';
 import { MailerModule } from './mailer/mailer.module';
+import { RabbitmqService } from './rabbitmq/rabbitmq.service';
 
 @Module({
   imports: [
@@ -88,5 +89,6 @@ import { MailerModule } from './mailer/mailer.module';
     MailerModule,
     HomeModule,
   ],
+  providers: [RabbitmqService],
 })
 export class AppModule {}

@@ -23,6 +23,7 @@ import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { LoginResponseType } from './types/login-response.type';
 import { User } from '../users/entities/user.entity';
 import { NullableType } from '../utils/types/nullable.type';
+import { RabbitmqService } from '../rabbitmq/rabbitmq.service';
 
 @ApiTags('Auth')
 @Controller({
@@ -30,7 +31,23 @@ import { NullableType } from '../utils/types/nullable.type';
   version: '1',
 })
 export class AuthController {
-  constructor(private readonly service: AuthService) {}
+  constructor(
+    private readonly service: AuthService,
+    private readonly rabbitMQService: RabbitmqService
+  ) {
+    this.rabbitMQService.consumeMessages('auth-queue', async (message) => {
+      if (message.action === 'email_register') {
+        const payload = message.payload;
+        // Implement your login logic here
+        // Send a response to the API Gateway
+        const response = await this.service.register(payload);
+        this.rabbitMQService.publishMessage('api-gateway-queue', {
+          correlationId: message.correlationId,
+          response,
+        });
+      }
+    });
+  }
 
   @SerializeOptions({
     groups: ['me'],

@@ -9,13 +9,20 @@ function generateUniqueId() {
 export class AuthController {
   constructor(private readonly rabbitMQService: RabbitmqService) {}
 
-  @Post('/login')
+  // {
+  //   email:'',
+  //   password:'',
+  //   firstName: '',
+  //   lastName: ''
+  // }
+
+  @Post('email/register')
   async login(@Body() credentials: any, @Req() req, @Res() res) {
     const correlationId = generateUniqueId();
 
     // Translate the HTTP request into a message
     const message = {
-      action: 'login',
+      action: 'email_register',
       payload: credentials,
       correlationId,
     };
@@ -29,7 +36,7 @@ export class AuthController {
         // Handle the login response received from the Auth service
         res.status(200).json(response);
       } else {
-        res.status(500).json({ message: 'Login request sent, waiting for response...' });
+        res.status(500).json({ message: 'Register request sent, waiting for response...' });
       }
     });
   }
