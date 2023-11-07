@@ -28,7 +28,7 @@
 rabbitmq-server -detached
 
 # # Wait for RabbitMQ to fully start (you may need to adjust the sleep time)
-sleep 10
+sleep 30
 
 # # Generate the password hash
 # hashed_password=$(rabbitmqctl eval 'io:format("~s~n", [rabbit_auth_backend_internal:hash_password(<<"Zijela2023">>)]).')

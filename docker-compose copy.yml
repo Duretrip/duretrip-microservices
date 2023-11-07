@@ -1,31 +1,39 @@
 version: '3'
 services:
   postgres:
-    image: postgres:16.0-alpine
+    image: khezen/postgresql
     ports:
-      - 5432:5432
+      - "5432:5432"
+      - "5050:5050"
     volumes:
       - boilerplate-db:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: Rise@2023
-      POSTGRES_DB: boilerplate
+      POSTGRESQL_PASSWORD: Rise@2023
+      POSTGRESQL_DB: boilerplate
+      PGADMIN_DEFAULT_EMAIL: duretrip@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: duretrip001
       
   mysql:
     image: mysql:latest
     container_name: mysql_container
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
     networks:
       - mynetwork
     ports:
       - "3308:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
-    # command: --default-authentication-plugin=mysql_native_password
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
+    command: --default-authentication-plugin=mysql_native_password
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - "8087:80"
+    environment:
+      PMA_HOST: mysql
 
   rabbitmq:
     image: "rabbitmq:3.13.0-rc.2-management-alpine"
