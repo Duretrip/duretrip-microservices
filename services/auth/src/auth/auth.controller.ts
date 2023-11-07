@@ -35,22 +35,24 @@ export class AuthController {
     private readonly service: AuthService,
     private readonly rabbitMQService: RabbitmqService,
   ) {
-    this.rabbitMQService
-      .consumeMessages('auth-queue', async (message) => {
+    try {
+      this.rabbitMQService.consumeMessages('auth-queue', async (message) => {
         if (message.action === 'email_register') {
           const payload = message.payload;
           // Implement your login logic here
           // Send a response to the API Gateway
-          const response = await this.service.register(payload);
-          this.rabbitMQService
-            .publishMessage('api-gateway-queue', {
-              correlationId: message.correlationId,
-              response,
-            })
-            .catch(() => console.log('err'));
+          // const response = await this.service.register(payload)
+          const response = "weldone bro"
+          await this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message.correlationId,
+            action: 'user_created',
+            response,
+          });
         }
       })
-      .catch(() => console.log('err'));
+    } catch (error) {
+      console.log({ error: JSON.stringify(error) });
+    }
   }
 
   @SerializeOptions({
@@ -76,7 +78,7 @@ export class AuthController {
   async confirmEmail(
     @Body() confirmEmailDto: AuthConfirmEmailDto,
   ): Promise<void> {
-    return this.service.confirmEmail(confirmEmailDto.hash);
+    return await this.service.confirmEmail(confirmEmailDto.hash);
   }
 
   @Post('forgot/password')

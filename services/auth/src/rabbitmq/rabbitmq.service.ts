@@ -11,7 +11,7 @@ export class RabbitmqService {
   }
 
   private async connectToRabbitMQ() {
-    this.connection = await amqp.connect(process.env.AUTH_DATABASE_URL); // Replace with your RabbitMQ server URL
+    this.connection = await amqp.connect(process.env.RABBITMQ_CONECTION_URL); // Replace with your RabbitMQ server URL
     this.channel = await this.connection.createChannel();
   }
 

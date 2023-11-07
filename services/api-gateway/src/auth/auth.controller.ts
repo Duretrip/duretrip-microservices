@@ -7,14 +7,17 @@ function generateUniqueId() {
 }
 @Controller()
 export class AuthController {
-  constructor(private readonly rabbitMQService: RabbitmqService) {}
-
-  // {
-  //   email:'',
-  //   password:'',
-  //   firstName: '',
-  //   lastName: ''
-  // }
+  constructor(private readonly rabbitMQService: RabbitmqService) {
+    try {
+      this.rabbitMQService.consumeMessages('api-gateway-queue', async (message) => {
+        if (message.action === 'user_created') {
+          console.log({ messageFomAuth: message });
+        }
+      })
+    } catch (error) {
+      console.log({ error: JSON.stringify(error) });
+    }
+  }
 
   @Post('email/register')
   async login(@Body() credentials: any, @Req() req, @Res() res) {
@@ -26,9 +29,16 @@ export class AuthController {
       payload: credentials,
       correlationId,
     };
+    console.log({ message });
+
 
     // Publish the login message to the RabbitMQ queue
-    this.rabbitMQService.publishMessage('auth-queue', message);
+    await this.rabbitMQService.publishMessage('auth-queue', message).then(res => {
+      console.log({ res });
+    }).catch(err => {
+      console.log('their father failed');
+    })
+
 
     // Listen for the response with the specified correlation ID
     this.rabbitMQService.waitForResponse(correlationId).then((response) => {
