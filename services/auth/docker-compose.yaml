@@ -8,6 +8,6 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - 8000:8000
+      - 8006:8006
     env_file:
       - .env.dev

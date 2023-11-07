@@ -40,5 +40,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(configService.getOrThrow('app.port', { infer: true }));
+  console.log(`app listening on ${configService.getOrThrow('app.port', { infer: true })}`)
 }
 void bootstrap();
