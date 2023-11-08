@@ -218,16 +218,16 @@ jobs:
 
     - name: Replace placeholders in YML script
       run: |
-          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgres/postgress-secrets.yml
-          sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgres/postgress-secrets.yml
+          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
 
     - name: Deploy on the GKE
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         CT_TYPE: "api"
       run: |-
-        kubectl apply -f k8s/Postgres/postgress-configMap.yml
-        kubectl apply -f k8s/Postgres/postgress-secrets.yml 
+        kubectl apply -f k8s/Postgress/postgress-configMap.yml
+        kubectl apply -f k8s/Postgress/postgress-secrets.yml 
         kubectl apply -f k8s/ingress/ingress-service-dev.yml
         kubectl apply -f k8s/api-gateway.yml
         kubectl apply -f k8s/jet.yml
