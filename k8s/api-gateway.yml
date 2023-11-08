@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-app
+  labels:
+    app: api-gateway-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway-app
+  template:
+    metadata:
+      labels:
+        app: api-gateway-app
+    spec:
+      containers:
+        - name: api-gateway-app
+          image: duretrip/api-gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "256Mi" # Standard memory request
+              cpu: "0.2"      # Standard CPU request
+            limits:
+              memory: "512Mi" # Standard memory limit
+              cpu: "0.5"      # Standard CPU limit
+          env:   # Setting Enviornmental Variables
+            - name: DATABASE_TYPE
+              value: postgres
+
+            - name: AUTH_MYSQL_DATABASE  # Setting Database name from configMap
+              value: auth_db
+
+            # - name: DATABASE_HOST
+            #   valueFrom: 
+            #     configMapKeyRef :
+            #       name : db-configs
+            #       key :  chost
+
+            - name: POSTGRES_PORT   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name : db-configs
+                  key :  port
+
+            - name: JWT_SECRET  # Setting Database name from configMap
+              valueFrom :
+                secretKeyRef :
+                  name : jwt-secret
+                  key :  username
+
+            - name: DATABASE_USERNAME  # Setting Database username from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : postgres-auth-secret
+                  key :  username
+
+            - name: DATABASE_PASSWORD # Setting Database password from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : postgres-auth-secret
+                  key :  password
+
+            - name: RABBITMQ_HOST   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_HOST
+            
+            - name: RABBITMQ_DEFAULT_USER   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_USER
+            
+            - name: RABBITMQ_DEFAULT_PASS   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_PASS
+
+            - name: RABBITMQ_USER   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_USER
+            
+            - name: RABBITMQ_PASS   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_PASS
+
+            - name: RABBITMQ_PAYMENT_QUEUE   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_PAYMENT_QUEUE
+
+            - name: RABBITMQ_AUTH_QUEUE   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_AUTH_QUEUE
+
+            - name: RABBITMQ_BOOK_HOTEL_QUEUE # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name: rabbitmq-config
+                  key: RABBITMQ_BOOK_HOTEL_QUEUE
+
+            - name: AUTH_JWT_SECRET  # Setting Database name from configMap
+              value: secret
+
+            - name: AUTH_JWT_TOKEN_EXPIRES_IN  # Setting Database name from configMap
+              value: '15'
+
+            - name: AUTH_REFRESH_SECRET  # Setting Database name from configMap
+              value: secret_for_refresh
+
+            - name: AUTH_REFRESH_TOKEN_EXPIRES_IN  # Setting Database name from configMap
+              value: 3650d
+
+            - name: APP_PORT  # Setting Database name from configMap
+              value: 8006
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-svc
+spec:
+  selector:
+    app: api-gateway-app
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8006
+      protocol: TCP
+
+

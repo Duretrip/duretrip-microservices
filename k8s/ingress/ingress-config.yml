@@ -1,0 +1,15 @@
+controller:
+  replicaCount: 1  # Adjust the number of replicas as needed
+  resources:
+    requests:
+      memory: "128Mi"  # Adjust based on your needs
+      cpu: "0.1"      # Adjust based on your needs
+  service:
+    enabled: true
+    annotations:
+      cloud.google.com/neg: '{"ingress":true}'  # For use with GKE
+      ingress.gcp.kubernetes.io/pre-shared-cert: dure-trip-ssl
+  config:
+    use-forwarded-headers: "true"
+  admissionWebhooks:
+    enabled: false  # Disable admission webhooks if not needed

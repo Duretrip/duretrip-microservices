@@ -1,0 +1,231 @@
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+env:
+  GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
+  GKE_CLUSTER: ${{ secrets.GKE_PROD_CLUSTER_NAME}}    # TODO: update to cluster name
+  GKE_ZONE: ${{ secrets.GKE_PROD_CLUSTER_ZONE}}   # TODO: update to cluster zone
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+jobs:
+  deploy-ingress-dev:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GKE_SA }}
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        working-directory: /usr/local/bin
+
+      - name: Install Nginx Ingress Controller
+        run: |
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm upgrade my-nginx-controller ingress-nginx/ingress-nginx -f k8s/ingress/ingress-config.yml
+          kubectl delete secret my-tls-secret
+          kubectl create secret tls my-tls-secret --cert=k8s/ssl/certificate.crt --key=k8s/ssl/duretrip_wildcard.key
+
+  
+  setup-and-deploy-rabbitmq-dev:
+    # needs: [create-image-and-push-to-dockerhub]
+    name: Setup and Deploy rabbitmq to app cluster
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GKE_SA }}
+
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    - name: Deploy on the GKE
+      run: |-
+        kubectl apply -f k8s/rabbitMQ/rabbitmq-config.yml
+        kubectl apply -f k8s/rabbitMQ/rabbitmq.yml
+
+
+  setup-and-deploy-to-postgres-cluster:
+    # needs: [setup-and-deploy-to-cluster-dev]
+
+    name: Setup and Deploy to postgres cluster
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GKE_SA }}
+
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+    - name: Replace placeholders in YML script
+      run: |
+          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgres/postgress-secrets.yml
+          sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgres/postgress-secrets.yml
+
+    - name: Deploy on the GKE
+      run: |-
+        kubectl apply -f k8s/Postgres/postgress-configMap.yml
+        kubectl apply -f k8s/Postgres/postgress-secrets.yml
+        kubectl apply -f k8s/Postgres/postgress.yml
+
+
+  migrate_database_permission:
+    needs: [setup-and-deploy-to-postgres-cluster]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GKE_SA }}
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+
+      - name: Get MySQL Pod
+        id: get-postgres-pod
+        run: |
+          export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
+          echo "::set-output name=pod_name::$POD_NAME"
+
+      - name: Replace placeholder in SQL script
+        run: |
+          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_PASS }}/g" init.sql
+
+      - name: Copy SQL Script to Pod
+        run: |
+          POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
+          kubectl cp init.sql "${POD_NAME}":/usr/tmp/init.sql
+
+      - name: Execute SQL Script in Pod
+        run: |
+          POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
+          kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /usr/tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
+        env:
+          PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+
+
+  create-image-and-push-to-dockerhub:
+    needs: [migrate_database_permission]
+
+    name: Create Image and Push to Dockerhub
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+        continue-on-error: true
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build Docker images
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          docker-compose -f services/api-gateway/docker-compose.yml build
+          docker-compose -f services/api-gateway/docker-compose.yml push
+        working-directory: .
+
+
+  setup-and-deploy-to-cluster-main:
+    needs: [create-image-and-push-to-dockerhub]
+
+    name: Setup and Deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GKE_SA }}
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ secrets.GKE_PROD_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_PROD_CLUSTER_ZONE }}
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+    - name: Replace placeholders in YML script
+      run: |
+          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgres/postgress-secrets.yml
+          sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgres/postgress-secrets.yml
+
+    - name: Deploy on the GKE
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        CT_TYPE: "api"
+      run: |-
+        kubectl apply -f k8s/Postgres/postgress-configMap.yml
+        kubectl apply -f k8s/Postgres/postgress-secrets.yml 
+        kubectl apply -f k8s/ingress/ingress-service-dev.yml
+        kubectl apply -f k8s/api-gateway.yml
+       
