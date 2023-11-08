@@ -1,16 +1,37 @@
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  labels:
+    app: postgres
+    tier: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-deployment
+  labels:
+    app: postgres
+    tier: database
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: postgres
+      tier: database
   template:
     metadata:
       labels:
         app: postgres
+        tier: database
     spec:
       containers:
         - name: postgres
@@ -45,17 +66,6 @@ spec:
               persistentVolumeClaim:
                 claimName: postgres-pvc
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
 
 ---
 # Define a 'Service' To Expose BookAir MySQL to Other Services
