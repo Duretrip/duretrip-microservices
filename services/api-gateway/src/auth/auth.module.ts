@@ -31,7 +31,7 @@ import { RabbitmqService } from 'src/rabbitmq/rabbitmq.service';
     JwtStrategy,
     JwtRefreshStrategy,
     AnonymousStrategy,
-    RabbitmqService
+    RabbitmqService,
   ],
   exports: [AuthService],
 })
