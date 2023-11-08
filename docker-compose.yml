@@ -11,19 +11,19 @@ services:
       POSTGRES_PASSWORD: Rise@2023
       POSTGRES_DB: boilerplate
       
-  mysql:
-    image: mysql:latest
-    container_name: mysql_container
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
-    networks:
-      - mynetwork
-    ports:
-      - "3308:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mysql_container
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: password
+  #     MYSQL_USER: test
+  #     MYSQL_PASSWORD: test
+  #   networks:
+  #     - mynetwork
+  #   ports:
+  #     - "3308:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
       # - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
     # command: --default-authentication-plugin=mysql_native_password
 
