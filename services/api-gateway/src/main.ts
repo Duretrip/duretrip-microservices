@@ -1,8 +1,4 @@
-import {
-  ClassSerializerInterceptor,
-  ValidationPipe,
-  VersioningType,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -42,6 +38,8 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(configService.getOrThrow('app.port', { infer: true }));
-  console.log(`app listening on ${configService.getOrThrow('app.port', { infer: true })}`)
+  console.log(
+    `app listening on ${configService.getOrThrow('app.port', { infer: true })}`,
+  );
 }
 void bootstrap();

@@ -1,5 +1,0 @@
-import { EntityHelper } from 'src/utils/entity-helper';
-export declare class Status extends EntityHelper {
-    id: number;
-    name?: string;
-}
