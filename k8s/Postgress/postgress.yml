@@ -33,6 +33,10 @@ spec:
         app: postgres
         tier: database
     spec:
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
       containers:
         - name: postgres
           image: postgres:16.0-alpine
@@ -61,10 +65,6 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "0.5"
-          volumes:
-            - name: postgres-data
-              persistentVolumeClaim:
-                claimName: postgres-pvc
 
 
 ---
