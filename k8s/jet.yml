@@ -19,111 +19,114 @@ spec:
           image: duretrip/jet:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8008
+            - containerPort: 3000
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "0.2"
+              memory: "256Mi" # Standard memory request
+              cpu: "0.2"      # Standard CPU request
             limits:
-              memory: "512Mi"
-              cpu: "0.5"
-          env:
+              memory: "512Mi" # Standard memory limit
+              cpu: "0.5"      # Standard CPU limit
+          env:   # Setting Enviornmental Variables
             - name: DATABASE_TYPE
               value: postgres
-            - name: DATABASE_NAME
+
+            - name: DATABASE_NAME  # Setting Database name from configMap
               value: jet_db
-            - name: DATABASE_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: chost
 
-            - name: DATABASE_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: port
+            # - name: DATABASE_HOST
+            #   valueFrom: 
+            #     configMapKeyRef :
+            #       name : db-configs
+            #       key :  chost
 
-            - name: JET_DATABASE_URL  # Setting Database name from configMap
+            - name: POSTGRES_PORT   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
+                  name : db-configs
+                  key :  port
+
+            - name: JWT_SECRET  # Setting Database name from configMap
               valueFrom :
                 secretKeyRef :
-                  name : jet-prisma-url
-                  key :  url
+                  name : jwt-secret
+                  key :  username
 
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: username
+            - name: DATABASE_USERNAME  # Setting Database username from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : postgres-jet-secret
+                  key :  username
 
-            - name: DATABASE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: username
+            - name: DATABASE_PASSWORD # Setting Database password from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : postgres-jet-secret
+                  key :  password
 
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: password
-
-            - name: RABBITMQ_CONECTION_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: rabbitmq-config
-                  key: RABBITMQ_URL
-
-            - name: RABBITMQ_HOST
-              valueFrom:
-                configMapKeyRef:
+            - name: RABBITMQ_HOST   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_HOST
-            - name: RABBITMQ_DEFAULT_USER
-              valueFrom:
-                configMapKeyRef:
+            
+            - name: RABBITMQ_DEFAULT_USER   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_USER
-            - name: RABBITMQ_DEFAULT_PASS
-              valueFrom:
-                configMapKeyRef:
+            
+            - name: RABBITMQ_DEFAULT_PASS   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_PASS
-            - name: RABBITMQ_USER
-              valueFrom:
-                configMapKeyRef:
+
+            - name: RABBITMQ_USER   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_USER
-            - name: RABBITMQ_PASS
-              valueFrom:
-                configMapKeyRef:
+            
+            - name: RABBITMQ_PASS   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_PASS
-            - name: RABBITMQ_PAYMENT_QUEUE
-              valueFrom:
-                configMapKeyRef:
+
+            - name: RABBITMQ_PAYMENT_QUEUE   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_PAYMENT_QUEUE
-            - name: RABBITMQ_AUTH_QUEUE
-              valueFrom:
-                configMapKeyRef:
+
+            - name: RABBITMQ_AUTH_QUEUE   # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_AUTH_QUEUE
-            - name: RABBITMQ_BOOK_HOTEL_QUEUE
-              valueFrom:
-                configMapKeyRef:
+
+            - name: RABBITMQ_BOOK_HOTEL_QUEUE # Setting Database host address from configMap
+              valueFrom: 
+                configMapKeyRef :
                   name: rabbitmq-config
                   key: RABBITMQ_BOOK_HOTEL_QUEUE
-            - name: AUTH_JWT_SECRET
+
+            - name: AUTH_JWT_SECRET  # Setting Database name from configMap
               value: secret
-            - name: AUTH_JWT_TOKEN_EXPIRES_IN
+
+            - name: AUTH_JWT_TOKEN_EXPIRES_IN  # Setting Database name from configMap
               value: '15'
-            - name: AUTH_REFRESH_SECRET
+
+            - name: AUTH_REFRESH_SECRET  # Setting Database name from configMap
               value: secret_for_refresh
-            - name: AUTH_REFRESH_TOKEN_EXPIRES_IN
+
+            - name: AUTH_REFRESH_TOKEN_EXPIRES_IN  # Setting Database name from configMap
               value: 3650d
-            - name: APP_PORT
-              value: "8008"
+
+            - name: APP_PORT  # Setting Database name from configMap
+              value: 8006
+
 
 ---
 apiVersion: v1
@@ -137,5 +140,7 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 8008
+      targetPort: 8006
       protocol: TCP
+
+

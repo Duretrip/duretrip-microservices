@@ -191,10 +191,10 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
-          docker-compose -f services/api-gateway/docker-compose.yaml build
-          docker-compose -f services/api-gateway/docker-compose.yaml push
-          docker-compose -f services/jet/docker-compose.yaml build
-          docker-compose -f services/jet/docker-compose.yaml push
+          docker-compose -f services/api-gateway/docker-compose.yml build
+          docker-compose -f services/api-gateway/docker-compose.yml push
+          docker-compose -f services/jet/docker-compose.yml build
+          docker-compose -f services/jet/docker-compose.yml push
         working-directory: .
 
 

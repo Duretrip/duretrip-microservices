@@ -46,8 +46,8 @@ spec:
             - name: DB_TYPE
               value: postgres
 
-            - name: DB_DATABASE_NAME
-              value: auth_dbb
+            - name: DATABASE_NAME  # Setting Database name from configMap
+              value: auth_db
 
             - name: DB_HOST
               value: "34.28.62.57"
