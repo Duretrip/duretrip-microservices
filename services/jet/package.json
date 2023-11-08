@@ -17,14 +17,20 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "jet:migrate:dev": "prisma migrate dev --name ",
+    "jet:migrate:dev:create": "prisma migrate dev --create-only",
+    "jet:migrate": "prisma migrate dev",
+    "prisma:generate:jet_client": "prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@prisma/client": "^5.5.2",
     "amqplib": "^0.10.3",
     "dotenv": "^16.3.1",
+    "nestjs-prisma": "^0.22.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
   },

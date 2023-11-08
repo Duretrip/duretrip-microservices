@@ -6,6 +6,7 @@ services:
       - 5432:5432
     volumes:
       - boilerplate-db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: Rise@2023
