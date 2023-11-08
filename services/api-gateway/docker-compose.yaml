@@ -6,8 +6,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: duretrip/api-gateway:latest
     restart: always
     ports:
       - 8006:8006
-    env_file:
-      - .env.dev
+    # env_file:
+    #   - .env.dev

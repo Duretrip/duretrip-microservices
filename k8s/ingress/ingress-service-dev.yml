@@ -1,0 +1,77 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fanout-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.global-static-ip-name: "web-static-ip"
+    ingress.gcp.kubernetes.io/pre-shared-cert: dure-trip-ssl
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: dev-api.duretrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-svc
+                port:
+                  number: 80
+
+    - host: dev-admin.duretrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: duretrip-admin-service
+                port:
+                  number: 80
+
+    - host: dev.duretrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: duretrip-user-service
+                port:
+                  number: 80
+
+    - host: dev-mysql.duretrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: postgress-svc
+                port:
+                  number: 5432
+
+
+    - host: dev-rabbit.duretrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq-service
+                port:
+                  number: 5672
+
+                  
+
+  tls:
+    - hosts:
+      - dev-api.duretrip.com
+      - dev-admin.duretrip.com
+      - dev.duretrip.com
+      - dev-mysql.duretrip.com
+      - dev-rabbit.duretrip.com
+      secretName: my-tls-secret  # The name of the Secret containing your SSL certificate

@@ -4,13 +4,13 @@ CREATE DATABASE jet_db;
 CREATE DATABASE hotel_db;
 
 -- Create users and grant privileges
-CREATE USER 'user'@'%' IDENTIFIED BY 'password';
+CREATE USER 'dureauth'@'%' IDENTIFIED BY '${PASSWORDE}';
 GRANT ALL PRIVILEGES ON auth_db.* TO 'user'@'%';
 
 -- Create users and grant privileges
-CREATE USER 'user'@'%' IDENTIFIED BY 'password';
+CREATE USER 'durejet'@'%' IDENTIFIED BY '${PASSWORDE}';
 GRANT ALL PRIVILEGES ON jet_db.* TO 'user'@'%';
 
 -- Create users and grant privileges
-CREATE USER 'user'@'%' IDENTIFIED BY 'password';
+CREATE USER 'durehotel'@'%' IDENTIFIED BY '${PASSWORDE}';
 GRANT ALL PRIVILEGES ON hotel_db.* TO 'user'@'%';
