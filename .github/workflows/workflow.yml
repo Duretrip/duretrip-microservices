@@ -185,6 +185,8 @@ jobs:
         run: |
           docker-compose -f services/api-gateway/docker-compose.yml build
           docker-compose -f services/api-gateway/docker-compose.yml push
+          docker-compose -f services/jet/docker-compose.yml build
+          docker-compose -f services/jet/docker-compose.yml push
         working-directory: .
 
 
@@ -228,4 +230,5 @@ jobs:
         kubectl apply -f k8s/Postgres/postgress-secrets.yml 
         kubectl apply -f k8s/ingress/ingress-service-dev.yml
         kubectl apply -f k8s/api-gateway.yml
+        kubectl apply -f k8s/jet.yml
        

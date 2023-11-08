@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway-app
+  name: jet-app
   labels:
-    app: api-gateway-app
+    app: jet-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-app
+      app: jet-app
   template:
     metadata:
       labels:
-        app: api-gateway-app
+        app: jet-app
     spec:
       containers:
-        - name: api-gateway-app
-          image: duretrip/api-gateway:latest
+        - name: jet-app
+          image: duretrip/jet:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -32,7 +32,7 @@ spec:
               value: postgres
 
             - name: DATABASE_NAME  # Setting Database name from configMap
-              value: auth_db
+              value: jet_db
 
             # - name: DATABASE_HOST
             #   valueFrom: 
@@ -55,13 +55,13 @@ spec:
             - name: DATABASE_USERNAME  # Setting Database username from Secret
               valueFrom :
                 secretKeyRef :
-                  name : postgres-auth-secret
+                  name : postgres-jet-secret
                   key :  username
 
             - name: DATABASE_PASSWORD # Setting Database password from Secret
               valueFrom :
                 secretKeyRef :
-                  name : postgres-auth-secret
+                  name : postgres-jet-secret
                   key :  password
 
             - name: RABBITMQ_HOST   # Setting Database host address from configMap
@@ -132,10 +132,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-gateway-svc
+  name: jet-svc
 spec:
   selector:
-    app: api-gateway-app
+    app: jet-app
   type: NodePort
   ports:
     - name: http
