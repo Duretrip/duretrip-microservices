@@ -143,12 +143,12 @@ jobs:
       - name: Copy SQL Script to Pod
         run: |
           POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
-          kubectl cp init.sql "${POD_NAME}":/usr/tmp/init.sql
+          kubectl cp init.sql "${POD_NAME}":/tmp/init.sql
 
       - name: Execute SQL Script in Pod
         run: |
           POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
-          kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /usr/tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
+          kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
         env:
           PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
