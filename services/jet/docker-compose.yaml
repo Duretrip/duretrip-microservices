@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
   main:
-    container_name: auth
+    container_name: jet
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     ports:
-      - 8006:8006
+      - 8007:8007
     env_file:
       - .env.dev

@@ -13,6 +13,7 @@ import { RabbitmqService } from '../rabbitmq/rabbitmq.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 import { CreateJetDto } from './dto/create-jet.dto';
+import { UpdateJetDto } from './dto/update-jet.dto';
 
 function generateUniqueId() {
   return uuidv4();
@@ -163,7 +164,8 @@ export class JetController {
   }
 
   @Post()
-  async create(@Body() credentials: any, @Req() req, @Res() res) {
+  @ApiCreatedResponse({ type: CreateJetDto })
+  async create(@Body() credentials: CreateJetDto, @Req() req, @Res() res) {
     const userId = req.user.id;
     const correlationId = generateUniqueId();
 
@@ -202,7 +204,7 @@ export class JetController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() credentials: any,
+    @Body() credentials: UpdateJetDto,
     @Req() req,
     @Res() res,
   ) {
