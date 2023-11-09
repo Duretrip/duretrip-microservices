@@ -15,9 +15,9 @@ jwt:
   cookieExpiresIn: 604800
 
 app:
-  name: 'Truthy'
+  name: 'DureTrip'
   version: 'v0.1'
-  description: 'Official Truthy API'
+  description: 'Official DureTrip API'
   appUrl: 'https://duretrip.com/'
   frontendUrl: 'https://duretrip.com/'
 
