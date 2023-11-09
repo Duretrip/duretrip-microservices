@@ -7,8 +7,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus() || 500;
-    const message = exception.message || 'Internal server error';
+    const status = exception?.getStatus() || 500;
+    const message = exception?.message || 'Internal server error';
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
