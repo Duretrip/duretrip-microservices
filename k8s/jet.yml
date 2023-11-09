@@ -106,7 +106,7 @@ spec:
             - name: AUTH_REFRESH_TOKEN_EXPIRES_IN
               value: 3650d
             - name: APP_PORT
-              value: 8006
+              value: "8006"
 
 ---
 apiVersion: v1
