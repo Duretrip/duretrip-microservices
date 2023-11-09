@@ -180,6 +180,11 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      
+      - name: Replace placeholders Image in YML script
+        run: |
+          sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
+          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
 
       - name: Build Docker images
         env:
@@ -224,7 +229,12 @@ jobs:
           sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/\${AUTH_DATABASE_URL}/${{ secrets.AUTH_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/\${JET_DATABASE_URL}/${{ secrets.JET_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
-
+    
+    - name: Replace placeholders Image in YML script
+      run: |
+          sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" k8s/api-gateway.yml
+          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" k8s/jet.yml
+    
     - name: Deploy on the GKE
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
