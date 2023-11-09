@@ -19,7 +19,7 @@ spec:
           image: duretrip/api-gateway:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 3000
+            - containerPort: 8006
           resources:
             requests:
               memory: "256Mi"
@@ -30,81 +30,106 @@ spec:
           env:
             - name: DATABASE_TYPE
               value: postgres
+
             - name: DATABASE_NAME
               value: auth_db
+
             - name: DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: db-configs
+                  name: db-config
                   key: chost
-            - name: POSTGRES_PORT
+
+            - name: DATABASE_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: db-configs
+                  name: db-config
                   key: port
+
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
                   key: username
+
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: postgres-auth-secret
+                  name: postgres-secrets
                   key: username
+
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-auth-secret
+                  name: postgres-secrets
                   key: password
+
             - name: RABBITMQ_HOST
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_HOST
+
             - name: RABBITMQ_DEFAULT_USER
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_USER
+
             - name: RABBITMQ_DEFAULT_PASS
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_PASS
+
             - name: RABBITMQ_USER
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_USER
+
             - name: RABBITMQ_PASS
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_PASS
+
+            - name: RABBITMQ_CONECTION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-url
+                  key: url
+
             - name: RABBITMQ_PAYMENT_QUEUE
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_PAYMENT_QUEUE
+
             - name: RABBITMQ_AUTH_QUEUE
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_AUTH_QUEUE
+
             - name: RABBITMQ_BOOK_HOTEL_QUEUE
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_BOOK_HOTEL_QUEUE
+
             - name: AUTH_JWT_SECRET
               value: secret
+
             - name: AUTH_JWT_TOKEN_EXPIRES_IN
               value: '15'
+
             - name: AUTH_REFRESH_SECRET
               value: secret_for_refresh
+
             - name: AUTH_REFRESH_TOKEN_EXPIRES_IN
               value: 3650d
+
             - name: APP_PORT
               value: "8006"
 
