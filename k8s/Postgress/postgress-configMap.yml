@@ -6,4 +6,4 @@ data:
   host : "10.24.8.200"
   chost : "10.24.8.200"
   port : "5432"
-  username: root
+  username: dureauth
