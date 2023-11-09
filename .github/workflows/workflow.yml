@@ -222,7 +222,6 @@ jobs:
           sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/\${JET_DATABASE_URL}/${{ secrets.JET_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s/\${RABBIT_MQ}/${{ secrets.RABBITMQ_URL }}/g" k8s/Postgress/postgress-secrets.yml
 
     - name: Deploy on the GKE
       env:
