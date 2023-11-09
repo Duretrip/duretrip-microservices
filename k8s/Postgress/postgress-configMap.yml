@@ -3,7 +3,7 @@ kind : ConfigMap
 metadata:
   name : db-configs
 data:
-  host : "34.68.28.42"
-  chost : "34.68.28.42"
+  host : "10.24.8.200"
+  chost : "10.24.8.200"
   port : "5432"
   username: root

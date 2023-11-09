@@ -34,11 +34,11 @@ spec:
             - name: DATABASE_NAME  # Setting Database name from configMap
               value: auth_db
 
-            # - name: DATABASE_HOST
-            #   valueFrom: 
-            #     configMapKeyRef :
-            #       name : db-configs
-            #       key :  chost
+            - name: DATABASE_HOST
+              valueFrom: 
+                configMapKeyRef :
+                  name : db-configs
+                  key :  chost
 
             - name: POSTGRES_PORT   # Setting Database host address from configMap
               valueFrom: 
