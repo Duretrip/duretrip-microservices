@@ -96,9 +96,9 @@ spec:
 
             - name: RABBITMQ_CONECTION_URL
               valueFrom:
-                secretKeyRef:
-                  name: rabbitmq-url
-                  key: url
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_URL
 
             - name: RABBITMQ_PAYMENT_QUEUE
               valueFrom:
