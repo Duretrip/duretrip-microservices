@@ -35,16 +35,13 @@ spec:
               value: auth_db
 
             - name: DATABASE_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: chost
+              value: "34.28.62.57"
+
+            - name: DATABASE_URL
+              value: postgres://dureauth:r24rHK98bo9@34.28.62.57:5432/auth_db
 
             - name: DATABASE_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: port
+              value: "5432"
 
             - name: JWT_SECRET
               valueFrom:
@@ -53,16 +50,10 @@ spec:
                   key: username
 
             - name: DATABASE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: username
+              value: dureauth
 
             - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: password
+              value: r24rHK98bo9
 
             - name: RABBITMQ_HOST
               valueFrom:
