@@ -195,7 +195,7 @@ jobs:
 
     name: Setup and Deploy
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/dev'
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -211,8 +211,8 @@ jobs:
     - name: Get GKE Credentials
       uses: google-github-actions/get-gke-credentials@v1
       with:
-        cluster_name: ${{ secrets.GKE_PROD_CLUSTER_NAME }}
-        location: ${{ secrets.GKE_PROD_CLUSTER_ZONE }}
+        cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
