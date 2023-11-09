@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Jet" ALTER COLUMN "priceDescription" SET DATA TYPE TEXT,
+ALTER COLUMN "pictures" DROP NOT NULL;
