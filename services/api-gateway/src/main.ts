@@ -1,45 +1,75 @@
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
-import { AppModule } from './app.module';
-import validationOptions from './utils/validation-options';
-import { AllConfigType } from './config/config.type';
-import { AllExceptionsFilter } from './allExceptionsFilter';
+import * as config from 'config';
+import helmet from 'helmet';
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule
+} from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { AppModule } from 'src/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
-  const configService = app.get(ConfigService<AllConfigType>);
-
-  app.enableShutdownHooks();
-  // app.setGlobalPrefix(
-  //   configService.getOrThrow('app.apiPrefix', { infer: true }),
-  //   {
-  //     exclude: ['/'],
-  //   },
-  // );
-  // app.enableVersioning({
-  //   type: VersioningType.URI,
-  // });
-  app.useGlobalPipes(new ValidationPipe(validationOptions));
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalFilters(new AllExceptionsFilter());
-
-  const options = new DocumentBuilder()
-    .setTitle('DureTrip APIs')
-    .setDescription('API docs')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('docs', app, document);
-
-  await app.listen(configService.getOrThrow('app.port', { infer: true }));
-  console.log(
-    `app listening on ${configService.getOrThrow('app.port', { infer: true })}`,
+  const serverConfig = config.get('server');
+  const port = process.env.PORT || serverConfig.port;
+  const app = await NestFactory.create(AppModule);
+  app.use(helmet());
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  const apiConfig = config.get('app');
+  if (process.env.NODE_ENV === 'development') {
+    app.enableCors({
+      origin: true,
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+      credentials: true
+    });
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle(apiConfig.name)
+      .setDescription(apiConfig.description)
+      .setVersion(apiConfig.version)
+      .addBearerAuth()
+      .build();
+    const customOptions: SwaggerCustomOptions = {
+      swaggerOptions: {
+        persistAuthorization: true
+      },
+      customSiteTitle: apiConfig.description
+    };
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api-docs', app, document, customOptions);
+  } else {
+    const whitelist = [apiConfig.get<string>('frontendUrl')];
+    app.enableCors({
+      origin: function (origin, callback) {
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      credentials: true
+    });
+  }
+  useContainer(app.select(AppModule), {
+    fallbackOnErrors: true
+  });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true
+    })
   );
+
+  app.use(cookieParser());
+  await app.listen(port);
+  console.log(`Application listening in port: ${port}`);
 }
-void bootstrap();
+
+bootstrap();
