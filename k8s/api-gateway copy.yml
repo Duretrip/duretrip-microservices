@@ -31,7 +31,7 @@ spec:
             - name: DATABASE_TYPE
               value: postgres
 
-            - name: DB_DATABASE_NAME
+            - name: DATABASE_NAME
               value: auth_db
 
             - name: DATABASE_HOST
@@ -43,7 +43,7 @@ spec:
                   name: auth-prisma-url
                   key: url
 
-            - name: DB_PORT
+            - name: DATABASE_PORT
               value: "5432"
 
             - name: JWT_SECRET
@@ -52,10 +52,10 @@ spec:
                   name: jwt-secret
                   key: username
 
-            - name: DB_USERNAME
+            - name: DATABASE_USERNAME
               value: dureauth
 
-            - name: DB_PASSWORD
+            - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-secrets
