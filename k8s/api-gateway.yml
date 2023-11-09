@@ -38,7 +38,10 @@ spec:
               value: "34.28.62.57"
 
             - name: DATABASE_URL
-              value: postgres://dureauth:r24rHK98bo9@34.28.62.57:5432/auth_db
+              valueFrom:
+                secretKeyRef:
+                  name: auth-prisma-url
+                  key: url
 
             - name: DATABASE_PORT
               value: "5432"
@@ -53,7 +56,10 @@ spec:
               value: dureauth
 
             - name: DATABASE_PASSWORD
-              value: r24rHK98bo9
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: password
 
             - name: RABBITMQ_HOST
               valueFrom:
