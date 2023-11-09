@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pvc
+  name: postgres-data
   labels:
     app: postgres
     tier: database
@@ -36,7 +36,7 @@ spec:
       volumes:
         - name: postgres-data
           persistentVolumeClaim:
-            claimName: postgres-pvc
+            claimName: postgres-data
       containers:
         - name: postgres
           image: postgres:9.5
@@ -60,15 +60,6 @@ spec:
           volumeMounts:
             - name: postgres-data
               mountPath: "/var/lib/postgresql/data"
-              subPath: data
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "0.2"
-            limits:
-              memory: "512Mi"
-              cpu: "0.5"
-
 
 ---
 # Define a 'Service' To Expose BookAir MySQL to Other Services
