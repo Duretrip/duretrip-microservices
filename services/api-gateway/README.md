@@ -1,292 +1,149 @@
-<div align="center">
-<img src="./public/images/logo.svg" alt="Truthy Logo">
-</div><br>
-<h1 align="center">
-  Truthy CMS (NestJS Headless API)
-</h1>
+# NestJS REST API boilerplate 🇺🇦
 
-<p align="center"> This repository is Backend API part of Truthy CMS written in NestJS. For Frontend please visit https://github.com/gobeam/truthy-react-frontend. This project includes API for Authentication, User Management, Role Management, Permission Management, Email Module, Account Settings, OTP, RBAC support, Localization, and many more. </p>
-<br>
-<p align="center">
-<img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/gobeam/truthy">
-<img alt="Workflow test" src="https://github.com/gobeam/truthy/actions/workflows/ci.yml/badge.svg">
-<img alt="GitHub" src="https://img.shields.io/github/license/gobeam/truthy">
-<img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/gobeam/truthy">
-<img src='https://www.codetriage.com/gobeam/truthy/badges/users.svg' alt='Open Source Helpers' />
-</p>
-<p align="center">
-<a href="https://www.buymeacoffee.com/gobeam" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-</p>
-<p align="center">
-  <sub>Created by <a href="https://www.linkedin.com/in/roshan-ranabhat/">Roshan Ranabhat (gobeam)</a> and maintained with ❤️ by an amazing <a href="https://github.com/gobeam/truthy-contributors">team of awesome developers</a>.</sub>
-</p>
+![github action status](https://github.com/brocoders/nestjs-boilerplate/actions/workflows/docker-e2e.yml/badge.svg)
+[![renovate](https://img.shields.io/badge/renovate-enabled-%231A1F6C?logo=renovatebot)](https://app.renovatebot.com/dashboard)
 
-<p align="center">
-  <sub>Check Live code deployed here:  Backend API Docs: <a href="http://157.245.148.131:7777/api-docs/">Swagger Docs</a>
-  Frontend: <a href="http://157.245.148.131:3000">Truthy CMS</a>
-  </sub>
-</p>
+## Description <!-- omit in toc -->
 
-<p align="center">
-<img src="https://gobeam.github.io/truthy-contributors/truthy.gif" alt="Truthy CMS" >
-</p>
+NestJS REST API boilerplate for typical project
 
-## Table of Contents
+[Full documentation here](/docs/readme.md)
 
-- [Getting Started](#getting-started)
-- [Prerequisites](#Prerequisites)
-- [Available Scripts](#available-scripts)
-- [Setup](#setup)
-- [Docker Setup](#docker-setup)
-- [File Structure](#file-structure)
-- [Application Security](#application-security)
-- [Contributing](#contributing)
-- [Sponsors](#sponsors)
-- [License](#license)
-- [Acknowledgement](#acknowledgement)
+Demo: <https://nestjs-boilerplate-test.herokuapp.com/docs>
 
----
+Frontend (React, Next.js): <https://github.com/brocoders/react-boilerplate>
 
-## Getting Started
+## Table of Contents <!-- omit in toc -->
 
-This project was created to help developers by bootstrapping basic modules that need to be present while creating a standard CMS. The main motto of this project was to save precious time while developing CMS and focus more on the core part. This project is trying to follow the best possible standard to make it optimized and production-ready. Hope you like it. <br>
-If you love it don't forget to share your experience. If you want to contribute to the Truthy CMS in any way like API, Frontend, Design, Logo you're more than welcome to do so. Our plan is to make this no. 1 CMS maintained by opensource community.
+- [Features](#features)
+- [Quick run](#quick-run)
+- [Comfortable development](#comfortable-development)
+- [Links](#links)
+- [Automatic update of dependencies](#automatic-update-of-dependencies)
+- [Database utils](#database-utils)
+- [Tests](#tests)
+- [Tests in Docker](#tests-in-docker)
+- [Test benchmarking](#test-benchmarking)
 
----
+## Features
 
-## Prerequisites
+- [x] Database ([typeorm](https://www.npmjs.com/package/typeorm)).
+- [x] Seeding.
+- [x] Config Service ([@nestjs/config](https://www.npmjs.com/package/@nestjs/config)).
+- [x] Mailing ([nodemailer](https://www.npmjs.com/package/nodemailer)).
+- [x] Sign in and sign up via email.
+- [x] Social sign in (Apple, Facebook, Google, Twitter).
+- [x] Admin and User roles.
+- [x] I18N ([nestjs-i18n](https://www.npmjs.com/package/nestjs-i18n)).
+- [x] File uploads. Support local and Amazon S3 drivers.
+- [x] Swagger.
+- [x] E2E and units tests.
+- [x] Docker.
+- [x] CI (Github Actions).
 
-NodeJS
-https://nodejs.org/en/
-
-Typescript
-https://www.typescriptlang.org/
-
-PostgresQL
-https://www.postgresql.org/
-
-Redis
-https://redis.io/
-
----
-
-## Available Scripts
-
-### npx truthy-api
-
-This commands downloads the latest version of truthy i.e NestJS Truthy CMS backend API.
-
-In the project directory, you can run:
-
-### `yarn start:dev`
-
-Runs the app in the development & watch mode.<br>
-Open [http://localhost:7777/api-docs](http://localhost:7777/api-docs) to view swagger API docs in browser (only available in development mode).<br>
-You will also see any lint errors in the console.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br>
-
-### `yarn lint`
-
-Lints all the files inside src,apps,libs,test folders and shows the results.
-
-### `yarn format`
-
-Formats all the files inside src using prettier with config provided in .prettierrc
-
-### `yarn format`
-
-Formats all the files inside src using prettier with config provided in .prettierrc
-
-### `yarn coverage`
-
-Runs coverage test command and creates coverage folder with detail report which can be checked with:
-```bash
-yarn coveralls
-```
-
-### `yarn orm-create migration_file_name`
-
-Uses Type ORM to create a migration file. `migration_file_name` is Migration file name to be created.
-
-### `yarn migrate`
-
-This command is used to migrate existing migration file.
-
-### `yarn migration:rollback`
-
-This command is used to rollback migration.
-
-### `yarn seed`
-
-This command is used to run existing seeders.
-
----
-
-## Setup
-
-First, you need to install the project using npx command
+## Quick run
 
 ```bash
-npx truthy-api
+git clone --depth 1 https://github.com/brocoders/nestjs-boilerplate.git my-app
+cd my-app/
+cp env-example .env
+docker compose up -d
 ```
 
-or clone it using
+For check status run
 
 ```bash
-git clone https://github.com/gobeam/truthy.git
+docker compose logs
 ```
-**You also need to run PostgresQL for database and Redis for key-val storage which will be used for queue and throttling.**
-After cloning the make changes in configuration file that exists in config folder which exists in root of project.
-File names are named in accordance with environment you run project with. For example if you're running project in development environment you should make change in configuration of development.yml file. 
-**Please keep in mind environment variables always overrides the config.**
 
-If you want to run locally,
+## Comfortable development
+
 ```bash
-yarn start
+git clone --depth 1 https://github.com/brocoders/nestjs-boilerplate.git my-app
+cd my-app/
+cp env-example .env
 ```
-*If you want to view swagger docs on development open http://localhost:7777/api-docs (assuming you are running application on 7777 port)*
 
-Run Migration
+Change `DATABASE_HOST=postgres` to `DATABASE_HOST=localhost`
+
+Change `MAIL_HOST=maildev` to `MAIL_HOST=localhost`
+
+Run additional container:
+
 ```bash
-yarn migrate
+docker compose up -d postgres adminer maildev
 ```
 
-Run Seeders
 ```bash
-yarn seed
+npm install
+
+npm run migration:run
+
+npm run seed:run
+
+npm run start:dev
 ```
 
-Rollback Migration
+## Links
+
+- Swagger: <http://localhost:3000/docs>
+- Adminer (client for DB): <http://localhost:8080>
+- Maildev: <http://localhost:1080>
+
+## Automatic update of dependencies
+
+If you want to automatically update dependencies, you can connect [Renovate](https://github.com/marketplace/renovate) for your project.
+
+## Database utils
+
+Generate migration
+
 ```bash
-yarn migration:rollback
+npm run migration:generate -- src/database/migrations/CreateNameTable
 ```
 
----
+Run migration
 
-## Docker Setup
-
-**If you want to run project without docker you will not need to create .env file**
-
-If you want to use **Docker** to deploy it on production or development stage
-First create a .env file copying from .env.example and add environment for below parameters only since it will be used for building container using docker-compose
-
-```env
-SERVER_PORT=7777
-DB_PASSWORD=root
-DB_USERNAME=postgres
-DB_DATABASE_NAME=truthy
-DB_PORT=5488
-REDIS_PORT=6399
-```
-
-After creating env file make changes in configuration in accordance with you development environment. Follow setup guide in case you missed it.
- 
-Now to run containers do
 ```bash
-docker-compose build .
-docker-compose up -d
+npm run migration:run
 ```
-These commands will run 3 containers for PostgresQL, Redis and Main API.
 
-To run migration on docker container
+Revert migration
+
 ```bash
-docker exec -it <container_id_or_name> yarn migrate
+npm run migration:revert
 ```
 
-To run seeder on docker container
+Drop all tables in database
+
 ```bash
-docker exec -it <container_id_or_name> yarn seed
+npm run schema:drop
 ```
 
----
+Run seed
 
-## File Structure
-
-This project follows the following file structure:
-
-```text
-truthy
-├── config                                  * Contains all configuration files
-│   └── default.yml                         * Default configuration file.
-│   └── development.yml                     * Configuration file for development environment.
-│   └── production.yml                      * Configuration file for production environment.
-│   └── test.yml                            * Configuration file for test environment.    
-├── coverage                                * Coverage reports after running `yarn coverage` command. 
-├── dist                                    * Optimized code for production after `yarn build` is run.
-├── images                                  * this folder is where uploaded profile images are stored. This folder is git ignored.
-├── src                  
-│   └── <module>                            * Folder where specific modules all files are stored
-│       └── dto                             * Data Transfer Objects.
-│       └── entity                          * Models for module.
-│       └── pipes                           * Includes validation pipes for NestJS modules.
-│       └── serializer                      * Includes serializer for model data.
-│       └── <module>.controller.ts          * Controller file.
-│       └── <module>.module.ts              * root module file for module.
-│       └── <module>.service.ts             * Service file for <module>.
-│       └── <module>.service.spec.ts        * Test file for service.
-│       └── <module>.repository.ts          * Repository file for <module>.
-│       └── <module>.repository.spec.ts     * Test file for repository.
-│   └── common                              * Common helpers function, dto, entity, exception, decorators etc.
-│   └── config                              * Configuration variables files.
-│   └── database                            * Database folders that includes migration and seeders file
-│       └── migrations                      * Migration folder includes all migration files.
-│       └── seeds                           * Seeds folder includes all seeders files.
-│   └── exception                           * Exception folder includes custom exceptions.
-│   └── app.module.ts                       * Root module of the application.
-│   └── main.ts                             * The entry file of the application which uses the core function NestFactory to create a Nest application instance.
-├── test                                    * Contains E2E tests 
+```bash
+npm run seed:run
 ```
 
-**Some important root files**
+## Tests
 
-```text
-.
-├── .editorconfig                           * Coding styles (also by programming language).
-├── .env                                    * Environment variables for docker.
-├── .prettierrc.js                          * Formatting Prettier options.
-├── .eslintrc.js                            * ESLint configuration and rules.
-├── .docker-compose.yml                     * Docker compose configuration.
-├── Dockerfile                              * Docker file for prod environment.
-├── Dockerfile.dev                          * Docker file for dev environment.
-├── tsconfig.json                           * Typescript configuration for application.
+```bash
+# unit tests
+npm run test
+
+# e2e tests
+npm run test:e2e
 ```
 
----
+## Tests in Docker
 
-## Application Security
+```bash
+docker compose -f docker-compose.ci.yaml --env-file env-example -p ci up --build --exit-code-from api && docker compose -p ci rm -svf
+```
 
-### Throttle
+## Test benchmarking
 
-By default Throttle has been implemented for all API's. Redis is default driver to record throttle state data. You can easily change configuration from config files.
-
-### Two Factor Authentication (2FA)
-
-User Will have 2FA authentication option available to be turned on or off. For 2FA time-based one-time password is used. A time-based one-time password (TOTP) application automatically generates an authentication code that changes after a certain period of time. Applications like [Authenticator](https://play.google.com/store/apps/details?id=com.azure.authenticator&hl=en&gl=US), [1Password](https://support.1password.com/one-time-passwords/), [Authy](https://authy.com/guides/github/) etc. can be used to generate TOTP. When you enable 2FA, you will be sent a QR code in your email which should be scanned from above mentioned application and TOTP will be generated by those applications.
-
----
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate. - see `CONTRIBUTING.md` for details.
-**If you want to be featured in contributors list on our home page please add PR on https://github.com/gobeam/truthy-contributors to provide your details.**
-
----
-
-## Sponsors
-- [Ekbana Solutions Pvt. Ltd](https://ekbana.com/)
-
----
-
-## License
-
-Released under the MIT License - see `LICENSE.md` for details.
-
----
-
-## Acknowledgement
-
-- [NestJS](https://github.com/nestjs/nest)
+```bash
+docker run --rm jordi/ab -n 100 -c 100 -T application/json -H "Authorization: Bearer USER_TOKEN" -v 2 http://<server_ip>:3000/api/v1/users
+```
