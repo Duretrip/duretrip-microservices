@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis-container
+        image: redis:latest
+        ports:
+          - containerPort: 6379
+        resources:
+            requests:
+              memory: "500Mi"
+              cpu: "0.2"
+            limits:
+              memory: "1Gi"
+              cpu: "0.5"
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+spec:
+  selector:
+    app: redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
