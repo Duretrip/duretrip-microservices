@@ -30,7 +30,19 @@ spec:
           env:
             - name: NODE_OPTIONS
               value: "--max-old-space-size=4096"
-              
+
+            - name: REDIS_HOST
+              value: host.docker.internal
+
+            - name: REDIS_PORT
+              value: "6379"
+
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: password
+
             - name: DB_TYPE
               value: postgres
 

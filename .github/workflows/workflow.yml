@@ -112,6 +112,7 @@ jobs:
         kubectl apply -f k8s/Postgress/postgress-configMap.yml
         kubectl apply -f k8s/Postgress/postgress-secrets.yml
         kubectl apply -f k8s/Postgress/postgress.yml
+        kubectl apply -f k8s/redis/redis.yml
 
 
   migrate_database_permission:
