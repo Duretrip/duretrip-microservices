@@ -28,19 +28,19 @@ spec:
               memory: "512Mi"
               cpu: "0.5"
           env:
-            - name: DATABASE_TYPE
+            - name: DB_TYPE
               value: postgres
 
-            - name: DATABASE_NAME
+            - name: DB_DATABASE_NAME
               value: auth_db
 
-            - name: DATABASE_HOST
+            - name: DB_HOST
               value: "34.28.62.57"
 
-            - name: DATABASE_URL
+            - name: DB_URL
               value: postgres://dureauth:r24rHK98bo9@34.28.62.57:5432/auth_db
 
-            - name: DATABASE_PORT
+            - name: DB_PORT
               value: "5432"
 
             - name: JWT_SECRET
@@ -49,10 +49,10 @@ spec:
                   name: jwt-secret
                   key: username
 
-            - name: DATABASE_USERNAME
+            - name: DB_USERNAME
               value: dureauth
 
-            - name: DATABASE_PASSWORD
+            - name: DB_PASSWORD
               value: r24rHK98bo9
 
             - name: RABBITMQ_HOST

@@ -17,6 +17,6 @@ RUN npm install
 COPY . .
 
 # Command to run the application (adjust as needed)
-CMD ["sh", "-c", "npm run migration:run && npm run seed:run && npm run start"]
+CMD ["sh", "-c", "npm run jet:migrate:dev:create && npm run jet:migrate:dev InitDB && npm run start"]
 # CMD ["sh", "-c", "npx nest --version && tsc -v"]
 # CMD ["npm", "start"]

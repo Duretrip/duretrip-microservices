@@ -11,5 +11,4 @@ services:
     ports:
       - 8006:8006
     # env_file:
-    #   - .env.dev.docker
-
+    #   - .env.dev
