@@ -5,7 +5,7 @@ CREATE DATABASE hotel_db;
 
 -- Create users and grant privileges
 CREATE USER "dureauth" WITH ENCRYPTED PASSWORD 'dureAuth2023';
-GRANT ALL PRIVILEGES ON DATABASE auth_dbb TO "dureauth";
+GRANT ALL PRIVILEGES ON DATABASE auth_db TO "dureauth";
 
 -- Create users and grant privileges
 CREATE USER "durejet" WITH ENCRYPTED PASSWORD '${PASSWORDE}';
