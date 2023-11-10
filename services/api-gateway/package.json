@@ -29,8 +29,8 @@
     "migration:rollback": "npm run typeorm migration:revert",
     "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed -n src/config/ormconfig.ts",
     "precommit": "lint-staged && npm run lint",
-    "prepush": "npm run test:unit && npm run test:e2e",
-    "prepare": "husky install"
+    "prepush": "npm run test:unit && npm run test:e2e"
+    
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "^3.54.1",
