@@ -11,12 +11,12 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install app dependencies
-RUN npm install
+RUN npm install --force
 
 # Copy the rest of your application code to the containernpm 
 COPY . .
 
 # Command to run the application (adjust as needed)
-CMD ["sh", "-c", "npm run migration:run && npm run seed:run && npm run start"]
+CMD ["sh", "-c", "npm run migrate && npm run seed && npm run start:dev"]
 # CMD ["sh", "-c", "npx nest --version && tsc -v"]
 # CMD ["npm", "start"]
