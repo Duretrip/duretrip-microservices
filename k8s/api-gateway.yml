@@ -32,7 +32,7 @@ spec:
               value: postgres
 
             - name: DB_DATABASE_NAME
-              value: auth_db
+              value: auth_dbb
 
             - name: DB_HOST
               value: "34.28.62.57"
