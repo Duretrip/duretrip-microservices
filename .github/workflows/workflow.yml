@@ -184,7 +184,7 @@ jobs:
       - name: Replace placeholders Image in YML script
         run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
-          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
+          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
 
       - name: Build Docker images
         env:
