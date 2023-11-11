@@ -5,8 +5,8 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - endure-db:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
+      - dure-db:/var/lib/postgresql/data
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d # Mount init.sql as an initialization script
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Duretrip@2023
@@ -71,7 +71,7 @@ services:
 
 volumes:
   # mysql_data:
-  endure-db:
+  dure-db:
   
 networks:
   mynetwork:
