@@ -12,7 +12,7 @@ export class MailService {
   constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService<AllConfigType>,
-  ) {}
+  ) { }
 
   async userSignUp(mailData: MailData<{ hash: string }>): Promise<void> {
     const i18n = I18nContext.current();
@@ -20,6 +20,7 @@ export class MailService {
     let text1: MaybeType<string>;
     let text2: MaybeType<string>;
     let text3: MaybeType<string>;
+    let text4: MaybeType<string>;
 
     if (i18n) {
       [emailConfirmTitle, text1, text2, text3] = await Promise.all([
@@ -27,6 +28,7 @@ export class MailService {
         i18n.t('confirm-email.text1'),
         i18n.t('confirm-email.text2'),
         i18n.t('confirm-email.text3'),
+        i18n.t('confirm-email.text4')
       ]);
     }
 
@@ -55,6 +57,7 @@ export class MailService {
         text1,
         text2,
         text3,
+        text4
       },
     });
   }

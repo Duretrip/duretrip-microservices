@@ -8,11 +8,11 @@ RUN cd /tmp/app && npm install
 
 COPY . /usr/src/app
 RUN cp -a /tmp/app/node_modules /usr/src/app
-COPY ./wait-for-it.sh /opt/wait-for-it.sh
-RUN chmod +x /opt/wait-for-it.sh
+# COPY ./wait-for-it.sh /opt/wait-for-it.sh
+# RUN chmod +x /opt/wait-for-it.sh
 COPY ./startup.docker.sh /opt/startup.docker.sh
 RUN chmod +x /opt/startup.docker.sh
-RUN sed -i 's/\r//g' /opt/wait-for-it.sh
+# RUN sed -i 's/\r//g' /opt/wait-for-it.sh
 RUN sed -i 's/\r//g' /opt/startup.docker.sh
 
 WORKDIR /usr/src/app
