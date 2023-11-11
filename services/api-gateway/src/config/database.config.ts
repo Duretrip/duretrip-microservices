@@ -74,10 +74,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<DatabaseConfig>('database', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
-
-  console.log('This is the env vars I am getting from the server', process.env);
-  
+  validateConfig(process.env, EnvironmentVariablesValidator);  
 
   return {
     url: process.env.DATABASE_URL,
