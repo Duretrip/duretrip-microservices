@@ -20,6 +20,10 @@ export class PermissionSeedService {
         { name: 'BOOK_JETS' },
         { name: 'VIEW_HOTELS' },
         { name: 'BOOK_HOTELS' },
+        { name: 'VIEW_MIRACLES' },
+        { name: 'LOVE_GOD' },
+        { name: 'ENJOY_GRACE' },
+        { name: 'LIVE_LONG' },
         // Add more permissions as needed
       ];
 

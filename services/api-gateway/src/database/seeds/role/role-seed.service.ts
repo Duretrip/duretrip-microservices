@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from 'src/permissions/entities/permission.entity';
 import { Role } from 'src/roles/entities/role.entity';
 import { RoleEnum } from 'src/roles/roles.enum';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, In, Repository } from 'typeorm';
 
 @Injectable()
 export class RoleSeedService {
@@ -58,13 +58,24 @@ export class RoleSeedService {
     });
 
     if (!countAdmin) {
-      await this.repository.save(
-        this.repository.create({
-          id: RoleEnum.admin,
-          name: 'Admin',
-          permissions: ['VIEW_JETS', 'BOOK_JETS'], // Assign permissions to the role
-        } as DeepPartial<Role>),
-      );
+      // Create Admin role without permissions
+      const adminRole = this.repository.create({
+        id: RoleEnum.admin,
+        name: 'Admin',
+      });
+
+      // Save Admin role without permissions
+      const savedAdminRole = await this.repository.save(adminRole);
+
+      // Assign permissions to the Admin role
+      const permissions = await this.permissionRepository.find({
+        where: { name: In(['VIEW_JETS', 'BOOK_JETS']) },
+      });
+      
+      savedAdminRole.permissions = permissions;
+      
+      // Save the Admin role with assigned permissions
+      const finalResult = await this.repository.save(savedAdminRole);
     }
   }
 }

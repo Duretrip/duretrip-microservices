@@ -47,6 +47,8 @@ export class AuthService {
     const user = await this.usersService.findOne({
       email: loginDto.email,
     });
+    console.log({user});
+    
 
     if (!user) {
       throw new HttpException(
@@ -216,6 +218,8 @@ export class AuthService {
         hash,
       },
     });
+
+    
   }
 
   async confirmEmail(hash: string): Promise<void> {
