@@ -1,91 +1,100 @@
 import { Module } from '@nestjs/common';
+import { UsersModule } from './users/users.module';
+import { FilesModule } from './files/files.module';
+import { AuthModule } from './auth/auth.module';
+import databaseConfig from './config/database.config';
+import authConfig from './config/auth.config';
+import appConfig from './config/app.config';
+import mailConfig from './config/mail.config';
+import fileConfig from './config/file.config';
+import facebookConfig from './config/facebook.config';
+import googleConfig from './config/google.config';
+import twitterConfig from './config/twitter.config';
+import appleConfig from './config/apple.config';
+import path from 'path';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
-import * as path from 'path';
-import * as config from 'config';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
-import {
-  CookieResolver,
-  HeaderResolver,
-  I18nJsonParser,
-  I18nModule,
-  QueryResolver
-} from 'nestjs-i18n';
-import { WinstonModule } from 'nest-winston';
-
-import { AuthModule } from 'src/auth/auth.module';
-import { RolesModule } from 'src/role/roles.module';
-import { PermissionsModule } from 'src/permission/permissions.module';
-import * as ormConfig from 'src/config/ormconfig';
-import * as throttleConfig from 'src/config/throttle-config';
-import { MailModule } from 'src/mail/mail.module';
-import { EmailTemplateModule } from 'src/email-template/email-template.module';
-import { RefreshTokenModule } from 'src/refresh-token/refresh-token.module';
-import { I18nExceptionFilterPipe } from 'src/common/pipes/i18n-exception-filter.pipe';
-import { CustomValidationPipe } from 'src/common/pipes/custom-validation.pipe';
-import { TwofaModule } from 'src/twofa/twofa.module';
-import { CustomThrottlerGuard } from 'src/common/guard/custom-throttle.guard';
-import { DashboardModule } from 'src/dashboard/dashboard.module';
-import { AppController } from 'src/app.controller';
-import winstonConfig from 'src/config/winston';
-const appConfig = config.get('app');
+import { AuthAppleModule } from './auth-apple/auth-apple.module';
+import { AuthFacebookModule } from './auth-facebook/auth-facebook.module';
+import { AuthGoogleModule } from './auth-google/auth-google.module';
+import { AuthTwitterModule } from './auth-twitter/auth-twitter.module';
+import { I18nModule } from 'nestjs-i18n/dist/i18n.module';
+import { HeaderResolver } from 'nestjs-i18n';
+import { TypeOrmConfigService } from './database/typeorm-config.service';
+import { ForgotModule } from './forgot/forgot.module';
+import { MailModule } from './mail/mail.module';
+import { HomeModule } from './home/home.module';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { AllConfigType } from './config/config.type';
+import { SessionModule } from './session/session.module';
+import { MailerModule } from './mailer/mailer.module';
+import { RabbitmqService } from './rabbitmq/rabbitmq.service';
+import { JetController } from './jet/jet.controller';
+import { PermissionsModule } from './permissions/permissions.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
-    WinstonModule.forRoot(winstonConfig),
-    ThrottlerModule.forRootAsync({
-      useFactory: () => throttleConfig
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [
+        databaseConfig,
+        authConfig,
+        appConfig,
+        mailConfig,
+        fileConfig,
+        facebookConfig,
+        googleConfig,
+        twitterConfig,
+        appleConfig,
+      ],
+      envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ormConfig
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (options: DataSourceOptions) => {
+        return new DataSource(options).initialize();
+      },
     }),
     I18nModule.forRootAsync({
-      useFactory: () => ({
-        fallbackLanguage: appConfig.fallbackLanguage,
-        parserOptions: {
-          path: path.join(__dirname, '/i18n/'),
-          watch: true
-        }
+      useFactory: (configService: ConfigService<AllConfigType>) => ({
+        fallbackLanguage: configService.getOrThrow('app.fallbackLanguage', {
+          infer: true,
+        }),
+        loaderOptions: { path: path.join(__dirname, '../i18n/'), watch: true },
       }),
-      parser: I18nJsonParser,
       resolvers: [
         {
-          use: QueryResolver,
-          options: ['lang', 'locale', 'l']
+          use: HeaderResolver,
+          useFactory: (configService: ConfigService<AllConfigType>) => {
+            return [
+              configService.get('app.headerLanguage', {
+                infer: true,
+              }),
+            ];
+          },
+          inject: [ConfigService],
         },
-        new HeaderResolver(['x-custom-lang']),
-        new CookieResolver(['lang', 'locale', 'l'])
-      ]
+      ],
+      imports: [ConfigModule],
+      inject: [ConfigService],
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      exclude: ['/api*']
-    }),
+    UsersModule,
+    FilesModule,
     AuthModule,
-    RolesModule,
-    PermissionsModule,
+    AuthFacebookModule,
+    AuthGoogleModule,
+    AuthTwitterModule,
+    AuthAppleModule,
+    ForgotModule,
+    SessionModule,
     MailModule,
-    EmailTemplateModule,
-    RefreshTokenModule,
-    TwofaModule,
-    DashboardModule
+    MailerModule,
+    HomeModule,
+    PermissionsModule,
+    RolesModule
   ],
-  providers: [
-    {
-      provide: APP_PIPE,
-      useClass: CustomValidationPipe
-    },
-    {
-      provide: APP_GUARD,
-      useClass: CustomThrottlerGuard
-    },
-    {
-      provide: APP_FILTER,
-      useClass: I18nExceptionFilterPipe
-    }
-  ],
-  controllers: [AppController]
+  providers: [RabbitmqService],
+  controllers: [JetController],
 })
 export class AppModule {}

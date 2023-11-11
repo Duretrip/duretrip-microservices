@@ -5,12 +5,12 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - duretrip-db:/var/lib/postgresql/data
+      - endure-db:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Duretrip@2023
-      POSTGRES_DB: duretrip
+      POSTGRES_DB: endure
       
   # mysql:
   #   image: mysql:latest
@@ -27,6 +27,14 @@ services:
   #     - mysql_data:/var/lib/mysql
       # - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
     # command: --default-authentication-plugin=mysql_native_password
+
+  maildev:
+    build:
+      context: .
+      dockerfile: maildev.Dockerfile
+    ports:
+      - 1080:1080
+      - 1025:1025
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -63,7 +71,7 @@ services:
 
 volumes:
   # mysql_data:
-  duretrip-db:
+  endure-db:
   
 networks:
   mynetwork:

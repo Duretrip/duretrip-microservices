@@ -1,22 +1,23 @@
-# Use the official Node.js runtime as a parent image
-FROM node:latest
+FROM node:18.18.2-alpine
 
-# Set the working directory in the container
-WORKDIR /app
+RUN apk add --no-cache bash
+RUN npm i -g @nestjs/cli typescript ts-node
 
-# RUN  npm install -g typescript@latest
-# RUN npm install -g @nestjs/cli
+COPY package*.json /tmp/app/
+RUN cd /tmp/app && npm install
 
-# Copy package.json and package-lock.json to the container
-COPY package*.json ./
+COPY . /usr/src/app
+RUN cp -a /tmp/app/node_modules /usr/src/app
+COPY ./wait-for-it.sh /opt/wait-for-it.sh
+RUN chmod +x /opt/wait-for-it.sh
+COPY ./startup.docker.sh /opt/startup.docker.sh
+RUN chmod +x /opt/startup.docker.sh
+RUN sed -i 's/\r//g' /opt/wait-for-it.sh
+RUN sed -i 's/\r//g' /opt/startup.docker.sh
 
-# Install app dependencies
-RUN npm install --force
+WORKDIR /usr/src/app
+# RUN if [ ! -f .env.docker ]; then cp env-example .env.docker; fi
+RUN npm run build
 
-# Copy the rest of your application code to the containernpm 
-COPY . .
-
-# Command to run the application (adjust as needed)
-CMD ["sh", "-c", "npm run migrate && npm run seed && npm run start:dev"]
-# CMD ["sh", "-c", "npx nest --version && tsc -v"]
-# CMD ["npm", "start"]
+CMD ["/opt/startup.docker.sh"]
+# CMD ["npm", "run", "start:prod"]
