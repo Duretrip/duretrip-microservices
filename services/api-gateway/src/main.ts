@@ -39,8 +39,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
 
-console.log('This is the env vars I am getting from the server', process.env);
-
   await app.listen(configService.getOrThrow('app.port', { infer: true }));
   console.log(
     `app listening on ${configService.getOrThrow('app.port', { infer: true })}`,
