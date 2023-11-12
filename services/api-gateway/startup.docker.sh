@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 # set -e
-echo "Environment Variables:"
-echo "----------------------"
-
-env
 
 chmod +x /opt/wait-for-it.sh
 
