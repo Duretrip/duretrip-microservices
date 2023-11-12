@@ -5,7 +5,7 @@ echo "----------------------"
 
 env
 
-RUN chmod +x /opt/wait-for-it.sh 
+chmod +x /opt/wait-for-it.sh
 
 # /opt/wait-for-it.sh host.docker.internal:5432
 # sleep 30
