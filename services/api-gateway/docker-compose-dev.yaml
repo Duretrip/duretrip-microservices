@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   main:
-    container_name: new_auth
+    container_name: auth
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,12 +10,12 @@ services:
     restart: always
     ports:
       - 8006:8006
-    volumes:
-      - ./wait-for-it.sh:/opt/wait-for-it.sh  # Mount init.sql as an initialization script
-      - ./startup.docker.sh:/docker-entrypoint-initdb.d/startup.docker.sh  # Mount init.sql as an initialization script
     env_file:
       - .env.docker
-    command: /docker-entrypoint-initdb.d/startup.docker.sh
+    # volumes:
+    #   - ./wait-for-it.sh:/opt/wait-for-it.sh  # Mount init.sql as an initialization script
+    #   - ./startup.docker.sh:/docker-entrypoint-initdb.d/startup.docker.sh  # Mount init.sql as an initialization script
+    # command: /docker-entrypoint-initdb.d/startup.docker.sh
 
 
       

@@ -18,5 +18,5 @@ RUN npm install
 # Copy the rest of your application code to the containernpm 
 COPY . .
 
-# CMD ["/opt/startup.docker.sh"]
+CMD ["sh", "-c", "npm run migration:run && npm run seed:run && npm run start"]
 
