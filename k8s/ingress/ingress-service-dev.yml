@@ -77,6 +77,18 @@ spec:
                 port:
                   number: 80
 
+
+    - host: mail-dev.duretrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: maildev-service
+                port:
+                  number: 1025
+
                   
 
   tls:
