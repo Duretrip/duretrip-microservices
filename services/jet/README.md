@@ -45,6 +45,19 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Prisma Database
+
+```bash
+# Migration
+$ npm run migrate
+
+# DB Client
+$ npm run prisma:generate:client
+
+# Seed
+$ npm run seed
+```
+
 ## Test
 
 ```bash

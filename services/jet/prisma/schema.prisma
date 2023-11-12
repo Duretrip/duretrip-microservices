@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../node_modules/@dare/jet/client"
 }
 
 datasource db {
@@ -22,7 +21,7 @@ model Jet {
   status             StatusEnum             @default(active)
   availableHours     String
   price              Int
-  priceDescription   Int
+  priceDescription   String
   pictures           Json
 
   ranges     RangesOnJets[] // Short Range (Up to 2000 Nautical Miles), Medium Range (2000-5000 Nautical Miles), Long Range (5000+ Nautical Miles)
