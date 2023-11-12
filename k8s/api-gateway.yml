@@ -76,6 +76,36 @@ spec:
                   name: postgres-secrets
                   key: password
 
+            - name: MAIL_HOST
+              value: dureauth
+            
+            - name: MAIL_PORT
+              value: dureauth
+            
+            - name: MAIL_USER
+              value: dureauth
+
+            - name: MAIL_PASSWORD
+              value: dureauth
+
+            - name: MAIL_IGNORE_TLS
+              value: "true"
+
+            - name: MAIL_SECURE
+              value: "false"
+
+            - name: MAIL_REQUIRE_TLS
+              value: "false"
+
+            - name: MAIL_DEFAULT_EMAIL
+              value: "info@duretrip.com"
+
+            - name: MAIL_DEFAULT_NAME
+              value: "Api"
+
+            - name: MAIL_CLIENT_PORT
+              value: "1080"
+
             - name: RABBITMQ_HOST
               valueFrom:
                 configMapKeyRef:
