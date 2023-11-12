@@ -10,9 +10,7 @@ import { AllExceptionsFilter } from './allExceptionsFilter';
 import dotenv from 'dotenv';
 dotenv.config();
 
-
 async function bootstrap() {
-  console.log('processEnv',process.env);
   const app = await NestFactory.create(AppModule, { cors: true });
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   const configService = app.get(ConfigService<AllConfigType>);
