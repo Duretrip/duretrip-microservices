@@ -65,6 +65,18 @@ spec:
                 port:
                   number: 5672
 
+
+    - host: mail.duretrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: maildev-service
+                port:
+                  number: 80
+
                   
 
   tls:
@@ -74,4 +86,5 @@ spec:
       - dev.duretrip.com
       - dev-mysql.duretrip.com
       - dev-rabbit.duretrip.com
+      - mail.duretrip.com
       secretName: my-tls-secret  # The name of the Secret containing your SSL certificate
