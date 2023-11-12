@@ -33,8 +33,6 @@ import { JetController } from './jet/jet.controller';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
 
-console.log('This is the env vars I am getting from the server', process.env);
-
 @Module({
   imports: [
     ConfigModule.forRoot({
