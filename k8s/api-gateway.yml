@@ -77,16 +77,16 @@ spec:
                   key: password
 
             - name: MAIL_HOST
-              value: dureauth
+              value: "10.24.5.185"
             
             - name: MAIL_PORT
-              value: dureauth
+              value: "1025"
             
             - name: MAIL_USER
-              value: dureauth
+              value: 
 
             - name: MAIL_PASSWORD
-              value: dureauth
+              value: 
 
             - name: MAIL_IGNORE_TLS
               value: "true"
