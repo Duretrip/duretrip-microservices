@@ -38,7 +38,7 @@ spec:
     app: maildev
   ports:
     - protocol: TCP
-      port: 1080
+      port: 80
       targetPort: 1080
       # Optional: add a name to the port
       name: maildev-web
