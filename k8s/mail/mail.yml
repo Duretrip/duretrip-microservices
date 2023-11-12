@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maildev-deployment
+  labels:
+    app: maildev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maildev
+  template:
+    metadata:
+      labels:
+        app: maildev
+    spec:
+      containers:
+      - name: maildev-container
+        image: node:20.9.0-alpine
+        command: ["sh", "-c"]
+        args:
+          - |
+            npm i -g maildev@2.0.5
+            maildev
+        ports:
+        - containerPort: 1080
+        - containerPort: 25
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: maildev-service
+  labels:
+    app: maildev
+spec:
+  selector:
+    app: maildev
+  ports:
+    - protocol: TCP
+      port: 1080
+      targetPort: 1080
+      nodePort: 30001  # Choose a node port as needed (30001 is just an example)
+    - protocol: TCP
+      port: 25
+      targetPort: 25
+  type: NodePort
