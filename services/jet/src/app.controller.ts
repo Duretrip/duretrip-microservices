@@ -1,13 +1,15 @@
 import { Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { RabbitmqService } from './rabbitmq/rabbitmq.service';
+import { JetsService } from './jets/jets.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly rabbitMQService: RabbitmqService,
     private readonly appService: AppService,
-  ) {}
+    private readonly jetsService: JetsService,
+  ) { }
   async onModuleInit() {
     await this.rabbitMQService.connectToRabbitMQ();
     try {
@@ -21,7 +23,39 @@ export class AppController {
             response,
           });
         }
-      })
+
+        if (message.action === 'find_all_jet') {
+          const payload = message.payload;
+          const response = await this.jetsService.findAll();
+          // console.log(response);
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'jet_find_all',
+            response,
+          });
+        }
+
+        if (message.action === 'find_one_jet') {
+          const payload = message.payload;
+          const response = this.jetsService.findOne(payload.id);
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'jet_find_one',
+            response,
+          });
+        }
+
+        if (message.action === 'create_one_jet') {
+          const payload = message.payload;
+          const response = this.jetsService.create(payload, payload.userId);
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'jet_create_one',
+            response,
+          });
+        }
+      });
     } catch (error) {
       console.log({ error: JSON.stringify(error) });
     }
