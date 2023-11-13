@@ -17,6 +17,6 @@ RUN yarn install
 COPY . .
 
 # Command to run the application (adjust as needed)
-CMD ["sh", "-c", "npm run start"]
+CMD ["sh", "-c", "yarn start"]
 # CMD ["sh", "-c", "npx nest --version && tsc -v"]
 # CMD ["npm", "start"]

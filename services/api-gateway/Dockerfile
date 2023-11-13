@@ -19,5 +19,5 @@ RUN yarn install
 COPY . .
 
 # CMD ["sh", "-c", "npm run migration:run && npm run seed:run && npm run start"]
-CMD ["sh", "-c", "npm run start"]
+CMD ["sh", "-c", "yarn start"]
 
