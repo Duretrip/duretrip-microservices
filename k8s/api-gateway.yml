@@ -104,7 +104,7 @@ spec:
               value: "Api"
 
             - name: MAIL_CLIENT_PORT
-              value: "1080"
+              value: "80"
 
             - name: FILE_DRIVER
               value: "local"
