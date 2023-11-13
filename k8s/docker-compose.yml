@@ -5,7 +5,7 @@ services:
     container_name: auth
     build:
       context: .
-      dockerfile: ../services/api-gateway/Dockerfile
+      dockerfile: ../api-gateway/Dockerfile
     image: duretrip/api-gateway:latest
     restart: always
     ports:
@@ -15,7 +15,7 @@ services:
     container_name: jet
     build:
       context: .
-      dockerfile: ../services/jet/Dockerfile
+      dockerfile: ../jet/Dockerfile
     image: duretrip/jet:latest
     restart: always
     ports:
