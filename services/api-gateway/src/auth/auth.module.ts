@@ -12,7 +12,7 @@ import { IsExist } from 'src/utils/validators/is-exists.validator';
 import { IsNotExist } from 'src/utils/validators/is-not-exists.validator';
 import { SessionModule } from 'src/session/session.module';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
-import { RabbitmqService } from 'src/rabbitmq/rabbitmq.service';
+import { RabbitMQService } from 'src/rabbitmq/rabbitmq.service';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { RabbitmqService } from 'src/rabbitmq/rabbitmq.service';
     JwtStrategy,
     JwtRefreshStrategy,
     AnonymousStrategy,
-    RabbitmqService,
+    RabbitMQService,
   ],
   exports: [AuthService],
 })
