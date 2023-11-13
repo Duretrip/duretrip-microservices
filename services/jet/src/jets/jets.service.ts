@@ -3,12 +3,14 @@ import { CreateJetDto } from './dto/create-jet.dto';
 import { UpdateJetDto } from './dto/update-jet.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Jet as JetModel } from '@prisma/client';
+import { log } from 'console';
 
 @Injectable()
 export class JetsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(createJetDto: CreateJetDto, userId: number): Promise<JetModel> {
+
     // TODO add Transaction
     const {
       model,
@@ -63,7 +65,6 @@ export class JetsService {
         data: capacityata,
       }),
     ]);
-
     return saveJet;
   }
 

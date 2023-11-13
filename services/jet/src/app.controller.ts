@@ -1,17 +1,16 @@
 import { Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { RabbitmqService } from './rabbitmq/rabbitmq.service';
+import { RabbitMQService } from './rabbitmq/rabbitmq.service';
 import { JetsService } from './jets/jets.service';
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly rabbitMQService: RabbitmqService,
+    private readonly rabbitMQService: RabbitMQService,
     private readonly appService: AppService,
     private readonly jetsService: JetsService,
   ) { }
   async onModuleInit() {
-    await this.rabbitMQService.connectToRabbitMQ();
     try {
       this.rabbitMQService.consumeMessages('jet-queue', async (message) => {
         if (message.action === 'register_jet') {
@@ -46,10 +45,10 @@ export class AppController {
           });
         }
 
-        if (message.action === 'create_jet') {
+        if (message.action === 'create_jet') {          
           const payload = message.payload;
-          const response = this.jetsService.create(payload, payload.userId);
-          this.rabbitMQService.publishMessage('api-gateway-queue', {
+          const response = await this.jetsService.create(payload, 2);
+          await this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
             action: 'jet_created',
             response,

@@ -16,9 +16,10 @@ export class JetsController {
   constructor(private readonly jetsService: JetsService) {}
 
   @Post()
-  create(@Body() createJetDto: CreateJetDto) {
+  async create(@Body() createJetDto: CreateJetDto) {
     const userId = 2;
-    return this.jetsService.create(createJetDto, userId);
+    const response = await this.jetsService.create(createJetDto, userId);
+    return response;
   }
 
   @Get()
