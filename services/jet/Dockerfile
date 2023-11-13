@@ -13,7 +13,7 @@ COPY package*.json ./
 # Install app dependencies
 RUN npm install
 
-RUN npm run prisma:generate:client
+RUN npx prisma:generate:client
 
 # Copy the rest of your application code to the containernpm 
 COPY . .
