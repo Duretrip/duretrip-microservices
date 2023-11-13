@@ -122,10 +122,10 @@ spec:
               value: redis://10.24.5.212:6380/1
 
             - name: FRONTEND_DOMAIN
-              value: dev.duretrip.com
+              value: http://dev.duretrip.com
 
             - name: BACKEND_DOMAIN
-              value: dev-api.duretrip.com
+              value: http://dev-api.duretrip.com
 
             - name: APP_NAME
               value: Duretrip
