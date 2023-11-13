@@ -2,13 +2,13 @@ version: '3.7'
 
 services:
   main:
-    container_name: auth
+    container_name: jet
     build:
       context: .
       dockerfile: Dockerfile
     image: duretrip/jet:latest
     restart: always
     ports:
-      - 8006:8006
-    # env_file:
-    #   - .env.dev
+      - 8007:8007
+    env_file:
+      - .env.dev

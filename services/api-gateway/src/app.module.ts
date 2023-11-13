@@ -28,7 +28,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { AllConfigType } from './config/config.type';
 import { SessionModule } from './session/session.module';
 import { MailerModule } from './mailer/mailer.module';
-import { RabbitmqService } from './rabbitmq/rabbitmq.service';
+import { RabbitMQService } from './rabbitmq/rabbitmq.service';
 import { JetController } from './jet/jet.controller';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
@@ -95,7 +95,7 @@ import { RolesModule } from './roles/roles.module';
     PermissionsModule,
     RolesModule
   ],
-  providers: [RabbitmqService],
+  providers: [RabbitMQService],
   controllers: [JetController],
 })
 export class AppModule {}

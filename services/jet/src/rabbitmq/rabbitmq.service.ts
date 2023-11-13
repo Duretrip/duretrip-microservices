@@ -1,14 +1,20 @@
+// rabbitmq.service.ts
+
 import { Injectable } from '@nestjs/common';
 import * as amqp from 'amqplib';
 
 @Injectable()
-export class RabbitmqService {
+export class RabbitMQService {
   private connection: amqp.Connection;
   private channel: amqp.Channel;
 
-  constructor() {}
+  constructor() { }
 
-  public async connectToRabbitMQ() {
+  async onModuleInit() {
+    await this.connectToRabbitMQ();
+  }
+  
+  private async connectToRabbitMQ() {
     this.connection = await amqp.connect(process.env.RABBITMQ_CONECTION_URL); // Replace with your RabbitMQ server URL
     this.channel = await this.connection.createChannel();
   }
@@ -26,17 +32,21 @@ export class RabbitmqService {
   }
 
   async waitForResponse(correlationId: string): Promise<any> {
-    return new Promise((resolve) => {
-      // Listen for responses with the specified correlationId
-      this.channel.consume('api-gateway-queue', (msg) => {
+    return new Promise(async (resolve) => {
+      // Create a new consumer for each request
+      const { consumerTag } = await this.channel.consume('api-gateway-queue', (msg) => {
         const message = JSON.parse(msg.content.toString());
-        console.log({ message });
         if (message.correlationId === correlationId) {
           resolve(message);
+
           // Acknowledge the message
           this.channel.ack(msg);
+
+          // Cancel the consumer after resolving the message
+          this.channel.cancel(consumerTag);
         }
       });
     });
   }
+
 }
