@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install app dependencies
-RUN yarn install
+RUN npm install
 
 RUN npm run prisma:generate:client
 
