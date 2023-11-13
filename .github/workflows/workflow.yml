@@ -187,17 +187,15 @@ jobs:
       
       - name: Replace placeholders Image in YML script
         run: |
-          sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
-          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
+          sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" k8s/docker-compose.yaml
+          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" k8s/docker-compose.yaml
 
       - name: Build Docker images
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
-          docker-compose -f services/api-gateway/docker-compose.yaml build
-          docker-compose -f services/api-gateway/docker-compose.yaml push
-          docker-compose -f services/jet/docker-compose.yaml build
-          docker-compose -f services/jet/docker-compose.yaml push
+          docker-compose -f k8s/docker-compose.yaml build
+          docker-compose -f k8s/docker-compose.yaml push
         working-directory: .
 
 
