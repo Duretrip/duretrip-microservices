@@ -46,12 +46,12 @@ export class AppController {
           });
         }
 
-        if (message.action === 'create_one_jet') {
+        if (message.action === 'create_jet') {
           const payload = message.payload;
           const response = this.jetsService.create(payload, payload.userId);
           this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
-            action: 'jet_create_one',
+            action: 'jet_created',
             response,
           });
         }
