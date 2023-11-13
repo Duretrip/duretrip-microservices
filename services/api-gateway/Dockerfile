@@ -1,7 +1,7 @@
 FROM node:18.18.2-alpine
 
-# RUN apk add --no-cache bash
-# RUN npm i -g @nestjs/cli typescript ts-node
+RUN apk add --no-cache bash
+RUN npm i -g @nestjs/cli typescript ts-node
 
 # Set the working directory in the container
 WORKDIR /app
