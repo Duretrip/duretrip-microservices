@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install app dependencies
-RUN npm install
+RUN yarn install
 
 # Copy the rest of your application code to the containernpm 
 COPY . .
