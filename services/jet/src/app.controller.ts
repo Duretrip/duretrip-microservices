@@ -11,6 +11,7 @@ export class AppController {
     private readonly jetsService: JetsService,
   ) { }
   async onModuleInit() {
+    await this.rabbitMQService.connectToRabbitMQ();
     try {
       this.rabbitMQService.consumeMessages('jet-queue', async (message) => {
         if (message.action === 'register_jet') {
