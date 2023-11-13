@@ -1,4 +1,4 @@
-FROM node:18.18.2-alpine
+FROM node:latest
 
 # RUN apk add --no-cache bash
 # RUN npm i -g @nestjs/cli typescript ts-node
@@ -10,7 +10,7 @@ WORKDIR /app
 # RUN npm install -g @nestjs/cli
 
 # Copy package.json and package-lock.json to the container
-COPY package.json ./
+COPY package*.json ./
 
 # Install app dependencies
 RUN npm install
