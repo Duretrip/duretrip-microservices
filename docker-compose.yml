@@ -1,34 +1,19 @@
 version: '3'
 services:
   postgres:
+    container_name: postgres
     image: postgres:16.0-alpine
     ports:
       - 5432:5432
     volumes:
-      - dure-db:/var/lib/postgresql/data
-      - ./pg-init-scripts:/docker-entrypoint-initdb.d # Mount init.sql as an initialization script
+      - duretrip:/var/lib/postgresql/data
+      - ./postgres:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Duretrip@2023
-      POSTGRES_DB: endure
-      
-  # mysql:
-  #   image: mysql:latest
-  #   container_name: mysql_container
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: password
-  #     MYSQL_USER: test
-  #     MYSQL_PASSWORD: test
-  #   networks:
-  #     - mynetwork
-  #   ports:
-  #     - "3308:3306"
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql as an initialization script
-    # command: --default-authentication-plugin=mysql_native_password
 
   maildev:
+    container_name: maildev
     build:
       context: .
       dockerfile: maildev.Dockerfile
@@ -38,11 +23,10 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    # image: "rabbitmq:3.13.0-rc.2-management-alpine"
     container_name: rabbitmq
     ports:
-      - "5672:5672" # RabbitMQ default port
-      - "15672:15672" # RabbitMQ management plugin
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -52,26 +36,19 @@ services:
     entrypoint: /bin/sh
     command: -c "chmod +x /usr/local/bin/init-rabbitmq.sh && /usr/local/bin/init-rabbitmq.sh"
 
-
-  redis1:
+  redis:
     image: "redis:latest"
-    container_name: redis_api_gateway
+    container_name: redis
     ports:
       - "6381:6379"
+      - "6380:6380"  # Additional port for the second instance
     environment:
       - REDIS_PASSWORD=password
-
-  redis2:
-    image: "redis:latest"
-    container_name: redis2_container
-    ports:
-      - "6380:6379" # Map to a different port
-    environment:
-      - REDIS_PASSWORD=redis_password_2
+    volumes:
+      - ./redis/init-redis.sh:/usr/local/bin/init-redis.sh
+      - ./redis/auth_redis.conf:/etc/redis/auth_redis.conf
+      - ./redis/jet_redis.conf:/etc/redis/jet_redis.conf
+    command: ["bash", "-c", "chmod +x /usr/local/bin/init-redis.sh && /usr/local/bin/init-redis.sh"]
 
 volumes:
-  # mysql_data:
-  dure-db:
-  
-networks:
-  mynetwork:
+  duretrip:
