@@ -13,7 +13,6 @@ import {
 import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 import { v4 as uuidv4 } from 'uuid';
 import { PermissionGuard } from 'src/permissions/guards/permission.guard';
-// import { Permissions } from 'src/permissions/decorators/permission.decorator';
 import { CreateJetDto } from './dto/create-jet.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateJetDto } from './dto/update-jet.dto';
@@ -62,9 +61,11 @@ export class JetController {
       // Listen for the response with the specified correlation ID
       const response = await this.waitForResponseWithTimeout(correlationId);
 
-      console.log({ response });
       if (response.action === 'jet_find_all') {
-        res.status(200).json('Jets fetched successfully');
+        res.status(200).json({
+          message: 'Jets fetched successfully',
+          data: response.response,
+        });
       } else {
         res.status(response.status ? response?.status : 500).json({
           message: response.message ? response.message : 'An error occurred',
@@ -76,14 +77,14 @@ export class JetController {
     }
   }
 
-  @Get(':id')
-  async getOneJet(@Param('id') id: string, @Req() req, @Res() res) {
+  @Get('facility')
+  async getAllFacilities(@Req() req, @Res() res) {
     const correlationId = generateUniqueId();
 
     // Translate the HTTP request into a message
     const message = {
-      action: 'find_one_jet',
-      payload: +id,
+      action: 'find_all_facility',
+      payload: {},
       correlationId,
     };
 
@@ -94,8 +95,82 @@ export class JetController {
       // Listen for the response with the specified correlation ID
       const response = await this.waitForResponseWithTimeout(correlationId);
 
-      if (response.action === 'jet_find_one') {
-        res.status(200).json('Jet fetched successfully');
+      if (response.action === 'facility_find_all') {
+        res.status(200).json({
+          message: 'Facility fetched successfully',
+          data: response.response,
+        });
+      } else {
+        res.status(response.status ? response?.status : 500).json({
+          message: response.message ? response.message : 'An error occurred',
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+
+  @Get('capacity')
+  async getAllCapacities(@Req() req, @Res() res) {
+    const correlationId = generateUniqueId();
+
+    // Translate the HTTP request into a message
+    const message = {
+      action: 'find_all_capacity',
+      payload: {},
+      correlationId,
+    };
+
+    try {
+      // Publish the login message to the RabbitMQ queue
+      this.rabbitMQService
+        .publishMessage('jet-queue', message)
+        .then(() => console.log('sent'))
+        .catch(() => console.log('not sent'));
+
+      // Listen for the response with the specified correlation ID
+      const response = await this.waitForResponseWithTimeout(correlationId);
+
+      if (response.action === 'capacity_find_all') {
+        res.status(200).json({
+          message: 'Capacity fetched successfully',
+          data: response.response,
+        });
+      } else {
+        res.status(response.status ? response?.status : 500).json({
+          message: response.message ? response.message : 'An error occurred',
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+
+  @Get('range')
+  async getAllRanges(@Req() req, @Res() res) {
+    const correlationId = generateUniqueId();
+
+    // Translate the HTTP request into a message
+    const message = {
+      action: 'find_all_range',
+      payload: {},
+      correlationId,
+    };
+
+    try {
+      // Publish the login message to the RabbitMQ queue
+      await this.rabbitMQService.publishMessage('jet-queue', message);
+
+      // Listen for the response with the specified correlation ID
+      const response = await this.waitForResponseWithTimeout(correlationId);
+
+      if (response.action === 'range_find_all') {
+        res.status(200).json({
+          message: 'Range fetched successfully',
+          data: response.response,
+        });
       } else {
         res.status(response.status ? response?.status : 500).json({
           message: response.message ? response.message : 'An error occurred',
@@ -129,7 +204,6 @@ export class JetController {
       // Listen for the response with the specified correlation ID
       const response = await this.waitForResponseWithTimeout(correlationId);
 
-      console.log({ response });
       if (response.action === 'jet_created') {
         res.status(200).json('Jet created successfully');
       } else {
@@ -166,7 +240,6 @@ export class JetController {
       // Listen for the response with the specified correlation ID
       const response = await this.waitForResponseWithTimeout(correlationId);
 
-      console.log({ response });
       if (response.action === 'jet_updated') {
         res.status(200).json('Jet updated successfully');
       } else {
@@ -187,7 +260,7 @@ export class JetController {
     // Translate the HTTP request into a message
     const message = {
       action: 'delete_jet',
-      payload: id,
+      payload: +id,
       correlationId,
     };
 
@@ -198,7 +271,6 @@ export class JetController {
       // Listen for the response with the specified correlation ID
       const response = await this.waitForResponseWithTimeout(correlationId);
 
-      console.log({ response });
       if (response.action === 'jet_deleted') {
         res.status(200).json('Jet deleted successfully');
       } else {
@@ -212,14 +284,14 @@ export class JetController {
     }
   }
 
-  @Get('facility')
-  async getAllFacilities(@Req() req, @Res() res) {
+  @Get(':id')
+  async getOneJet(@Param('id') id: string, @Req() req, @Res() res) {
     const correlationId = generateUniqueId();
 
     // Translate the HTTP request into a message
     const message = {
-      action: 'find_all_facility',
-      payload: {},
+      action: 'find_one_jet',
+      payload: +id,
       correlationId,
     };
 
@@ -230,79 +302,11 @@ export class JetController {
       // Listen for the response with the specified correlation ID
       const response = await this.waitForResponseWithTimeout(correlationId);
 
-      console.log({ response });
-      if (response.action === 'facility_find_all') {
-        res.status(200).json('Facility fetched successfully');
-      } else {
-        res.status(response.status ? response?.status : 500).json({
-          message: response.message ? response.message : 'An error occurred',
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  }
-
-  @Get('capacity')
-  async getAllCapacities(@Req() req, @Res() res) {
-    const correlationId = generateUniqueId();
-
-    // Translate the HTTP request into a message
-    const message = {
-      action: 'find_all_capacity',
-      payload: {},
-      correlationId,
-    };
-
-    try {
-      // Publish the login message to the RabbitMQ queue
-      this.rabbitMQService
-        .publishMessage('jet-queue', message)
-        .then(() => console.log('sent'))
-        .catch(() => console.log('not sent'));
-
-      // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
-
-      console.log({ response });
-      if (response.action === 'capacity_find_all') {
+      if (response.action === 'jet_find_one') {
         res.status(200).json({
-          message: 'Capacity fetched successfully',
-          data: response,
+          message: 'Jet fetched successfully',
+          data: response.response,
         });
-      } else {
-        res.status(response.status ? response?.status : 500).json({
-          message: response.message ? response.message : 'An error occurred',
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  }
-
-  @Get('range')
-  async getAllRanges(@Req() req, @Res() res) {
-    const correlationId = generateUniqueId();
-
-    // Translate the HTTP request into a message
-    const message = {
-      action: 'find_all_range',
-      payload: {},
-      correlationId,
-    };
-
-    try {
-      // Publish the login message to the RabbitMQ queue
-      await this.rabbitMQService.publishMessage('jet-queue', message);
-
-      // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
-
-      console.log({ response });
-      if (response.action === 'range_find_all') {
-        res.status(200).json('Range fetched successfully');
       } else {
         res.status(response.status ? response?.status : 500).json({
           message: response.message ? response.message : 'An error occurred',

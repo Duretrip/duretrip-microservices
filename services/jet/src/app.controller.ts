@@ -20,22 +20,11 @@ export class AppController {
     await this.rabbitMQService.connectToRabbitMQ();
     try {
       this.rabbitMQService.consumeMessages('jet-queue', async (message) => {
-        // if (message.action === 'register_jet') {
-        //   const payload = message.payload;
-        //   const response = this.appService.sayHi();
-        //   this.rabbitMQService.publishMessage('api-gateway-queue', {
-        //     correlationId: message?.correlationId,
-        //     action: 'jet_created',
-        //     response,
-        //   });
-        // }
-
         // Find All Jets
         if (message.action === 'find_all_jet') {
           const payload = message.payload;
-          console.log('message', message);
+
           const response = await this.jetsService.findAll();
-          console.log(response);
 
           this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
@@ -46,8 +35,11 @@ export class AppController {
 
         // Find One Jet
         if (message.action === 'find_one_jet') {
+          console.log('Why always running', message);
+
           const payload = message.payload;
-          const response = this.jetsService.findOne(payload);
+          const response = await this.jetsService.findOne(payload);
+
           this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
             action: 'jet_find_one',
@@ -58,7 +50,6 @@ export class AppController {
         // Create  Jet
         if (message.action === 'create_jet') {
           const payload = message.payload;
-          console.log('payload', payload);
 
           const response = await this.jetsService.create(payload, 2);
           await this.rabbitMQService.publishMessage('api-gateway-queue', {
@@ -71,9 +62,11 @@ export class AppController {
         // Update  Jet
         if (message.action === 'update_jet') {
           const payload = message.payload;
-          console.log('payload', payload);
 
-          const response = await this.jetsService.update(payload.id, payload);
+          const response = await this.jetsService.update(
+            Number(payload.id),
+            payload.credentials,
+          );
           await this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
             action: 'jet_updated',
@@ -84,9 +77,8 @@ export class AppController {
         // Delete  Jet
         if (message.action === 'delete_jet') {
           const payload = message.payload;
-          console.log('payload', payload);
 
-          const response = await this.jetsService.remove(payload);
+          const response = await this.jetsService.remove(Number(payload));
           await this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
             action: 'jet_deleted',
@@ -97,10 +89,8 @@ export class AppController {
         // Find All Facilities
         if (message.action === 'find_all_facility') {
           const payload = message.payload;
-          console.log('payload', payload);
-          console.log('message', message);
+
           const response = await this.facilityService.findAll();
-          console.log(response);
 
           this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
@@ -111,9 +101,8 @@ export class AppController {
         // Find All Ranges
         if (message.action === 'find_all_range') {
           const payload = message.payload;
-          console.log('message', message);
+
           const response = await this.rangeService.findAll();
-          console.log(response);
 
           this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
@@ -125,9 +114,8 @@ export class AppController {
         // Find All Capacities
         if (message.action === 'find_all_capacity') {
           const payload = message.payload;
-          console.log('message', message);
+
           const response = await this.capacityService.findAll();
-          console.log(response);
 
           this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,

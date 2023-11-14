@@ -127,7 +127,7 @@ export class JetsService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.jet.findFirst({
+    const jet = await this.prisma.jet.findFirst({
       where: {
         id,
       },
@@ -173,6 +173,7 @@ export class JetsService {
         },
       },
     });
+    return jet;
   }
 
   async update(id: number, updateJetDto: UpdateJetDto) {
