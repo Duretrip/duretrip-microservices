@@ -18,8 +18,10 @@ export class JetsController {
   @Post()
   async create(@Body() createJetDto: CreateJetDto) {
     const userId = 2;
-    const response = await this.jetsService.create(createJetDto, userId);
-    return response;
+    const data = await this.jetsService.create(createJetDto, userId);
+    console.log('data', data);
+    return data;
+
   }
 
   @Get()
