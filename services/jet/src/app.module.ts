@@ -4,10 +4,19 @@ import { AppService } from './app.service';
 import { RabbitMQService } from './rabbitmq/rabbitmq.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { JetsModule } from './jets/jets.module';
+import { CapacityModule } from './capacity/capacity.module';
+import { RangeModule } from './range/range.module';
+import { FacilityModule } from './facility/facility.module';
 
 @Module({
-  imports: [PrismaModule, JetsModule],
+  imports: [
+    PrismaModule,
+    JetsModule,
+    FacilityModule,
+    RangeModule,
+    CapacityModule,
+  ],
   controllers: [AppController],
   providers: [RabbitMQService, AppService],
 })
-export class AppModule { }
+export class AppModule {}

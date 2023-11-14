@@ -9,7 +9,7 @@ export class AppController {
     private readonly rabbitMQService: RabbitMQService,
     private readonly appService: AppService,
     private readonly jetsService: JetsService,
-  ) { }
+  ) {}
   async onModuleInit() {
     await this.rabbitMQService.connectToRabbitMQ();
     try {
@@ -46,7 +46,7 @@ export class AppController {
           });
         }
 
-        if (message.action === 'create_jet') {          
+        if (message.action === 'create_jet') {
           const payload = message.payload;
           const response = await this.jetsService.create(payload, 2);
           await this.rabbitMQService.publishMessage('api-gateway-queue', {

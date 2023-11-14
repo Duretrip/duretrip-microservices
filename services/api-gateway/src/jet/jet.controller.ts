@@ -11,6 +11,8 @@ import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 import { v4 as uuidv4 } from 'uuid';
 import { PermissionGuard } from 'src/permissions/guards/permission.guard';
 import { Permissions } from 'src/permissions/decorators/permission.decorator';
+import { CreateJetDto } from './dto/create-jet.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 function generateUniqueId() {
   return uuidv4();
@@ -19,15 +21,21 @@ function generateUniqueId() {
 const RESPONSE_TIMEOUT = 5000; // Timeout in milliseconds (adjust as needed)
 
 @Controller('jet')
+@ApiTags('Jets')
 @UseGuards(PermissionGuard)
 export class JetController {
   constructor(private readonly rabbitMQService: RabbitMQService) {}
 
-  private async waitForResponseWithTimeout(correlationId: string): Promise<any> {
+  private async waitForResponseWithTimeout(
+    correlationId: string,
+  ): Promise<any> {
     return Promise.race([
       this.rabbitMQService.waitForResponse(correlationId),
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout waiting for response')), RESPONSE_TIMEOUT)
+        setTimeout(
+          () => reject(new Error('Timeout waiting for response')),
+          RESPONSE_TIMEOUT,
+        ),
       ),
     ]);
   }
@@ -65,7 +73,11 @@ export class JetController {
   }
 
   @Post()
-  async createAllJet(@Body() credentials: any, @Req() req, @Res() res) {
+  async createAllJet(
+    @Body() credentials: CreateJetDto,
+    @Req() req,
+    @Res() res,
+  ) {
     const correlationId = generateUniqueId();
 
     // Translate the HTTP request into a message

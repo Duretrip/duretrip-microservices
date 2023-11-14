@@ -21,15 +21,17 @@
     "migrate:dev": "prisma migrate dev --name ",
     "migrate:dev:create": "prisma migrate dev --create-only",
     "migrate": "prisma migrate dev",
+    "migrate:reset": "prisma migrate reset",
     "prisma:generate:client": "prisma generate",
     "prisma:dbpush": "prisma db push ",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node --transpile-only  prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/mapped-types": "^2.0.3",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^7.1.15",
     "@prisma/client": "^5.5.2",
     "amqplib": "^0.10.3",
     "class-transformer": "^0.5.1",
