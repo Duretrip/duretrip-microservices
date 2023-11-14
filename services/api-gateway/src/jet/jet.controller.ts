@@ -108,7 +108,11 @@ export class JetController {
   }
 
   @Post()
-  async createJet(@Body() credentials: CreateJetDto, @Req() req, @Res() res) {
+  async createAllJet(
+    @Body() credentials: CreateJetDto,
+    @Req() req,
+    @Res() res,
+  ) {
     const correlationId = generateUniqueId();
 
     // Translate the HTTP request into a message
