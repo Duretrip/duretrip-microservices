@@ -23,8 +23,8 @@ export class JetsController {
   }
 
   @Get()
-  findAll() {
-    return this.jetsService.findAll();
+  async findAll() {
+    return await this.jetsService.findAll();
   }
 
   @Get(':id')

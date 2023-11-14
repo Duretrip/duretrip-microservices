@@ -9,6 +9,7 @@ export class JetsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createJetDto: CreateJetDto, userId: number): Promise<JetModel> {
+    // return createJetDto;
     const {
       model,
       pictures,
@@ -212,13 +213,6 @@ export class JetsService {
         },
       },
     });
-
-    //delete existing releted record
-    // await this.prisma.rangesOnJets.delete({
-    //   where: {
-
-    //   }
-    // })
 
     // Jet Ranges
     const rangeData = ranges.map((id) => {

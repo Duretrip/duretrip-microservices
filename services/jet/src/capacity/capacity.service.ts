@@ -17,7 +17,8 @@ export class CapacityService {
   }
 
   async findAll() {
-    return await this.prisma.capacity.findMany();
+    const capacity = await this.prisma.capacity.findMany();
+    return capacity;
   }
 
   async findOne(id: number) {

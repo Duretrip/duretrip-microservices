@@ -7,5 +7,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [CapacityController],
   providers: [CapacityService],
+  exports: [CapacityService],
 })
 export class CapacityModule {}
