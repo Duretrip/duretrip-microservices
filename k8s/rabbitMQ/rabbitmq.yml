@@ -78,10 +78,21 @@ spec:
           volumeMounts:
             - name: rabbitmq-data
               mountPath: /var/lib/rabbitmq
+            - name: rabbitmq-config
+              mountPath: /etc/rabbitmq/rabbitmq.config
+            - name: init-rabbitmq-script
+              mountPath: /usr/local/bin/init-rabbitmq.sh
+              subPath: init-rabbitmq.sh
       volumes:
         - name: rabbitmq-data
           persistentVolumeClaim:
             claimName: rabbitmq-data-rabbitmq-0
+        - name: rabbitmq-config
+          hostPath:
+          path: rabbitmq.config
+        - name: init-rabbitmq-script
+          hostPath:
+          path: init-rabbitmq.sh
 
 ---
 
