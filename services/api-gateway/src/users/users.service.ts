@@ -51,8 +51,8 @@ export class UsersService {
     });
   }
 
-  findOne(fields: EntityCondition<User>): Promise<NullableType<User>> {
-    return this.usersRepository.findOne({
+  async findOne(fields: EntityCondition<User>): Promise<NullableType<User>> {
+    return await this.usersRepository.findOne({
       where: fields,
     });
   }
