@@ -8,10 +8,8 @@ export class RabbitMQService {
   private connection: amqp.Connection;
   private channel: amqp.Channel;
 
-  constructor() {}
-
-  async onModuleInit() {
-    await this.connectToRabbitMQ();
+  constructor() {
+    this.connectToRabbitMQ();
   }
 
   public async connectToRabbitMQ() {

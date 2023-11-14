@@ -25,4 +25,17 @@ export class RolesService {
       throw new NotFoundException(`Role with ID ${roleId} not found`);
     }
   }
+
+  async getRolePermissions(roleId: number) {
+    const role = await this.roleRepository.find({
+      where: { id: roleId },
+      relations: ['permissions']
+    });
+
+    if (!role || role.length === 0) {
+      throw new NotFoundException('Role not found');
+    }
+
+    return role[0].permissions;
+  }
 }
