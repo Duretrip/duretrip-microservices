@@ -85,19 +85,19 @@ CREATE TABLE "FacilitiesOnJets" (
 );
 
 -- AddForeignKey
-ALTER TABLE "RangesOnJets" ADD CONSTRAINT "RangesOnJets_jetId_fkey" FOREIGN KEY ("jetId") REFERENCES "Jet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RangesOnJets" ADD CONSTRAINT "RangesOnJets_jetId_fkey" FOREIGN KEY ("jetId") REFERENCES "Jet"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "RangesOnJets" ADD CONSTRAINT "RangesOnJets_rangeId_fkey" FOREIGN KEY ("rangeId") REFERENCES "Range"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RangesOnJets" ADD CONSTRAINT "RangesOnJets_rangeId_fkey" FOREIGN KEY ("rangeId") REFERENCES "Range"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CapacitiesOnJets" ADD CONSTRAINT "CapacitiesOnJets_jetId_fkey" FOREIGN KEY ("jetId") REFERENCES "Jet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CapacitiesOnJets" ADD CONSTRAINT "CapacitiesOnJets_jetId_fkey" FOREIGN KEY ("jetId") REFERENCES "Jet"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CapacitiesOnJets" ADD CONSTRAINT "CapacitiesOnJets_capacityId_fkey" FOREIGN KEY ("capacityId") REFERENCES "Capacity"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CapacitiesOnJets" ADD CONSTRAINT "CapacitiesOnJets_capacityId_fkey" FOREIGN KEY ("capacityId") REFERENCES "Capacity"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FacilitiesOnJets" ADD CONSTRAINT "FacilitiesOnJets_jetId_fkey" FOREIGN KEY ("jetId") REFERENCES "Jet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FacilitiesOnJets" ADD CONSTRAINT "FacilitiesOnJets_jetId_fkey" FOREIGN KEY ("jetId") REFERENCES "Jet"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FacilitiesOnJets" ADD CONSTRAINT "FacilitiesOnJets_facilityId_fkey" FOREIGN KEY ("facilityId") REFERENCES "Facility"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FacilitiesOnJets" ADD CONSTRAINT "FacilitiesOnJets_facilityId_fkey" FOREIGN KEY ("facilityId") REFERENCES "Facility"("id") ON DELETE CASCADE ON UPDATE CASCADE;
