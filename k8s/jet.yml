@@ -80,40 +80,54 @@ spec:
                   name: rabbitmq-config
                   key: RABBITMQ_HOST
             - name: RABBITMQ_DEFAULT_USER
+            
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_USER
             - name: RABBITMQ_DEFAULT_PASS
+
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_PASS
+
             - name: RABBITMQ_USER
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_USER
+
             - name: RABBITMQ_PASS
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_PASS
+
             - name: RABBITMQ_PAYMENT_QUEUE
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_PAYMENT_QUEUE
+            
             - name: RABBITMQ_AUTH_QUEUE
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_AUTH_QUEUE
-            - name: RABBITMQ_BOOK_HOTEL_QUEUE
+            
+            - name: RABBITMQ_HOTEL_QUEUE
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
-                  key: RABBITMQ_BOOK_HOTEL_QUEUE
+                  key: RABBITMQ_HOTEL_QUEUE
+
+            - name: RABBITMQ_JET_QUEUE
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_JET_QUEUE
+            
             - name: AUTH_JWT_SECRET
               value: secret
             - name: AUTH_JWT_TOKEN_EXPIRES_IN
