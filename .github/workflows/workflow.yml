@@ -3,7 +3,8 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - testing
+      - main
+      - dev
   workflow_dispatch:
 
 env:
