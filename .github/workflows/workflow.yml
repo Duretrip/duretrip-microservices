@@ -85,7 +85,7 @@ jobs:
 
     - name: Deploy on the GKE
       run: |-
-        kubectl apply -f k8s/rabbitMQ/rabbitmq-config.yml
+        kubectl apply -f k8s/rabbitMQ/rabbitmq-config.yaml
         kubectl apply -f k8s/rabbitMQ/init-script.yaml
         kubectl apply -f k8s/rabbitMQ/rabbitmq-deployment.yaml
 
