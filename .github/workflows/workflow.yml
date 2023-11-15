@@ -79,6 +79,9 @@ jobs:
           sed -i "s/{{RABBITMQ_DEFAULT_PASS}}/${{ secrets.RABBITMQ_DEFAULT_PASS }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
           sed -i "s/{{RABBITMQ_USER_NAME}}/${{ secrets.RABBITMQ_USER_NAME }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
           sed -i "s/{{RABBITMQ_USER_PASSWORD}}/${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s/{{RABBITMQ_HOST}}/${{ secrets.RABBITMQ_HOST }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s/{{RABBITMQ_PORT}}/${{ secrets.RABBITMQ_PORT }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+
 
     - name: Deploy on the GKE
       run: |-
@@ -122,7 +125,7 @@ jobs:
           sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/{{DATABASE_MASTER_BASE_USER}}/${{ secrets.DATABASE_MASTER_BASE_USER }}/g" k8s/Postgress/postgress.yml
           sed -i "s/{{DATABASE_MASTER_BASE_PASSWORD}}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress.yml
-          sed -i "s/{{REDIS_PASSWORD}}/${{ secrets.REDIS_PASSWORD }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s/{{REDIS_PASSWORD}}/${{ secrets.REDIS_PASSWORD }}/g" k8s/redis
 
     - name: Deploy on the GKE
       run: |-
@@ -216,7 +219,8 @@ jobs:
           sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/api-gateway.yml
           sed -i "s/{{DATABASE_TYPE}}/${{ secrets.DATABASE_TYPE }}/g" k8s/api-gateway.yml
           sed -i "s/{{AUTH_DB_NAME}}/${{ secrets.AUTH_DB_NAME }}/g" k8s/api-gateway.yml
-
+          sed -i "s/{{RABBITMQ_JET_QUEUE}}/${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/api-gateway.yml
+          sed -i "s/{{RABBITMQ_API_GATEWAY_QUEUE}}/${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}/g" k8s/api-gateway.yml
 
       - name: Build Docker images
         env:
@@ -272,6 +276,8 @@ jobs:
           sed -i "s/{{DATABASE_HOST}}/${{ secrets.DATABASE_HOST }}/g" k8s/jet.yml
           sed -i "s/{{DATABASE_PORT}}/${{ secrets.DATABASE_PORT }}/g" k8s/jet.yml
           sed -i "s/{{JET_DB_NAME}}/${{ secrets.JET_DB_NAME }}/g" k8s/jet.yml
+          sed -i "s/{{RABBITMQ_JET_QUEUE}}/${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/jet.yml
+          sed -i "s/{{RABBITMQ_API_GATEWAY_QUEUE}}/${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}/g" k8s/jet.yml
 
     
     - name: Deploy on the GKE
