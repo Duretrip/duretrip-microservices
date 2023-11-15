@@ -251,9 +251,9 @@ jobs:
           sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/jet.yml
           sed -i "s/{{JET_DB_PASSWORD}}/${{ secrets.DATABASE_PASS }}/g" k8s/jet.yml
           sed -i "s/{{DATABASE_HOST}}/Damilare/g" k8s/jet.yml
-          sed -i "s/{{DATABASE_PORT}}/${{ secrets.DATABASE_PORT }}/g" k8s/jet.yml
+          sed -i "s/{{DATABASE_PORT}}/Adegoke/g" k8s/jet.yml
           sed -i "s/{{JET_DB_NAME}}/${{ secrets.JET_DB_NAME }}/g" k8s/jet.yml
-          sed -i "s/{{RABBITMQ_JET_QUEUE}}/${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/jet.yml
+          sed -i "s/{{RABBITMQ_JET_QUEUE}}/We Fly/g" k8s/jet.yml
           sed -i "s/{{RABBITMQ_API_GATEWAY_QUEUE}}/${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}/g" k8s/jet.yml
           sed -i "s/{{RABBITMQ_USER_NAME}}/${{ secrets.RABBITMQ_USER_NAME }}/g" k8s/jet.yml
           sed -i "s/{{RABBITMQ_USER_PASSWORD}}/${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/jet.yml
