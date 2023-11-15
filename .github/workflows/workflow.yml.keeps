@@ -3,7 +3,8 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - test
+      - main
+      - dev
   workflow_dispatch:
 
 env:
@@ -169,6 +170,8 @@ jobs:
           sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/Postgress/configMap.yml
           sed -i "s/{{HOTEL_DB_USER}}/${{ secrets.HOTEL_DB_USER }}/g" k8s/Postgress/configMap.yml
 
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/api-gateway.yml
       # - name: Copy SQL Script to Pod
       #   run: |
       #     POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
@@ -227,15 +230,15 @@ jobs:
           sed -i "s/{{RABBITMQ_PORT}}/${{ secrets.RABBITMQ_PORT }}/g" k8s/api-gateway.yml
 
 
-      # - name: Build Docker images
-      #   env:
-      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      #   run: |
-      #     docker-compose -f services/api-gateway/docker-compose.yaml build
-      #     docker-compose -f services/api-gateway/docker-compose.yaml push
-      #     docker-compose -f services/jet/docker-compose.yaml build
-      #     docker-compose -f services/jet/docker-compose.yaml push
-      #   working-directory: .
+      - name: Build Docker images
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          docker-compose -f services/api-gateway/docker-compose.yaml build
+          docker-compose -f services/api-gateway/docker-compose.yaml push
+          docker-compose -f services/jet/docker-compose.yaml build
+          docker-compose -f services/jet/docker-compose.yaml push
+        working-directory: .
 
 
   setup-and-deploy-to-cluster-main:
@@ -287,21 +290,17 @@ jobs:
           sed -i "s/{{RABBITMQ_USER_PASSWORD}}/${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/jet.yml
           sed -i "s/{{RABBITMQ_HOST}}/${{ secrets.RABBITMQ_HOST }}/g" k8s/jet.yml
           sed -i "s/{{RABBITMQ_PORT}}/${{ secrets.RABBITMQ_PORT }}/g" k8s/jet.yml
-
-    - name: Echo contents of api-gateway.yml
-      run: cat k8s/api-gateway.yml
-
     
-    # - name: Deploy on the GKE
-    #   env:
-    #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    #     CT_TYPE: "api"
-    #   run: |-
-    #     kubectl apply -f k8s/Postgress/postgress-configMap.yml
-    #     kubectl apply -f k8s/Postgress/postgress-secrets.yml 
-    #     kubectl apply -f k8s/ingress/ingress-service-dev.yml
-    #     kubectl apply -f k8s/api-gateway.yml
-    #     kubectl apply -f k8s/jet.yml
+    - name: Deploy on the GKE
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        CT_TYPE: "api"
+      run: |-
+        kubectl apply -f k8s/Postgress/postgress-configMap.yml
+        kubectl apply -f k8s/Postgress/postgress-secrets.yml 
+        kubectl apply -f k8s/ingress/ingress-service-dev.yml
+        kubectl apply -f k8s/api-gateway.yml
+        kubectl apply -f k8s/jet.yml
 
     
        
