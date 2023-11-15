@@ -25,8 +25,9 @@ spec:
           volumeMounts:
           - name: postgres-data
             mountPath: /var/lib/postgresql/data
-          - name: init-scripts
+          - name: postgres-init-scripts
             mountPath: /docker-entrypoint-initdb.d
+            subPath: init.sql
 
 ---
 apiVersion: v1
@@ -38,5 +39,32 @@ spec:
     app: postgres
   ports:
   - protocol: TCP
-    port: 5432
-    targetPort: 5432
+    port: {{DATABASE_PORT}}
+    targetPort: {{DATABASE_PORT}}
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  gcePersistentDisk:
+    pdName: postgres-data-disk
+    fsType: ext4
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -125,6 +125,7 @@ jobs:
           sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/{{DATABASE_MASTER_BASE_USER}}/${{ secrets.DATABASE_MASTER_BASE_USER }}/g" k8s/Postgress/postgress.yml
           sed -i "s/{{DATABASE_MASTER_BASE_PASSWORD}}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress.yml
+          sed -i "s/{{DATABASE_PORT}}/${{ secrets.DATABASE_PORT }}/g" k8s/Postgress/postgress.yml
           sed -i "s/{{REDIS_PASSWORD}}/${{ secrets.REDIS_PASSWORD }}/g" k8s/redis/redis.yml
 
     - name: Deploy on the GKE
