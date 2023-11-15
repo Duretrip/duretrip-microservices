@@ -33,7 +33,7 @@ jobs:
         credentials_json: ${{ secrets.GKE_SA }}
 
     - name: Get GKE Credentials
-      uses: google-github-actions/get-gke-credentials@v1
+      uses: google-github-actions|get-gke-credentials@v1
       with:
         cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
@@ -41,18 +41,18 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     - name: Replace placeholders in YML script
       run: |
-          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }}/g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_AUTH_QUEUE}}|${{ secrets.RABBITMQ_AUTH_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_JET_QUEUE}}|${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_HOTEL_QUEUE}}|${{ secrets.RABBITMQ_HOTEL_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_DEFAULT_USER}}|${{ secrets.RABBITMQ_DEFAULT_USER }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_DEFAULT_PASS}}|${{ secrets.RABBITMQ_DEFAULT_PASS }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_HOST}}|${{ secrets.RABBITMQ_HOST }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_PORT}}|${{ secrets.RABBITMQ_PORT }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }}|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }}|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_AUTH_QUEUE}}|${{ secrets.RABBITMQ_AUTH_QUEUE }}|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_JET_QUEUE}}|${{ secrets.RABBITMQ_JET_QUEUE }}|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_HOTEL_QUEUE}}|${{ secrets.RABBITMQ_HOTEL_QUEUE }}|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_DEFAULT_USER}}|${{ secrets.RABBITMQ_DEFAULT_USER }}|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_DEFAULT_PASS}}|${{ secrets.RABBITMQ_DEFAULT_PASS }}|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }}|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }}|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_HOST}}|${{ secrets.RABBITMQ_HOST }}|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_PORT}}|${{ secrets.RABBITMQ_PORT }}|g" k8s/rabbitMQ/rabbitmq-config.yaml
 
 
     - name: Deploy on the GKE
@@ -82,7 +82,7 @@ jobs:
         credentials_json: ${{ secrets.GKE_SA }}
 
     - name: Get GKE Credentials
-      uses: google-github-actions/get-gke-credentials@v1
+      uses: google-github-actions|get-gke-credentials@v1
       with:
         cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
@@ -91,14 +91,14 @@ jobs:
 
     - name: Replace placeholders in YML script
       run: |
-          sed -i "s|\${PASSWORDE}|${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s|\${JET_DATABASE_URL}|${{ secrets.JET_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s|\${AUTH_DATABASE_URL}|${{ secrets.AUTH_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s|\${SECRET}|${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s|{{DATABASE_MASTER_BASE_USER}}|${{ secrets.DATABASE_MASTER_BASE_USER }}/g" k8s/Postgress/postgress.yml
-          sed -i "s|{{DATABASE_MASTER_BASE_PASSWORD}}|${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress.yml
-          sed -i "s|{{DATABASE_PORT}}|${{ secrets.DATABASE_PORT }}/g" k8s/Postgress/postgress.yml
-          sed -i "s|{{REDIS_PASSWORD}}|${{ secrets.REDIS_PASSWORD }}/g" k8s/redis/redis.yml
+          sed -i "s|\${PASSWORDE}|${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${JET_DATABASE_URL}|${{ secrets.JET_DATABASE_URL }}|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${AUTH_DATABASE_URL}|${{ secrets.AUTH_DATABASE_URL }}|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${SECRET}|${{ secrets.JWT_SECRET }}|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|{{DATABASE_MASTER_BASE_USER}}|${{ secrets.DATABASE_MASTER_BASE_USER }}|g" k8s/Postgress/postgress.yml
+          sed -i "s|{{DATABASE_MASTER_BASE_PASSWORD}}|${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}|g" k8s/Postgress/postgress.yml
+          sed -i "s|{{DATABASE_PORT}}|${{ secrets.DATABASE_PORT }}|g" k8s/Postgress/postgress.yml
+          sed -i "s|{{REDIS_PASSWORD}}|${{ secrets.REDIS_PASSWORD }}|g" k8s/redis/redis.yml
 
     # - name: Deploy on the GKE
     #   run: |-
@@ -121,7 +121,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GKE_SA }}
       - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@v1
+        uses: google-github-actions|get-gke-credentials@v1
         with:
           cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
           location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
@@ -136,7 +136,7 @@ jobs:
         run: |
           sed -i "s|\${PASSWORDE}|${{ secrets.DATABASE_PASS }}|g" k8s/Postgress/configMap.yml
           sed -i "s|{{AUTH_DB_NAME}}|${{ secrets.AUTH_DB_NAME }}|g" k8s/Postgress/configMap.yml
-          sed -i "s|{{JET_DB_NAME}}/jet_db|g" k8s/Postgress/configMap.yml
+          sed -i "s|{{JET_DB_NAME}}|jet_db|g" k8s/Postgress/configMap.yml
           sed -i "s|{{HOTEL_DB_NAME}}|${{ secrets.HOTEL_DB_NAME }}|g" k8s/Postgress/configMap.yml
           sed -i "s|{{AUTH_DB_USER}}|${{ secrets.AUTH_DB_USER }}|g" k8s/Postgress/configMap.yml
           sed -i "s|{{JET_DB_USER}}|${{ secrets.JET_DB_USER }}|g" k8s/Postgress/configMap.yml
@@ -188,16 +188,16 @@ jobs:
         run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
-          sed -i "s|{{AUTH_DB_USER}}/Yoga/g" k8s/api-gateway.yml
-          sed -i "s|\${PASSWORDE}/Yogalogo/g" k8s/api-gateway.yml
-          sed -i "s|{{DATABASE_TYPE}}|${{ secrets.DATABASE_TYPE }}/g" k8s/api-gateway.yml
-          sed -i "s|{{AUTH_DB_NAME}}|${{ secrets.AUTH_DB_NAME }}/g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_JET_QUEUE}}|${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}/g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }}/g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_HOST}}|${{ secrets.RABBITMQ_HOST }}/g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_PORT}}|${{ secrets.RABBITMQ_PORT }}/g" k8s/api-gateway.yml
+          sed -i "s|{{AUTH_DB_USER}}|Yoga|g" k8s/api-gateway.yml
+          sed -i "s|\${PASSWORDE}|Yogalogo|g" k8s/api-gateway.yml
+          sed -i "s|{{DATABASE_TYPE}}|${{ secrets.DATABASE_TYPE }|g" k8s/api-gateway.yml
+          sed -i "s|{{AUTH_DB_NAME}}|${{ secrets.AUTH_DB_NAME }|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_JET_QUEUE}}|${{ secrets.RABBITMQ_JET_QUEUE }|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_HOST}}|${{ secrets.RABBITMQ_HOST }|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_PORT}}|${{ secrets.RABBITMQ_PORT }|g" k8s/api-gateway.yml
 
 
       # - name: Build Docker images
@@ -230,7 +230,7 @@ jobs:
       with:
         credentials_json: ${{ secrets.GKE_SA }}
     - name: Get GKE Credentials
-      uses: google-github-actions/get-gke-credentials@v1
+      uses: google-github-actions|get-gke-credentials@v1
       with:
         cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
@@ -239,10 +239,10 @@ jobs:
 
     - name: Replace placeholders in YML script
       run: |
-          sed -i "s|\${PASSWORDE}|${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s|\${SECRET}|${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s|\${AUTH_DATABASE_URL}|${{ secrets.AUTH_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
-          sed -i "s|\${JET_DATABASE_URL}|${{ secrets.JET_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${PASSWORDE}|${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${SECRET}|${{ secrets.JWT_SECRET }}|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${AUTH_DATABASE_URL}|${{ secrets.AUTH_DATABASE_URL }}|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${JET_DATABASE_URL}|${{ secrets.JET_DATABASE_URL }}|g" k8s/Postgress/postgress-secrets.yml
     
     - name: Replace placeholders Image in YML script
       run: |
