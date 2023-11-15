@@ -105,11 +105,13 @@ spec:
                 configMapKeyRef:
                   name: rabbitmq-config
                   key: RABBITMQ_AUTH_QUEUE
-            - name: RABBITMQ_BOOK_HOTEL_QUEUE
-              valueFrom:
-                configMapKeyRef:
-                  name: rabbitmq-config
-                  key: RABBITMQ_BOOK_HOTEL_QUEUE
+                  
+            - name: RABBITMQ_JET_QUEUE
+              value: {{RABBITMQ_JET_QUEUE}}
+
+            - name: RABBITMQ_API_GATEWAY_QUEUE
+              value: {{RABBITMQ_API_GATEWAY_QUEUE}}
+
             - name: AUTH_JWT_SECRET
               value: secret
             - name: AUTH_JWT_TOKEN_EXPIRES_IN
