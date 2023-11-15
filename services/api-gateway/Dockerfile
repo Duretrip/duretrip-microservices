@@ -10,7 +10,7 @@ WORKDIR /app
 # RUN npm install -g @nestjs/cli
 
 # Copy package.json and package-lock.json to the container
-COPY package*.json ./
+COPY package.json ./
 
 # Install app dependencies
 RUN npm install

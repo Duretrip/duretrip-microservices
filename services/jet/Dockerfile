@@ -1,5 +1,6 @@
 # Use the official Node.js runtime as a parent image
-FROM node:latest
+# FROM node:latest
+FROM node:18-alpine3.16
 
 # Set the working directory in the container
 WORKDIR /app
@@ -13,10 +14,12 @@ COPY package*.json ./
 # Install app dependencies
 RUN npm install
 
+# RUN npm run prisma:generate:client
+
 # Copy the rest of your application code to the containernpm 
 COPY . .
 
 # Command to run the application (adjust as needed)
-CMD ["sh", "-c", "npm run migrate && npm run prisma:generate:client && npm run start"]
+CMD ["sh", "-c", "npm run prisma:generate:client && npm run start"]
 # CMD ["sh", "-c", "npx nest --version && tsc -v"]
 # CMD ["npm", "start"]
