@@ -33,7 +33,7 @@ jobs:
         credentials_json: ${{ secrets.GKE_SA }}
 
     - name: Get GKE Credentials
-      uses: google-github-actions|get-gke-credentials@v1
+      uses: google-github-actions/get-gke-credentials@v1
       with:
         cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
@@ -82,7 +82,7 @@ jobs:
         credentials_json: ${{ secrets.GKE_SA }}
 
     - name: Get GKE Credentials
-      uses: google-github-actions|get-gke-credentials@v1
+      uses: google-github-actions/get-gke-credentials@v1
       with:
         cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
@@ -121,7 +121,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GKE_SA }}
       - name: Get GKE Credentials
-        uses: google-github-actions|get-gke-credentials@v1
+        uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
           location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
@@ -190,14 +190,14 @@ jobs:
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
           sed -i "s|{{AUTH_DB_USER}}|Yoga|g" k8s/api-gateway.yml
           sed -i "s|\${PASSWORDE}|Yogalogo|g" k8s/api-gateway.yml
-          sed -i "s|{{DATABASE_TYPE}}|${{ secrets.DATABASE_TYPE }|g" k8s/api-gateway.yml
-          sed -i "s|{{AUTH_DB_NAME}}|${{ secrets.AUTH_DB_NAME }|g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_JET_QUEUE}}|${{ secrets.RABBITMQ_JET_QUEUE }|g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }|g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }|g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }|g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_HOST}}|${{ secrets.RABBITMQ_HOST }|g" k8s/api-gateway.yml
-          sed -i "s|{{RABBITMQ_PORT}}|${{ secrets.RABBITMQ_PORT }|g" k8s/api-gateway.yml
+          sed -i "s|{{DATABASE_TYPE}}|${{ secrets.DATABASE_TYPE }}|g" k8s/api-gateway.yml
+          sed -i "s|{{AUTH_DB_NAME}}|${{ secrets.AUTH_DB_NAME }}|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_JET_QUEUE}}|${{ secrets.RABBITMQ_JET_QUEUE }}|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_USER_NAME}}|${{ secrets.RABBITMQ_USER_NAME }}|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|${{ secrets.RABBITMQ_USER_PASSWORD }}|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_HOST}}|${{ secrets.RABBITMQ_HOST }}|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_PORT}}|${{ secrets.RABBITMQ_PORT }}|g" k8s/api-gateway.yml
 
 
       # - name: Build Docker images
@@ -230,7 +230,7 @@ jobs:
       with:
         credentials_json: ${{ secrets.GKE_SA }}
     - name: Get GKE Credentials
-      uses: google-github-actions|get-gke-credentials@v1
+      uses: google-github-actions/get-gke-credentials@v1
       with:
         cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
