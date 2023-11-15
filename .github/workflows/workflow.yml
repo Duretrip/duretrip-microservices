@@ -67,10 +67,24 @@ jobs:
         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    - name: Replace placeholders in YML script
+      run: |
+          sed -i "s/{{RABBITMQ_USER_NAME}}/${{ secrets.RABBITMQ_USER_NAME }}/g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s/{{RABBITMQ_USER_PASSWORD}}/${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s/{{RABBITMQ_AUTH_QUEUE}}/${{ secrets.RABBITMQ_AUTH_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s/{{RABBITMQ_JET_QUEUE}}/${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s/{{RABBITMQ_HOTEL_QUEUE}}/${{ secrets.RABBITMQ_HOTEL_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s/{{RABBITMQ_API_GATEWAY_QUEUE}}/${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}/g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s/{{RABBITMQ_DEFAULT_USER}}/${{ secrets.RABBITMQ_DEFAULT_USER }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s/{{RABBITMQ_DEFAULT_PASS}}/${{ secrets.RABBITMQ_DEFAULT_PASS }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s/{{RABBITMQ_USER_NAME}}/${{ secrets.RABBITMQ_USER_NAME }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s/{{RABBITMQ_USER_PASSWORD}}/${{ secrets.RABBITMQ_USER_PASSWORD }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
+
     - name: Deploy on the GKE
       run: |-
         kubectl apply -f k8s/rabbitMQ/rabbitmq-config.yml
-        kubectl apply -f k8s/rabbitMQ/rabbitmq.yml
+        kubectl apply -f k8s/rabbitMQ/init-script.yaml
+        kubectl apply -f k8s/rabbitMQ/rabbitmq-deployment.yaml
 
 
   setup-and-deploy-to-postgres-cluster:
@@ -106,10 +120,13 @@ jobs:
           sed -i "s/\${JET_DATABASE_URL}/${{ secrets.JET_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/\${AUTH_DATABASE_URL}/${{ secrets.AUTH_DATABASE_URL }}/g" k8s/Postgress/postgress-secrets.yml
           sed -i "s/\${SECRET}/${{ secrets.JWT_SECRET }}/g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s/{{DATABASE_MASTER_BASE_USER}}/${{ secrets.DATABASE_MASTER_BASE_USER }}/g" k8s/Postgress/postgress.yml
+          sed -i "s/{{DATABASE_MASTER_BASE_PASSWORD}}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/Postgress/postgress.yml
+          sed -i "s/{{REDIS_PASSWORD}}/${{ secrets.REDIS_PASSWORD }}/g" k8s/rabbitMQ/rabbitmq-config.yaml
 
     - name: Deploy on the GKE
       run: |-
-        kubectl apply -f k8s/Postgress/postgress-configMap.yml
+        kubectl apply -f k8s/Postgress/configMap.yml
         kubectl apply -f k8s/Postgress/postgress-secrets.yml
         kubectl apply -f k8s/Postgress/postgress.yml
         kubectl apply -f k8s/redis/redis.yml
@@ -133,7 +150,7 @@ jobs:
           cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
           location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
 
-      - name: Get MySQL Pod
+      - name: Get Postgres Pod
         id: get-postgres-pod
         run: |
           export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
@@ -141,19 +158,24 @@ jobs:
 
       - name: Replace placeholder in SQL script
         run: |
-          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_PASS }}/g" k8s/Postgress/init.sql
+          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_PASS }}/g" k8s/Postgress/configMap.sql
+          sed -i "s/{{AUTH_DB_NAME}}/${{ secrets.AUTH_DB_NAME }}/g" k8s/Postgress/configMap.sql
+          sed -i "s/{{JET_DB_NAME}}/${{ secrets.JET_DB_NAME }}/g" k8s/Postgress/configMap.sql
+          sed -i "s/{{HOTEL_DB_NAME}}/${{ secrets.HOTEL_DB_NAME }}/g" k8s/Postgress/configMap.sql
+          sed -i "s/{{AUTH_DB_USER}}/${{ secrets.AUTH_DB_USER }}/g" k8s/Postgress/configMap.sql
+          sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/Postgress/configMap.sql
+          sed -i "s/{{HOTEL_DB_USER}}/${{ secrets.HOTEL_DB_USER }}/g" k8s/Postgress/configMap.sql
+      # - name: Copy SQL Script to Pod
+      #   run: |
+      #     POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
+      #     kubectl cp k8s/Postgress/init.sql "${POD_NAME}":/tmp/init.sql
 
-      - name: Copy SQL Script to Pod
-        run: |
-          POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
-          kubectl cp k8s/Postgress/init.sql "${POD_NAME}":/tmp/init.sql
-
-      - name: Execute SQL Script in Pod
-        run: |
-          POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
-          kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
-        env:
-          PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      # - name: Execute SQL Script in Pod
+      #   run: |
+      #     POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
+      #     kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
+      #   env:
+      #     PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
       - name: Deploy on Mail Service
         run: |-
           kubectl apply -f k8s/mail/mail.yml
@@ -189,6 +211,12 @@ jobs:
         run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
+
+          sed -i "s/{{AUTH_DB_USER}}/${{ secrets.DATABASE_MASTER_BASE_USER }}/g" k8s/api-gateway.yml
+          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/api-gateway.yml
+          sed -i "s/{{DATABASE_TYPE}}/${{ secrets.DATABASE_TYPE }}/g" k8s/api-gateway.yml
+          sed -i "s/{{AUTH_DB_NAME}}/${{ secrets.AUTH_DB_NAME }}/g" k8s/api-gateway.yml
+
 
       - name: Build Docker images
         env:
@@ -238,6 +266,13 @@ jobs:
       run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" k8s/api-gateway.yml
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" k8s/jet.yml
+          sed -i "s/{{DATABASE_TYPE}}/${{ secrets.DATABASE_TYPE }}/g" k8s/jet.yml
+          sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/jet.yml
+          sed -i "s/{{JET_DB_PASSWORD}}/${{ secrets.DATABASE_PASS }}/g" k8s/jet.yml
+          sed -i "s/{{DATABASE_HOST}}/${{ secrets.DATABASE_HOST }}/g" k8s/jet.yml
+          sed -i "s/{{DATABASE_PORT}}/${{ secrets.DATABASE_PORT }}/g" k8s/jet.yml
+          sed -i "s/{{JET_DB_NAME}}/${{ secrets.JET_DB_NAME }}/g" k8s/jet.yml
+
     
     - name: Deploy on the GKE
       env:

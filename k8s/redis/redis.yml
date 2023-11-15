@@ -26,10 +26,7 @@ spec:
               cpu: "0.5"
         env:
         - name: REDIS_PASSWORD
-          valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: password
+          value: {{REDIS_PASSWORD}}
 ---
 apiVersion: v1
 kind: Service
