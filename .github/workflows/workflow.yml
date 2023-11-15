@@ -14,34 +14,6 @@ env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
 jobs:
-  deploy-ingress-dev:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GKE_SA }}
-      - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@v1
-        with:
-          cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
-          location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
-      - name: Install Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-        working-directory: /usr/local/bin
-
-      - name: Install Nginx Ingress Controller
-        run: |
-          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-          helm upgrade my-nginx-controller ingress-nginx/ingress-nginx -f k8s/ingress/ingress-config.yml
-          kubectl delete secret my-tls-secret
-          kubectl create secret tls my-tls-secret --cert=k8s/ssl/certificate.crt --key=k8s/ssl/duretrip_wildcard.key
-
-  
   setup-and-deploy-rabbitmq-dev:
     # needs: [create-image-and-push-to-dockerhub]
     name: Setup and Deploy rabbitmq to app cluster
@@ -128,12 +100,12 @@ jobs:
           sed -i "s/{{DATABASE_PORT}}/${{ secrets.DATABASE_PORT }}/g" k8s/Postgress/postgress.yml
           sed -i "s/{{REDIS_PASSWORD}}/${{ secrets.REDIS_PASSWORD }}/g" k8s/redis/redis.yml
 
-    - name: Deploy on the GKE
-      run: |-
-        kubectl apply -f k8s/Postgress/configMap.yml
-        kubectl apply -f k8s/Postgress/postgress-secrets.yml
-        kubectl apply -f k8s/Postgress/postgress.yml
-        kubectl apply -f k8s/redis/redis.yml
+    # - name: Deploy on the GKE
+    #   run: |-
+    #     kubectl apply -f k8s/Postgress/configMap.yml
+    #     kubectl apply -f k8s/Postgress/postgress-secrets.yml
+    #     kubectl apply -f k8s/Postgress/postgress.yml
+    #     kubectl apply -f k8s/redis/redis.yml
 
 
   migrate_database_permission:
@@ -216,8 +188,8 @@ jobs:
         run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
-          sed -i "s/{{AUTH_DB_USER}}/${{ secrets.DATABASE_MASTER_BASE_USER }}/g" k8s/api-gateway.yml
-          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}/g" k8s/api-gateway.yml
+          sed -i "s/{{AUTH_DB_USER}}/Yoga/g" k8s/api-gateway.yml
+          sed -i "s/\${PASSWORDE}/Yogalogo/g" k8s/api-gateway.yml
           sed -i "s/{{DATABASE_TYPE}}/${{ secrets.DATABASE_TYPE }}/g" k8s/api-gateway.yml
           sed -i "s/{{AUTH_DB_NAME}}/${{ secrets.AUTH_DB_NAME }}/g" k8s/api-gateway.yml
           sed -i "s/{{RABBITMQ_JET_QUEUE}}/${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/api-gateway.yml
