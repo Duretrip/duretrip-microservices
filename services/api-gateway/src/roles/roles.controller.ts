@@ -1,6 +1,6 @@
 // roles.controller.ts
 
-import { Controller, Param, ParseIntPipe, Post, Body } from '@nestjs/common';
+import { Controller, Param, ParseIntPipe, Post, Body, Get } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -15,6 +15,11 @@ export class RolesController {
     @Body() body: { permissionIds: number[] },
   ) {
     const { permissionIds } = body;
-    return this.rolesService.assignPermissionsToRole(roleId, permissionIds);
+    return await this.rolesService.assignPermissionsToRole(roleId, permissionIds);
+  }
+
+  @Get(':id/permissions')
+  async getRolePermissions(@Param('id') roleId: number) {
+    return await this.rolesService.getRolePermissions(roleId);
   }
 }

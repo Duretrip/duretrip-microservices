@@ -18,13 +18,13 @@ export class JetsController {
   @Post()
   async create(@Body() createJetDto: CreateJetDto) {
     const userId = 2;
-    const response = await this.jetsService.create(createJetDto, userId);
-    return response;
+    const data = await this.jetsService.create(createJetDto, userId);
+    return data;
   }
 
   @Get()
-  findAll() {
-    return this.jetsService.findAll();
+  async findAll() {
+    return await this.jetsService.findAll();
   }
 
   @Get(':id')

@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-1.1.x"]
 }
 
 datasource db {
@@ -15,7 +16,7 @@ model Jet {
   model              String
   description        String
   userId             Int
-  registrationNumber String
+  registrationNumber String                 @unique
   currentLocation    String
   availabilityStatus AvailabilityStatusEnum @default(available)
   status             StatusEnum             @default(active)
@@ -25,7 +26,7 @@ model Jet {
   pictures           Json
 
   ranges     RangesOnJets[] // Short Range (Up to 2000 Nautical Miles), Medium Range (2000-5000 Nautical Miles), Long Range (5000+ Nautical Miles)
-  capacities CapacitiesOnJets[] // Small jet (Up to 6 passengers, Midsize jet (7-10 passengers), Large Jet (11-19 passengers),
+  capacities CapacitiesOnJets[] // Small jet (Up to 6 passengers), Midsize jet (7-10 passengers), Large Jet (11-19 passengers),
   facilities FacilitiesOnJets[] // Wi-Fi, Entertainment Systems, Catering, Conference Facilties, Pet Friendly
 
   createdAt DateTime @default(now())
@@ -34,7 +35,7 @@ model Jet {
 
 model Range {
   id        Int            @id @default(autoincrement())
-  name      String
+  name      String         @unique
   status    StatusEnum     @default(active)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
@@ -53,7 +54,7 @@ model RangesOnJets {
 
 model Capacity {
   id        Int                @id @default(autoincrement())
-  name      String
+  name      String             @unique
   status    StatusEnum         @default(active)
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
@@ -72,7 +73,7 @@ model CapacitiesOnJets {
 
 model Facility {
   id        Int                @id @default(autoincrement())
-  name      String
+  name      String             @unique
   status    StatusEnum         @default(active)
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt

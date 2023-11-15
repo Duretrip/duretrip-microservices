@@ -7,9 +7,9 @@ services:
       - 5432:5432
     volumes:
       - duretrip:/var/lib/postgresql/data
-      - ./postgres:/docker-entrypoint-initdb.d
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
-      POSTGRES_USER: postgres
+      # POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Duretrip@2023
 
   maildev:

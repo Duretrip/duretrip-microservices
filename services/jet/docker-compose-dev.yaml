@@ -10,5 +10,5 @@ services:
     restart: always
     ports:
       - 8007:8007
-    # env_file:
-    #   - .env.dev
+    env_file:
+      - .env.dev
