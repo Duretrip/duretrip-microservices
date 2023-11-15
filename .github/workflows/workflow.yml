@@ -162,13 +162,13 @@ jobs:
 
       - name: Replace placeholder in SQL script
         run: |
-          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_PASS }}/g" k8s/Postgress/configMap.sql
-          sed -i "s/{{AUTH_DB_NAME}}/${{ secrets.AUTH_DB_NAME }}/g" k8s/Postgress/configMap.sql
-          sed -i "s/{{JET_DB_NAME}}/${{ secrets.JET_DB_NAME }}/g" k8s/Postgress/configMap.sql
-          sed -i "s/{{HOTEL_DB_NAME}}/${{ secrets.HOTEL_DB_NAME }}/g" k8s/Postgress/configMap.sql
-          sed -i "s/{{AUTH_DB_USER}}/${{ secrets.AUTH_DB_USER }}/g" k8s/Postgress/configMap.sql
-          sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/Postgress/configMap.sql
-          sed -i "s/{{HOTEL_DB_USER}}/${{ secrets.HOTEL_DB_USER }}/g" k8s/Postgress/configMap.sql
+          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_PASS }}/g" k8s/Postgress/configMap.yml
+          sed -i "s/{{AUTH_DB_NAME}}/${{ secrets.AUTH_DB_NAME }}/g" k8s/Postgress/configMap.yml
+          sed -i "s/{{JET_DB_NAME}}/${{ secrets.JET_DB_NAME }}/g" k8s/Postgress/configMap.yml
+          sed -i "s/{{HOTEL_DB_NAME}}/${{ secrets.HOTEL_DB_NAME }}/g" k8s/Postgress/configMap.yml
+          sed -i "s/{{AUTH_DB_USER}}/${{ secrets.AUTH_DB_USER }}/g" k8s/Postgress/configMap.yml
+          sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/Postgress/configMap.yml
+          sed -i "s/{{HOTEL_DB_USER}}/${{ secrets.HOTEL_DB_USER }}/g" k8s/Postgress/configMap.yml
       # - name: Copy SQL Script to Pod
       #   run: |
       #     POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
