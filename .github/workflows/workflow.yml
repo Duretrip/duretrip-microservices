@@ -154,11 +154,11 @@ jobs:
           cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
           location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
 
-      - name: Get Postgres Pod
-        id: get-postgres-pod
-        run: |
-          export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
-          echo "::set-output name=pod_name::$POD_NAME"
+      # - name: Get Postgres Pod
+      #   id: get-postgres-pod
+      #   run: |
+      #     export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
+      #     echo "::set-output name=pod_name::$POD_NAME"
 
       - name: Replace placeholder in SQL script
         run: |
@@ -169,6 +169,9 @@ jobs:
           sed -i "s/{{AUTH_DB_USER}}/${{ secrets.AUTH_DB_USER }}/g" k8s/Postgress/configMap.yml
           sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/Postgress/configMap.yml
           sed -i "s/{{HOTEL_DB_USER}}/${{ secrets.HOTEL_DB_USER }}/g" k8s/Postgress/configMap.yml
+
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/api-gateway.yml
       # - name: Copy SQL Script to Pod
       #   run: |
       #     POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
