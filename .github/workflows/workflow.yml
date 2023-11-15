@@ -290,6 +290,10 @@ jobs:
 
     - name: Echo contents of api-gateway.yml
       run: cat k8s/api-gateway.yml
+    - name: Echo contents of jet.yml
+      run: cat k8s/jet.yml
+    - name: Echo contents of postgres config
+      run: cat k8s/Postgress/configMap.yml
 
     
     # - name: Deploy on the GKE
