@@ -3,8 +3,7 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - main
-      - dev
+      - testing
   workflow_dispatch:
 
 env:
@@ -251,7 +250,7 @@ jobs:
           sed -i "s/{{DATABASE_TYPE}}/${{ secrets.DATABASE_TYPE }}/g" k8s/jet.yml
           sed -i "s/{{JET_DB_USER}}/${{ secrets.JET_DB_USER }}/g" k8s/jet.yml
           sed -i "s/{{JET_DB_PASSWORD}}/${{ secrets.DATABASE_PASS }}/g" k8s/jet.yml
-          sed -i "s/{{DATABASE_HOST}}/${{ secrets.DATABASE_HOST }}/g" k8s/jet.yml
+          sed -i "s/{{DATABASE_HOST}}/Damilare/g" k8s/jet.yml
           sed -i "s/{{DATABASE_PORT}}/${{ secrets.DATABASE_PORT }}/g" k8s/jet.yml
           sed -i "s/{{JET_DB_NAME}}/${{ secrets.JET_DB_NAME }}/g" k8s/jet.yml
           sed -i "s/{{RABBITMQ_JET_QUEUE}}/${{ secrets.RABBITMQ_JET_QUEUE }}/g" k8s/jet.yml
