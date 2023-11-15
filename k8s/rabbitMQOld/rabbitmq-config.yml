@@ -62,8 +62,4 @@ data:
   RABBITMQ_PASS: guest
   RABBITMQ_HOST: 35.184.19.124:5672
   RABBITMQ_URL: amqp://guest:guest@35.184.19.124:5672
-  RABBITMQ_AUTH_QUEUE: auth_queue
-  RABBITMQ_PAYMENT_QUEUE: payment_queue
-  RABBITMQ_BOOK_HOTEL_QUEUE: book_hotel_queue
-  RABBITMQ_BOOK_JET_QUEUE: book_jet_queue
   # Add other variables as needed

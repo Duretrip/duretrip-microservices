@@ -15,7 +15,7 @@ ALTER USER "durejet" WITH CREATEDB;
 GRANT ALL ON SCHEMA public TO durejet;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durejet;
 
--- Create hotel user and grant privileges
+-- Create users and grant privileges
 CREATE DATABASE hotel_db;
 CREATE USER "durehotel" WITH ENCRYPTED PASSWORD 'dureHotel2023';
 GRANT ALL PRIVILEGES ON DATABASE hotel_db TO "durehotel";

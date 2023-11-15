@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rabbitmq-pod
+spec:
+  volumes:
+    - name: rabbitmq-config
+      configMap:
+        name: rabbitmq-config
+    - name: init-script
+      configMap:
+        name: init-script
+  containers:
+    - name: rabbitmq-container
+      image: rabbitmq:3-management
+      volumeMounts:
+        - name: rabbitmq-config
+          mountPath: /etc/rabbitmq/rabbitmq.config
+          subPath: rabbitmq.config
+        - name: init-script
+          mountPath: /usr/local/bin/init-rabbitmq.sh
+          subPath: init-rabbitmq.sh
+      command: ["/bin/sh", "-c"]
+      args:
+        - "chmod +x /usr/local/bin/init-rabbitmq.sh && /usr/local/bin/init-rabbitmq.sh"
