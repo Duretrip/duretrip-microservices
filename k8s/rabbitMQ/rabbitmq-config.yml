@@ -62,8 +62,8 @@ data:
   RABBITMQ_PASS: guest
   RABBITMQ_HOST: rabbitmq-service:5672
   RABBITMQ_URL: amqp://guest:guest@rabbitmq-service:5672
-  RABBITMQ_AUTH_QUEUE: auth_queue
-  RABBITMQ_PAYMENT_QUEUE: payment_queue
-  RABBITMQ_HOTEL_QUEUE: hotel_queue
+  RABBITMQ_AUTH_QUEUE: auth-queue
+  RABBITMQ_PAYMENT_QUEUE: payment-queue
+  RABBITMQ_HOTEL_QUEUE: hotel-queue
   RABBITMQ_JET_QUEUE: jet-queue
   # Add other variables as needed

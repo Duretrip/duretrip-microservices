@@ -187,11 +187,11 @@ spec:
                   name: rabbitmq-config
                   key: RABBITMQ_AUTH_QUEUE
 
-            - name: RABBITMQ_BOOK_HOTEL_QUEUE
+            - name: RABBITMQ_HOTEL_QUEUE
               valueFrom:
                 configMapKeyRef:
                   name: rabbitmq-config
-                  key: RABBITMQ_BOOK_HOTEL_QUEUE
+                  key: RABBITMQ_HOTEL_QUEUE
 
             - name: AUTH_JWT_SECRET
               value: secret
