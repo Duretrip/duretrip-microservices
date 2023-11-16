@@ -44,6 +44,18 @@ spec:
       labels:
         app: rabbitmq
     spec:
+      initContainers:
+        - name: init-rabbitmq
+          image: rabbitmq:3-management
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              chmod +x /usr/local/bin/init-rabbitmq.sh
+              /usr/local/bin/init-rabbitmq.sh
+          volumeMounts:
+            - name: rabbitmq-init-script
+              mountPath: /usr/local/bin/init-rabbitmq.sh
+              subPath: init-rabbitmq.sh
       containers:
         - name: rabbitmq
           image: rabbitmq:3-management
@@ -60,9 +72,6 @@ spec:
           volumeMounts:
             - name: rabbitmq-data
               mountPath: /var/lib/rabbitmq
-            - name: rabbitmq-init-script
-              mountPath: /docker-entrypoint-initdb.d/init-rabbitmq.sh
-              subPath: init-rabbitmq.sh 
           env:
             - name: RABBITMQ_DEFAULT_USER
               value: {{RABBITMQ_DEFAULT_USER}}
