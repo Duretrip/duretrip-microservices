@@ -155,8 +155,8 @@ jobs:
       #   env:
       #     PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
       # - name: Deploy on Mail Service
-      #   run: |-
-      #     kubectl apply -f k8s/mail/mail.yml
+        run: |-
+          kubectl apply -f k8s/mail/mail.yml
 
 
   create-image-and-push-to-dockerhub:
