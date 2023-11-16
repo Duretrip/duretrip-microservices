@@ -133,27 +133,27 @@ jobs:
           cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
           location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
 
-      - name: Get MySQL Pod
-        id: get-postgres-pod
-        run: |
-          export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
-          echo "::set-output name=pod_name::$POD_NAME"
+      # - name: Get MySQL Pod
+      #   id: get-postgres-pod
+      #   run: |
+      #     export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
+      #     echo "::set-output name=pod_name::$POD_NAME"
 
-      - name: Replace placeholder in SQL script
-        run: |
-          sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_PASS }}/g" k8s/Postgress/init.sql
+      # - name: Replace placeholder in SQL script
+      #   run: |
+      #     sed -i "s/\${PASSWORDE}/${{ secrets.DATABASE_PASS }}/g" k8s/Postgress/init.sql
 
-      - name: Copy SQL Script to Pod
-        run: |
-          POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
-          kubectl cp k8s/Postgress/init.sql "${POD_NAME}":/tmp/init.sql
+      # - name: Copy SQL Script to Pod
+      #   run: |
+      #     POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
+      #     kubectl cp k8s/Postgress/init.sql "${POD_NAME}":/tmp/init.sql
 
-      - name: Execute SQL Script in Pod
-        run: |
-          POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
-          kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
-        env:
-          PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      # - name: Execute SQL Script in Pod
+      #   run: |
+      #     POD_NAME="${{ steps.get-postgres-pod.outputs.pod_name }}"
+      #     kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
+      #   env:
+      #     PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
       - name: Deploy on Mail Service
         run: |-
           kubectl apply -f k8s/mail/mail.yml

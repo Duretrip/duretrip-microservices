@@ -83,10 +83,10 @@ spec:
               value: "1025"
             
             - name: MAIL_USER
-              value: 
+              value: ""
 
             - name: MAIL_PASSWORD
-              value: 
+              value: ""
 
             - name: MAIL_IGNORE_TLS
               value: "true"

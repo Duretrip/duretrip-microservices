@@ -1,5 +1,6 @@
 # Use the official Node.js runtime as a parent image
-FROM node:latest
+# FROM node:latest
+FROM node:18-alpine3.16
 
 # Set the working directory in the container
 WORKDIR /app
@@ -13,7 +14,11 @@ COPY package*.json ./
 # Install app dependencies
 RUN npm install
 
+<<<<<<< HEAD
 RUN npm run prisma:generate:client
+=======
+# RUN npm run prisma:generate:client
+>>>>>>> refs/remotes/origin/dev
 
 # Copy the rest of your application code to the containernpm 
 COPY . .

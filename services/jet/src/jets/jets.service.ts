@@ -1,17 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateJetDto } from './dto/create-jet.dto';
 import { UpdateJetDto } from './dto/update-jet.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Jet as JetModel } from '@prisma/client';
-import { log } from 'console';
 
 @Injectable()
 export class JetsService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createJetDto: CreateJetDto, userId: number): Promise<JetModel> {
-
-    // TODO add Transaction
+    // return createJetDto;
     const {
       model,
       pictures,
@@ -25,47 +23,69 @@ export class JetsService {
       facilities,
       capacities,
     } = createJetDto;
-    const saveJet = await this.prisma.jet.create({
-      data: {
-        userId,
-        model,
-        description,
-        registrationNumber,
-        currentLocation,
-        availableHours,
-        price,
-        priceDescription,
-        pictures,
-      },
-    });
+    try {
+      // Check if Registration number exist
+      const regNumber = await this.prisma.jet.findUnique({
+        where: {
+          registrationNumber,
+        },
+        select: {
+          id: true,
+          model: true,
+          registrationNumber: true,
+        },
+      });
 
-    // Jet Ranges
-    const rangeData = ranges.map((id) => {
-      return { jetId: saveJet.id, rangeId: id };
-    });
+      if (regNumber) {
+        throw new ConflictException('Registration Number already exist!');
+      }
+      // TODO add Transaction
 
-    // Jet Facilities
-    const facilityData = facilities.map((id) => {
-      return { jetId: saveJet.id, facilityId: id };
-    });
+      const saveJet = await this.prisma.jet.create({
+        data: {
+          userId,
+          model,
+          description,
+          registrationNumber,
+          currentLocation,
+          availableHours,
+          price,
+          priceDescription,
+          pictures,
+        },
+      });
 
-    // Jet Capacities
-    const capacityata = capacities.map((id) => {
-      return { jetId: saveJet.id, capacityId: id };
-    });
+      // Jet Ranges
+      const rangeData = ranges.map((id) => {
+        return { jetId: saveJet.id, rangeId: id };
+      });
 
-    await Promise.all([
-      this.prisma.rangesOnJets.createMany({
-        data: rangeData,
-      }),
-      this.prisma.facilitiesOnJets.createMany({
-        data: facilityData,
-      }),
-      this.prisma.capacitiesOnJets.createMany({
-        data: capacityata,
-      }),
-    ]);
-    return saveJet;
+      // Jet Facilities
+      const facilityData = facilities.map((id) => {
+        return { jetId: saveJet.id, facilityId: id };
+      });
+
+      // Jet Capacities
+      const capacityata = capacities.map((id) => {
+        return { jetId: saveJet.id, capacityId: id };
+      });
+
+      await Promise.all([
+        this.prisma.rangesOnJets.createMany({
+          data: rangeData,
+        }),
+        this.prisma.facilitiesOnJets.createMany({
+          data: facilityData,
+        }),
+        this.prisma.capacitiesOnJets.createMany({
+          data: capacityata,
+        }),
+      ]);
+      return saveJet;
+    } catch (error) {
+      console.log(error);
+      return error.response;
+    }
   }
 
   async findAll() {
@@ -103,12 +123,11 @@ export class JetsService {
         },
       },
     });
-    console.log(jets);
     return jets;
   }
 
   async findOne(id: number) {
-    return await this.prisma.jet.findFirst({
+    const jet = await this.prisma.jet.findFirst({
       where: {
         id,
       },
@@ -154,6 +173,7 @@ export class JetsService {
         },
       },
     });
+    return jet;
   }
 
   async update(id: number, updateJetDto: UpdateJetDto) {
@@ -194,13 +214,6 @@ export class JetsService {
         },
       },
     });
-
-    //delete existing releted record
-    // await this.prisma.rangesOnJets.delete({
-    //   where: {
-
-    //   }
-    // })
 
     // Jet Ranges
     const rangeData = ranges.map((id) => {
