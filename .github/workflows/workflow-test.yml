@@ -52,19 +52,6 @@ jobs:
 
       - name: Replace placeholders in YML scripts
         run: |
-          sed -i "s|{{RABBITMQ_USER_NAME}}|$RABBITMQ_USER_NAME|g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|$RABBITMQ_USER_PASSWORD|g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_AUTH_QUEUE}}|$RABBITMQ_AUTH_QUEUE|g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_JET_QUEUE}}|$RABBITMQ_JET_QUEUE|g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_HOTEL_QUEUE}}|$RABBITMQ_HOTEL_QUEUE|g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|$RABBITMQ_API_GATEWAY_QUEUE|g" k8s/rabbitMQ/init-script.yaml
-          sed -i "s|{{RABBITMQ_DEFAULT_USER}}|$RABBITMQ_DEFAULT_USER|g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_DEFAULT_PASS}}|$RABBITMQ_DEFAULT_PASS|g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_USER_NAME}}|$RABBITMQ_USER_NAME|g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|$RABBITMQ_USER_PASSWORD|g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g" k8s/rabbitMQ/rabbitmq-config.yaml
-          sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/rabbitMQ/rabbitmq-config.yaml
-
           sed -i "s|\${PASSWORDE}|$DATABASE_MASTER_BASE_PASSWORD|g" k8s/Postgress/postgress-secrets.yml
           sed -i "s|\${JET_DATABASE_URL}|$JET_DATABASE_URL|g" k8s/Postgress/postgress-secrets.yml
           sed -i "s|\${AUTH_DATABASE_URL}|$AUTH_DATABASE_URL|g" k8s/Postgress/postgress-secrets.yml
