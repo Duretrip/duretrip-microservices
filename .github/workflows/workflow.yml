@@ -116,8 +116,7 @@ jobs:
           sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/jet.yml
 
           sed -i 's|{{RABBITMQ_DEFAULT_USER}}|$RABBITMQ_DEFAULT_USER|g' k8s/rabbitMQ/rabbitmq.yml
-          sed -i 's|{{RABBITMQ_DEFAULT_PASS}}|$RABBITMQ_DEFAULT_PASS|g' k8s/rabbitMQ/rabbitmq.yml
-          sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/rabbitMQ/rabbitmq.yml
+
 
   #     - name: Echo contents of api-gateway.yml
   #       run: cat k8s/api-gateway.yml
