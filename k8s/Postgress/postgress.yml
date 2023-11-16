@@ -29,12 +29,12 @@ spec:
         - name: postgres
           image: postgres:16.0-alpine
           ports:
-          - containerPort: {{DATABASE_PORT}}
+          - containerPort: "{{DATABASE_PORT}}"
           env:
             - name: POSTGRES_USER
-              value: {{DATABASE_MASTER_BASE_USER}}
+              value: "{{DATABASE_MASTER_BASE_USER}}"
             - name: POSTGRES_PASSWORD
-              value: {{DATABASE_MASTER_BASE_PASSWORD}}
+              value: "{{DATABASE_MASTER_BASE_PASSWORD}}"
           volumeMounts:
           - name: postgres-data
             mountPath: /var/lib/postgresql/data

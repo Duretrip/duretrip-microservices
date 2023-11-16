@@ -38,9 +38,6 @@ jobs:
       REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
       REDIS_HOST: ${{ secrets.REDIS_HOST }}
       REDIS_PORT: ${{ secrets.REDIS_PORT }}
-
-
-
       DATABASE_PASS: ${{ secrets.DATABASE_PASS }}
       AUTH_DB_NAME: ${{ secrets.AUTH_DB_NAME }}
       JET_DB_NAME: ${{ secrets.JET_DB_NAME }}
@@ -126,6 +123,10 @@ jobs:
           sed -i "s|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g" k8s/jet.yml
           sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/jet.yml
 
+          sed -i "s|{{RABBITMQ_DEFAULT_USER}}|$RABBITMQ_DEFAULT_USER|g" k8s/rabbitMQ/rabbitmq.yml
+          sed -i "s|{{RABBITMQ_DEFAULT_PASS}}|$RABBITMQ_DEFAULT_PASS|g" k8s/rabbitMQ/rabbitmq.yml
+          sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/rabbitMQ/rabbitmq.yml
+
       - name: Echo contents of api-gateway.yml
         run: cat k8s/api-gateway.yml
       - name: Echo contents of jet.yml
@@ -192,7 +193,7 @@ jobs:
     - name: Deploy on the GKE
       run: |-
         kubectl apply -f k8s/rabbitMQ/init-script.yaml
-        kubectl apply -f k8s/rabbitMQ/rabbitmq-deployment.yaml
+        kubectl apply -f k8s/rabbitMQ/rabbitmq.yaml
 
 
   setup-and-deploy-to-postgres-cluster:

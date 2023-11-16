@@ -1,0 +1,322 @@
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - tester
+  workflow_dispatch:
+
+env:
+  GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
+  GKE_CLUSTER: ${{ secrets.GKE_PROD_CLUSTER_NAME}}    # TODO: update to cluster name
+  GKE_ZONE: ${{ secrets.GKE_PROD_CLUSTER_ZONE}}   # TODO: update to cluster zone
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+jobs:
+  replace-placeholders:
+    runs-on: ubuntu-latest
+    env:
+      RABBITMQ_USER_NAME: ${{ secrets.RABBITMQ_USER_NAME }}
+      RABBITMQ_USER_PASSWORD: ${{ secrets.RABBITMQ_USER_PASSWORD }}
+      RABBITMQ_AUTH_QUEUE: ${{ secrets.RABBITMQ_AUTH_QUEUE }}
+      RABBITMQ_JET_QUEUE: ${{ secrets.RABBITMQ_JET_QUEUE }}
+      RABBITMQ_HOTEL_QUEUE: ${{ secrets.RABBITMQ_HOTEL_QUEUE }}
+      RABBITMQ_API_GATEWAY_QUEUE: ${{ secrets.RABBITMQ_API_GATEWAY_QUEUE }}
+      RABBITMQ_DEFAULT_USER: ${{ secrets.RABBITMQ_DEFAULT_USER }}
+      RABBITMQ_DEFAULT_PASS: ${{ secrets.RABBITMQ_DEFAULT_PASS }}
+      RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
+      RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
+      DATABASE_MASTER_BASE_PASSWORD: ${{ secrets.DATABASE_MASTER_BASE_PASSWORD }}
+      JET_DATABASE_URL: ${{ secrets.JET_DATABASE_URL }}
+      AUTH_DATABASE_URL: ${{ secrets.AUTH_DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      DATABASE_MASTER_BASE_USER: ${{ secrets.DATABASE_MASTER_BASE_USER }}
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+      REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
+      DATABASE_PASS: ${{ secrets.DATABASE_PASS }}
+      AUTH_DB_NAME: ${{ secrets.AUTH_DB_NAME }}
+      JET_DB_NAME: ${{ secrets.JET_DB_NAME }}
+      HOTEL_DB_NAME: ${{ secrets.HOTEL_DB_NAME }}
+      AUTH_DB_USER: ${{ secrets.AUTH_DB_USER }}
+      JET_DB_USER: ${{ secrets.JET_DB_USER }}
+      HOTEL_DB_USER: ${{ secrets.HOTEL_DB_USER }}
+      DATABASE_TYPE: ${{ secrets.DATABASE_TYPE }}
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Replace placeholders in YML scripts
+        run: |
+          sed -i "s|{{RABBITMQ_USER_NAME}}|$RABBITMQ_USER_NAME|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|$RABBITMQ_USER_PASSWORD|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_AUTH_QUEUE}}|$RABBITMQ_AUTH_QUEUE|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_JET_QUEUE}}|$RABBITMQ_JET_QUEUE|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_HOTEL_QUEUE}}|$RABBITMQ_HOTEL_QUEUE|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|$RABBITMQ_API_GATEWAY_QUEUE|g" k8s/rabbitMQ/init-script.yaml
+          sed -i "s|{{RABBITMQ_DEFAULT_USER}}|$RABBITMQ_DEFAULT_USER|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_DEFAULT_PASS}}|$RABBITMQ_DEFAULT_PASS|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_USER_NAME}}|$RABBITMQ_USER_NAME|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|$RABBITMQ_USER_PASSWORD|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g" k8s/rabbitMQ/rabbitmq-config.yaml
+          sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/rabbitMQ/rabbitmq-config.yaml
+
+          sed -i "s|\${PASSWORDE}|$DATABASE_MASTER_BASE_PASSWORD|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${JET_DATABASE_URL}|$JET_DATABASE_URL|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${AUTH_DATABASE_URL}|$AUTH_DATABASE_URL|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|\${SECRET}|$JWT_SECRET|g" k8s/Postgress/postgress-secrets.yml
+          sed -i "s|{{DATABASE_MASTER_BASE_USER}}|$DATABASE_MASTER_BASE_USER|g" k8s/Postgress/postgress.yml
+          sed -i "s|{{DATABASE_MASTER_BASE_PASSWORD}}|$DATABASE_MASTER_BASE_PASSWORD|g" k8s/Postgress/postgress.yml
+          sed -i "s|{{DATABASE_PORT}}|$DATABASE_PORT|g" k8s/Postgress/postgress.yml
+          sed -i "s|{{REDIS_PASSWORD}}|$REDIS_PASSWORD|g" k8s/redis/redis.yml
+          sed -i "s|{{REDIS_PORT}}|$REDIS_PORT|g" k8s/redis/redis.yml
+          sed -i "s|{{REDIS_USERNAME}}|$REDIS_USERNAME|g" k8s/redis/redis.yml
+          
+          sed -i "s|\${PASSWORDE}|$DATABASE_PASS|g" k8s/Postgress/configMap.yml
+          sed -i "s|{{AUTH_DB_NAME}}|$AUTH_DB_NAME|g" k8s/Postgress/configMap.yml
+          sed -i "s|{{JET_DB_NAME}}|$JET_DB_NAME|g" k8s/Postgress/configMap.yml
+          sed -i "s|{{HOTEL_DB_NAME}}|$HOTEL_DB_NAME|g" k8s/Postgress/configMap.yml
+          sed -i "s|{{AUTH_DB_USER}}|$AUTH_DB_USER|g" k8s/Postgress/configMap.yml
+          sed -i "s|{{JET_DB_USER}}|$JET_DB_USER|g" k8s/Postgress/configMap.yml
+          sed -i "s|{{HOTEL_DB_USER}}|$HOTEL_DB_USER|g" k8s/Postgress/configMap.yml
+
+          sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
+          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
+          sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" k8s/api-gateway.yml
+          sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" k8s/jet.yml
+
+          sed -i "s|{{AUTH_DB_USER}}|$DATABASE_MASTER_BASE_USER|g" k8s/api-gateway.yml
+          sed -i "s|\${PASSWORDE}|$DATABASE_MASTER_BASE_PASSWORD|g" k8s/api-gateway.yml
+          sed -i "s|{{DATABASE_TYPE}}|$DATABASE_TYPE|g" k8s/api-gateway.yml
+          sed -i "s|{{AUTH_DB_NAME}}|$AUTH_DB_NAME|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_JET_QUEUE}}|$RABBITMQ_JET_QUEUE|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|$RABBITMQ_API_GATEWAY_QUEUE|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_USER_NAME}}|$RABBITMQ_USER_NAME|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|$RABBITMQ_USER_PASSWORD|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/api-gateway.yml
+          sed -i "s|{{JWT_SECRET}}|$JWT_SECRET|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_AUTH_QUEUE}}|$RABBITMQ_AUTH_QUEUE|g" k8s/api-gateway.yml
+          sed -i "s|{{DATABASE_PORT}}|$DATABASE_PORT|g" k8s/api-gateway.yml
+          sed -i "s|{{DATABASE_HOST}}|$DATABASE_HOST|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_USERNAME}}|$REDIS_USERNAME|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_PASSWORD}}|$REDIS_PASSWORD|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_HOST}}|$REDIS_HOST|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_PORT}}|$REDIS_PORT|g" k8s/api-gateway.yml
+
+          sed -i "s|{{DATABASE_TYPE}}|$DATABASE_TYPE|g" k8s/jet.yml
+          sed -i "s|{{JET_DB_USER}}|$JET_DB_USER|g" k8s/jet.yml
+          sed -i "s|{{JET_DB_PASSWORD}}|$DATABASE_PASS|g" k8s/jet.yml
+          sed -i "s|{{DATABASE_HOST}}|$DATABASE_HOST|g" k8s/jet.yml
+          sed -i "s|{{DATABASE_PORT}}|$DATABASE_PORT|g" k8s/jet.yml
+          sed -i "s|{{JET_DB_NAME}}|$JET_DB_NAME|g" k8s/jet.yml
+          sed -i "s|{{RABBITMQ_JET_QUEUE}}|$RABBITMQ_JET_QUEUE|g" k8s/jet.yml
+          sed -i "s|{{RABBITMQ_API_GATEWAY_QUEUE}}|$RABBITMQ_API_GATEWAY_QUEUE|g" k8s/jet.yml
+          sed -i "s|{{RABBITMQ_USER_NAME}}|$RABBITMQ_USER_NAME|g" k8s/jet.yml
+          sed -i "s|{{RABBITMQ_USER_PASSWORD}}|$RABBITMQ_USER_PASSWORD|g" k8s/jet.yml
+          sed -i "s|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g" k8s/jet.yml
+          sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/jet.yml
+
+          sed -i "s|{{RABBITMQ_DEFAULT_USER}}|$RABBITMQ_DEFAULT_USER|g" k8s/rabbitMQ/rabbitmq.yml
+          sed -i "s|{{RABBITMQ_DEFAULT_PASS}}|$RABBITMQ_DEFAULT_PASS|g" k8s/rabbitMQ/rabbitmq.yml
+          sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/rabbitMQ/rabbitmq.yml
+
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/api-gateway.yml
+      - name: Echo contents of jet.yml
+        run: cat k8s/jet.yml
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/Postgress/configMap.yml
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/rabbitMQ/rabbitmq-config.yaml
+
+  deploy-ingress-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GKE_SA }}
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        working-directory: /usr/local/bin
+
+      - name: Install Nginx Ingress Controller
+        run: |
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm upgrade my-nginx-controller ingress-nginx/ingress-nginx -f k8s/ingress/ingress-config.yml
+          kubectl delete secret my-tls-secret
+          kubectl create secret tls my-tls-secret --cert=k8s/ssl/certificate.crt --key=k8s/ssl/duretrip_wildcard.key
+
+  
+  setup-and-deploy-rabbitmq-dev:
+    # needs: [create-image-and-push-to-dockerhub]
+    name: Setup and Deploy rabbitmq to app cluster
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GKE_SA }}
+
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+    - name: Deploy on the GKE
+      run: |-
+        kubectl apply -f k8s/rabbitMQ/init-script.yaml
+        kubectl apply -f k8s/rabbitMQ/rabbitmq.yaml
+
+
+  setup-and-deploy-to-postgres-cluster:
+    # needs: [setup-and-deploy-to-cluster-dev]
+
+    name: Setup and Deploy to postgres
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GKE_SA }}
+
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+    - name: Deploy on the GKE
+      run: |-
+        kubectl apply -f k8s/Postgress/configMap.yml
+        kubectl apply -f k8s/Postgress/postgress.yml
+        kubectl apply -f k8s/redis/redis.yml
+
+
+  migrate_database_permission:
+    needs: [setup-and-deploy-to-postgres-cluster]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GKE_SA }}
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+
+      - name: Deploy Mail Service
+        run: |-
+          kubectl apply -f k8s/mail/mail.yml
+
+
+  create-image-and-push-to-dockerhub:
+    needs: [migrate_database_permission]
+
+    name: Create Image and Push to Dockerhub
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+        continue-on-error: true
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build Docker images
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          docker-compose -f services/api-gateway/docker-compose.yaml build
+          docker-compose -f services/api-gateway/docker-compose.yaml push
+          docker-compose -f services/jet/docker-compose.yaml build
+          docker-compose -f services/jet/docker-compose.yaml push
+        working-directory: .
+
+
+  setup-and-deploy-to-cluster-main:
+    needs: [create-image-and-push-to-dockerhub]
+
+    name: Setup and Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GKE_SA }}
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+    - name: Deploy on the GKE
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        CT_TYPE: "api"
+      run: |-
+        kubectl apply -f k8s/ingress/ingress-service-dev.yml
+        kubectl apply -f k8s/api-gateway.yml
+        kubectl apply -f k8s/jet.yml
+
+    
+       
