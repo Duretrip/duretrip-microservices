@@ -154,7 +154,7 @@ jobs:
       #     kubectl exec -it "${POD_NAME}" -- /bin/sh -c "cd /tmp && psql -U ${{ secrets.MYSQL_USER }} -d boilerplate -W < init.sql"
       #   env:
       #     PGPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      # - name: Deploy on Mail Service
+      - name: Deploy on Mail Service
         run: |-
           kubectl apply -f k8s/mail/mail.yml
 
