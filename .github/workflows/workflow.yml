@@ -65,13 +65,6 @@ jobs:
           sed -i 's|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g' k8s/rabbitMQ/rabbitmq-config.yaml
           sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/rabbitMQ/rabbitmq-config.yaml
 
-          sed -i 's|${PASSWORDE}|$DATABASE_MASTER_BASE_PASSWORD|g' k8s/Postgress/postgress-secrets.yml
-          sed -i 's|${JET_DATABASE_URL}|$JET_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
-          sed -i 's|${AUTH_DATABASE_URL}|$AUTH_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
-          sed -i 's|${SECRET}|$JWT_SECRET|g' k8s/Postgress/postgress-secrets.yml
-          sed -i 's|{{DATABASE_MASTER_BASE_USER}}|$DATABASE_MASTER_BASE_USER|g' k8s/Postgress/postgress.yml
-          sed -i 's|{{DATABASE_MASTER_BASE_PASSWORD}}|$DATABASE_MASTER_BASE_PASSWORD|g' k8s/Postgress/postgress.yml
-          sed -i 's|{{DATABASE_PORT}}|$DATABASE_PORT|g' k8s/Postgress/postgress.yml
           sed -i 's|{{REDIS_PASSWORD}}|$REDIS_PASSWORD|g' k8s/redis/redis.yml
           sed -i 's|{{REDIS_PORT}}|$REDIS_PORT|g' k8s/redis/redis.yml
           sed -i 's|{{REDIS_USERNAME}}|$REDIS_USERNAME|g' k8s/redis/redis.yml
@@ -113,50 +106,40 @@ jobs:
           sed -i 's|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g' k8s/jet.yml
           sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/jet.yml
 
-          sed -i 's|${PASSWORDE}|$DATABASE_PASS|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{AUTH_DB_NAME}}|$AUTH_DB_NAME|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{JET_DB_NAME}}|$JET_DB_NAME|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{HOTEL_DB_NAME}}|$HOTEL_DB_NAME|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{AUTH_DB_USER}}|$AUTH_DB_USER|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{JET_DB_USER}}|$JET_DB_USER|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{HOTEL_DB_USER}}|$HOTEL_DB_USER|g' k8s/Postgress/configMap.yml
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/api-gateway.yml
+      - name: Echo contents of jet.yml
+        run: cat k8s/jet.yml
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/Postgress/configMap.yml
+      - name: Echo contents of api-gateway.yml
+        run: cat k8s/rabbitMQ/rabbitmq-config.yaml
 
-          sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/rabbitMQ/rabbitmq.yml
+  deploy-ingress-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GKE_SA }}
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        working-directory: /usr/local/bin
 
-  #     - name: Echo contents of api-gateway.yml
-  #       run: cat k8s/api-gateway.yml
-  #     - name: Echo contents of jet.yml
-  #       run: cat k8s/jet.yml
-  #     - name: Echo contents of api-gateway.yml
-  #       run: cat k8s/Postgress/configMap.yml
-  #     - name: Echo contents of api-gateway.yml
-  #       run: cat k8s/rabbitMQ/rabbitmq-config.yaml
-
-  # deploy-ingress-dev:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  #     - name: Authenticate to Google Cloud
-  #       uses: google-github-actions/auth@v1
-  #       with:
-  #         credentials_json: ${{ secrets.GKE_SA }}
-  #     - name: Get GKE Credentials
-  #       uses: google-github-actions/get-gke-credentials@v1
-  #       with:
-  #         cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
-  #         location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
-  #     - name: Install Helm
-  #       run: |
-  #         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-  #       working-directory: /usr/local/bin
-
-  #     - name: Install Nginx Ingress Controller
-  #       run: |
-  #         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  #         helm upgrade my-nginx-controller ingress-nginx/ingress-nginx -f k8s/ingress/ingress-config.yml
-  #         kubectl delete secret my-tls-secret
-  #         kubectl create secret tls my-tls-secret --cert=k8s/ssl/certificate.crt --key=k8s/ssl/duretrip_wildcard.key
+      - name: Install Nginx Ingress Controller
+        run: |
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm upgrade my-nginx-controller ingress-nginx/ingress-nginx -f k8s/ingress/ingress-config.yml
+          kubectl delete secret my-tls-secret
+          kubectl create secret tls my-tls-secret --cert=k8s/ssl/certificate.crt --key=k8s/ssl/duretrip_wildcard.key
 
   
   # setup-and-deploy-rabbitmq-dev:
@@ -190,37 +173,54 @@ jobs:
   #       kubectl apply -f k8s/rabbitMQ/rabbitmq.yaml
 
 
-  # setup-and-deploy-to-postgres-cluster:
-  #   # needs: [setup-and-deploy-to-cluster-dev]
+  setup-and-deploy-to-postgres-cluster:
+    # needs: [setup-and-deploy-to-cluster-dev]
 
-  #   name: Setup and Deploy to postgres
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: 'read'
-  #     id-token: 'write'
+    name: Setup and Deploy to postgres
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v3
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
 
-  #   - name: Authenticate to Google Cloud
-  #     uses: google-github-actions/auth@v1
-  #     with:
-  #       credentials_json: ${{ secrets.GKE_SA }}
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GKE_SA }}
 
-  #   - name: Get GKE Credentials
-  #     uses: google-github-actions/get-gke-credentials@v1
-  #     with:
-  #       cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
-  #       location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
-  #     env:
-  #       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
+        location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    - name: Replace placeholders in YML scripts
+      run: |
+        sed -i 's|${PASSWORDE}|$DATABASE_MASTER_BASE_PASSWORD|g' k8s/Postgress/postgress-secrets.yml
+        sed -i 's|${JET_DATABASE_URL}|$JET_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
+        sed -i 's|${AUTH_DATABASE_URL}|$AUTH_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
+        sed -i 's|${SECRET}|$JWT_SECRET|g' k8s/Postgress/postgress-secrets.yml
+        sed -i 's|{{DATABASE_MASTER_BASE_USER}}|$DATABASE_MASTER_BASE_USER|g' k8s/Postgress/postgress.yml
+        sed -i 's|{{DATABASE_MASTER_BASE_PASSWORD}}|$DATABASE_MASTER_BASE_PASSWORD|g' k8s/Postgress/postgress.yml
+        sed -i 's|{{DATABASE_PORT}}|$DATABASE_PORT|g' k8s/Postgress/postgress.yml
+        sed -i 's|${PASSWORDE}|$DATABASE_PASS|g' k8s/Postgress/configMap.yml
+        sed -i 's|{{AUTH_DB_NAME}}|$AUTH_DB_NAME|g' k8s/Postgress/configMap.yml
+        sed -i 's|{{JET_DB_NAME}}|$JET_DB_NAME|g' k8s/Postgress/configMap.yml
+        sed -i 's|{{HOTEL_DB_NAME}}|$HOTEL_DB_NAME|g' k8s/Postgress/configMap.yml
+        sed -i 's|{{AUTH_DB_USER}}|$AUTH_DB_USER|g' k8s/Postgress/configMap.yml
+        sed -i 's|{{JET_DB_USER}}|$JET_DB_USER|g' k8s/Postgress/configMap.yml
+        sed -i 's|{{HOTEL_DB_USER}}|$HOTEL_DB_USER|g' k8s/Postgress/configMap.yml
 
-  #   - name: Deploy on the GKE
-  #     run: |-
-  #       kubectl apply -f k8s/Postgress/configMap.yml
-  #       kubectl apply -f k8s/Postgress/postgress.yml
-  #       kubectl apply -f k8s/redis/redis.yml
+
+    - name: Deploy on the GKE
+      run: |-
+        kubectl apply -f k8s/Postgress/configMap.yml
+        kubectl apply -f k8s/Postgress/postgress.yml
+        kubectl apply -f k8s/redis/redis.yml
 
 
   # migrate_database_permission:
