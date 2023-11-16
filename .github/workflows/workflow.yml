@@ -76,8 +76,6 @@ jobs:
           sed -i 's|{{REDIS_PORT}}|$REDIS_PORT|g' k8s/redis/redis.yml
           sed -i 's|{{REDIS_USERNAME}}|$REDIS_USERNAME|g' k8s/redis/redis.yml
 
-
-
           sed -i 's|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|' services/api-gateway/docker-compose.yaml
           sed -i 's|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|' services/jet/docker-compose.yaml
           sed -i 's|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|' k8s/api-gateway.yml
@@ -114,6 +112,10 @@ jobs:
           sed -i 's|{{RABBITMQ_USER_PASSWORD}}|$RABBITMQ_USER_PASSWORD|g' k8s/jet.yml
           sed -i 's|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g' k8s/jet.yml
           sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/jet.yml
+          sed -i 's|{{RABBITMQ_DEFAULT_USER}}|$RABBITMQ_DEFAULT_USER|g' k8s/jet.yml
+          sed -i 's|{{RABBITMQ_DEFAULT_PASS}}|$RABBITMQ_DEFAULT_PASS|g' k8s/jet.yml
+          sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/jet.yml
+
 
 
   #     - name: Echo contents of api-gateway.yml
