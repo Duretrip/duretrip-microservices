@@ -35,6 +35,12 @@ jobs:
       DATABASE_MASTER_BASE_USER: ${{ secrets.DATABASE_MASTER_BASE_USER }}
       DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+      REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
+
+
+
       DATABASE_PASS: ${{ secrets.DATABASE_PASS }}
       AUTH_DB_NAME: ${{ secrets.AUTH_DB_NAME }}
       JET_DB_NAME: ${{ secrets.JET_DB_NAME }}
@@ -72,6 +78,9 @@ jobs:
           sed -i "s|{{DATABASE_MASTER_BASE_PASSWORD}}|$DATABASE_MASTER_BASE_PASSWORD|g" k8s/Postgress/postgress.yml
           sed -i "s|{{DATABASE_PORT}}|$DATABASE_PORT|g" k8s/Postgress/postgress.yml
           sed -i "s|{{REDIS_PASSWORD}}|$REDIS_PASSWORD|g" k8s/redis/redis.yml
+          sed -i "s|{{REDIS_PORT}}|$REDIS_PORT|g" k8s/redis/redis.yml
+          sed -i "s|{{REDIS_USERNAME}}|$REDIS_USERNAME|g" k8s/redis/redis.yml
+          
           sed -i "s|\${PASSWORDE}|$DATABASE_PASS|g" k8s/Postgress/configMap.yml
           sed -i "s|{{AUTH_DB_NAME}}|$AUTH_DB_NAME|g" k8s/Postgress/configMap.yml
           sed -i "s|{{JET_DB_NAME}}|$JET_DB_NAME|g" k8s/Postgress/configMap.yml
@@ -96,6 +105,13 @@ jobs:
           sed -i "s|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g" k8s/api-gateway.yml
           sed -i "s|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g" k8s/api-gateway.yml
           sed -i "s|{{JWT_SECRET}}|$JWT_SECRET|g" k8s/api-gateway.yml
+          sed -i "s|{{RABBITMQ_AUTH_QUEUE}}|$RABBITMQ_AUTH_QUEUE|g" k8s/api-gateway.yml
+          sed -i "s|{{DATABASE_PORT}}|$DATABASE_PORT|g" k8s/api-gateway.yml
+          sed -i "s|{{DATABASE_HOST}}|$DATABASE_HOST|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_USERNAME}}|$REDIS_USERNAME|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_PASSWORD}}|$REDIS_PASSWORD|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_HOST}}|$REDIS_HOST|g" k8s/api-gateway.yml
+          sed -i "s|{{REDIS_PORT}}|$REDIS_PORT|g" k8s/api-gateway.yml
 
           sed -i "s|{{DATABASE_TYPE}}|$DATABASE_TYPE|g" k8s/jet.yml
           sed -i "s|{{JET_DB_USER}}|$JET_DB_USER|g" k8s/jet.yml
