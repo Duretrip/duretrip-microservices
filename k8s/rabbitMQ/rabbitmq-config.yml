@@ -60,8 +60,8 @@ data:
   RABBITMQ_DEFAULT_PASS: guest
   RABBITMQ_USER: guest
   RABBITMQ_PASS: guest
-  RABBITMQ_HOST: 35.184.19.124:5672
-  RABBITMQ_URL: amqp://guest:guest@35.184.19.124:5672
+  RABBITMQ_HOST: rabbitmq-service:5672
+  RABBITMQ_URL: amqp://guest:guest@rabbitmq-service:5672
   RABBITMQ_AUTH_QUEUE: auth_queue
   RABBITMQ_PAYMENT_QUEUE: payment_queue
   RABBITMQ_HOTEL_QUEUE: hotel_queue

@@ -16,22 +16,7 @@
 #                  log.console.level = info
 #                  channel_max = 1700
 #                  default_user_tags.administrator = true
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: rabbitmq-pv
-spec:
-  capacity:
-    storage: 1Gi  # Adjust the size as needed
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
-  hostPath:
-    path: projects/duretrip/zones/us-central1-a/disks/pvc-7529ecaf-0090-4e61-95a4-ae7ae956a7d9  # Modify this path to your actual host directory
 
----
 
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -81,7 +66,7 @@ spec:
       volumes:
         - name: rabbitmq-data
           persistentVolumeClaim:
-            claimName: rabbitmq-data-rabbitmq-0
+            claimName: rabbitmq-pv-claim
 
 ---
 
