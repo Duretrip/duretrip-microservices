@@ -21,9 +21,6 @@ spec:
           memory: "256Mi"
           cpu: "250m"
       volumeMounts:
-        - name: rabbitmq-config
-          mountPath: /etc/rabbitmq/rabbitmq.config
-          subPath: rabbitmq.config
         - name: init-script
           mountPath: /usr/local/bin/init-rabbitmq.sh
           subPath: init-rabbitmq.sh

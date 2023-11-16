@@ -97,14 +97,6 @@ spec:
             - name: RABBITMQ_API_GATEWAY_QUEUE
               value: {{RABBITMQ_API_GATEWAY_QUEUE}}
 
-            - name: AUTH_JWT_SECRET
-              value: secret
-            - name: AUTH_JWT_TOKEN_EXPIRES_IN
-              value: '15'
-            - name: AUTH_REFRESH_SECRET
-              value: secret_for_refresh
-            - name: AUTH_REFRESH_TOKEN_EXPIRES_IN
-              value: 3650d
             - name: APP_PORT
               value: "8008"
 

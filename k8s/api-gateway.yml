@@ -188,13 +188,13 @@ spec:
               value: {{RABBITMQ_API_GATEWAY_QUEUE}}
 
             - name: AUTH_JWT_SECRET
-              value: secret
+              value: {{JWT_SECRET}}
 
             - name: AUTH_JWT_TOKEN_EXPIRES_IN
               value: '2880m'
 
             - name: AUTH_REFRESH_SECRET
-              value: secret_for_refresh
+              value: {{JWT_SECRET}}
 
             - name: AUTH_REFRESH_TOKEN_EXPIRES_IN
               value: 3650d
