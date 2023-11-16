@@ -65,10 +65,10 @@ jobs:
           sed -i 's|{{RABBITMQ_HOST}}|$RABBITMQ_HOST|g' k8s/rabbitMQ/rabbitmq-config.yaml
           sed -i 's|{{RABBITMQ_PORT}}|$RABBITMQ_PORT|g' k8s/rabbitMQ/rabbitmq-config.yaml
 
-          sed -i 's|\${PASSWORDE}|$DATABASE_MASTER_BASE_PASSWORD|g' k8s/Postgress/postgress-secrets.yml
-          sed -i 's|\${JET_DATABASE_URL}|$JET_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
-          sed -i 's|\${AUTH_DATABASE_URL}|$AUTH_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
-          sed -i 's|\${SECRET}|$JWT_SECRET|g' k8s/Postgress/postgress-secrets.yml
+          sed -i 's|${PASSWORDE}|$DATABASE_MASTER_BASE_PASSWORD|g' k8s/Postgress/postgress-secrets.yml
+          sed -i 's|${JET_DATABASE_URL}|$JET_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
+          sed -i 's|${AUTH_DATABASE_URL}|$AUTH_DATABASE_URL|g' k8s/Postgress/postgress-secrets.yml
+          sed -i 's|${SECRET}|$JWT_SECRET|g' k8s/Postgress/postgress-secrets.yml
           sed -i 's|{{DATABASE_MASTER_BASE_USER}}|$DATABASE_MASTER_BASE_USER|g' k8s/Postgress/postgress.yml
           sed -i 's|{{DATABASE_MASTER_BASE_PASSWORD}}|$DATABASE_MASTER_BASE_PASSWORD|g' k8s/Postgress/postgress.yml
           sed -i 's|{{DATABASE_PORT}}|$DATABASE_PORT|g' k8s/Postgress/postgress.yml
@@ -76,13 +76,7 @@ jobs:
           sed -i 's|{{REDIS_PORT}}|$REDIS_PORT|g' k8s/redis/redis.yml
           sed -i 's|{{REDIS_USERNAME}}|$REDIS_USERNAME|g' k8s/redis/redis.yml
           
-          sed -i 's|\${PASSWORDE}|$DATABASE_PASS|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{AUTH_DB_NAME}}|$AUTH_DB_NAME|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{JET_DB_NAME}}|$JET_DB_NAME|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{HOTEL_DB_NAME}}|$HOTEL_DB_NAME|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{AUTH_DB_USER}}|$AUTH_DB_USER|g' k8s/Postgress/configMap.yml
-          sed -i 's|{{JET_DB_USER}}|$JET_DB_USER|g' k8s/Postgress/configMap.yml
-          sed -i s|{{HOTEL_DB_USER}}|$HOTEL_DB_USER|g' k8s/Postgress/configMap.yml
+
 
   #         sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
   #         sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
