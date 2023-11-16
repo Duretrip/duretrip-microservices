@@ -70,11 +70,11 @@ spec:
             - containerPort: 15672
           resources:
             requests:
-              memory: "512Mi" # Standard memory request
-              cpu: "0.5"      # Standard CPU request
+              memory: "256Mi" # Standard memory request
+              cpu: "0.2"      # Standard CPU request
             limits:
-              memory: "712Mi" # Standard memory limit
-              cpu: "0.7"      # Standard CPU limit
+              memory: "512Mi" # Standard memory limit
+              cpu: "0.5"      # Standard CPU limit
           volumeMounts:
             - name: rabbitmq-data
               mountPath: /var/lib/rabbitmq
