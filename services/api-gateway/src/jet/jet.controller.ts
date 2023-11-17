@@ -17,6 +17,7 @@ import { CreateJetDto } from './dto/create-jet.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateJetDto } from './dto/update-jet.dto';
 import {Permissions} from 'src/permissions/decorators/permission.decorator'
+import { AuthGuard } from '@nestjs/passport';
 
 function generateUniqueId() {
   return uuidv4();
@@ -26,7 +27,8 @@ const RESPONSE_TIMEOUT = 5000; // Timeout in milliseconds (adjust as needed)
 
 @Controller('jet')
 @ApiTags('Jets')
-@UseGuards(PermissionGuard)
+@UseGuards(AuthGuard('jwt'), PermissionGuard)
+
 export class JetController {
   constructor(private readonly rabbitMQService: RabbitMQService) {}
 

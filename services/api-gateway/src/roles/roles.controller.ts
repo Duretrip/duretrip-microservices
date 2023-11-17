@@ -6,9 +6,10 @@ import { ApiTags, ApiOperation, ApiResponse, ApiNotFoundResponse, ApiParam, ApiB
 import { Role } from './entities/role.entity';
 import { PermissionGuard } from 'src/permissions/guards/permission.guard';
 import {Permissions} from 'src/permissions/decorators/permission.decorator'
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Roles')
-@UseGuards(PermissionGuard) 
+@UseGuards(AuthGuard('jwt'), PermissionGuard) 
 @Controller('roles')
 export class RolesController {
   constructor(private readonly roleService: RoleService) { }

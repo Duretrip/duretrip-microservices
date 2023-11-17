@@ -5,14 +5,15 @@ import { Permission } from './entities/permission.entity';
 import { PermissionsService } from './permissions.service';
 import { PermissionGuard } from './guards/permission.guard';
 import {Permissions} from 'src/permissions/decorators/permission.decorator'
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Permissions')
-@UseGuards(PermissionGuard) 
+@UseGuards(AuthGuard('jwt'), PermissionGuard) 
 @Controller('permissions')
 export class PermissionsController {
   constructor(private readonly permissionService: PermissionsService) {}
 
-  @Permissions('VIEW_ROLE')
+  @Permissions('VIEW_PERMISSIONS')
   @Get()
   @ApiOperation({ summary: 'Get all permissions', description: 'Retrieve a list of all permissions.' })
   @ApiResponse({ status: 200, description: 'Permissions fetched successfully', type: Permission, isArray: true })
@@ -20,7 +21,7 @@ export class PermissionsController {
     return this.permissionService.findAll();
   }
 
-  @Permissions('VIEW_ROLE')
+  @Permissions('VIEW_PERMISSIONS')
   @Get(':id')
   @ApiOperation({ summary: 'Get permission by ID', description: 'Retrieve a permission by its ID.' })
   @ApiResponse({ status: 200, description: 'Permission fetched successfully', type: Permission })
