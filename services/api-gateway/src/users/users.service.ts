@@ -48,12 +48,14 @@ export class UsersService {
         }),
         {},
       ),
+      relations: ['role', 'role.permissions'], // Include relations
     });
   }
 
   async findOne(fields: EntityCondition<User>): Promise<NullableType<User>> {
     return await this.usersRepository.findOne({
       where: fields,
+      relations: ['role', 'role.permissions'], // Include relations
     });
   }
 

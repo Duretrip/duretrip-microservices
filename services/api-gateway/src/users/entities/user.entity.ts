@@ -14,9 +14,9 @@ import {
   BeforeUpdate,
   Index,
 } from 'typeorm';
-import { Role } from '../../roles/entities/role.entity';
-import { Status } from '../../statuses/entities/status.entity';
-import { FileEntity } from '../../files/entities/file.entity';
+import { Role } from 'src/roles/entities/role.entity';
+import { Status } from 'src/statuses/entities/status.entity';
+import { FileEntity } from 'src/files/entities/file.entity';
 import bcrypt from 'bcryptjs';
 import { EntityHelper } from 'src/utils/entity-helper';
 import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';

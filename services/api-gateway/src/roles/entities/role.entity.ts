@@ -1,8 +1,10 @@
+// role.entity.ts
+
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Allow, IsNumber } from 'class-validator';
+import { Allow, IsNumber, IsString, IsNotEmpty, IsArray, ArrayNotEmpty } from 'class-validator';
 import { EntityHelper } from 'src/utils/entity-helper';
-import { Permission } from '../../permissions/entities/permission.entity'; // Update the import path
+import { Permission } from 'src/permissions/entities/permission.entity'; // Update the import path
 
 @Entity()
 export class Role extends EntityHelper {
@@ -11,12 +13,17 @@ export class Role extends EntityHelper {
   @IsNumber()
   id: number;
 
-  @Allow()
   @ApiProperty({ example: 'Admin' })
+  @Allow()
+  @IsString()
+  @IsNotEmpty()
   @Column()
   name?: string;
 
-  @ManyToMany(() => Permission, (permission) => permission.roles) // ManyToMany relationship with Permission
+  @ApiProperty({ type: () => [Permission] })
+  @ManyToMany(() => Permission, (permission) => permission.roles)
   @JoinTable()
+  @IsArray()
+  @ArrayNotEmpty()
   permissions: Permission[];
 }

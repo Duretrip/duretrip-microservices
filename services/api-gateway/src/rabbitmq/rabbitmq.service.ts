@@ -33,7 +33,7 @@ export class RabbitMQService {
     return new Promise(async (resolve) => {
       // Create a new consumer for each request
       const { consumerTag } = await this.channel.consume(
-        'api-gateway-queue',
+        'process.env.RABBITMQ_API_GATEWAY_QUEUE',
         (msg) => {
           const message = JSON.parse(msg.content.toString());
           if (message.correlationId === correlationId) {
