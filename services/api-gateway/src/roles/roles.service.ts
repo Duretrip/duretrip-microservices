@@ -67,7 +67,7 @@ export class RoleService {
       throw new NotFoundException('Role or permission not found');
     }
 
-    role.permissions = [...role.permissions, permission];
+    role.permissions = role.permissions ? [...role.permissions, permission] : [permission];
     return await this.roleRepository.save(role);
   }
 
@@ -83,7 +83,7 @@ export class RoleService {
       throw new NotFoundException('Role not found');
     }
 
-    role.permissions = role.permissions.filter((p) => p.id !== permissionId);
+    role.permissions = role.permissions ? role.permissions.filter((p) => p.id !== permissionId) : [];
     return await this.roleRepository.save(role);
   }
 }
