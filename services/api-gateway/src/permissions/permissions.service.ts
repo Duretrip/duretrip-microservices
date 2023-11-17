@@ -27,19 +27,19 @@ export class PermissionsService {
     return permission;
   }
 
-  async create(permissionData: Permission): Promise<Permission> {
-    const newPermission = this.permissionRepository.create(permissionData);
-    return this.permissionRepository.save(newPermission);
-  }
+  // async create(permissionData: Permission): Promise<Permission> {
+  //   const newPermission = this.permissionRepository.create(permissionData);
+  //   return this.permissionRepository.save(newPermission);
+  // }
 
-  async update(id: number, permissionData: Permission): Promise<Permission> {
-    await this.findById(id); // Check if permission exists
-    await this.permissionRepository.update(id, permissionData);
-    return this.findById(id);
-  }
+  // async update(id: number, permissionData: Permission): Promise<Permission> {
+  //   await this.findById(id); // Check if permission exists
+  //   await this.permissionRepository.update(id, permissionData);
+  //   return this.findById(id);
+  // }
 
-  async delete(id: number): Promise<void> {
-    const permission = await this.findById(id); // Check if permission exists
-    await this.permissionRepository.remove(permission);
-  }
+  // async delete(id: number): Promise<void> {
+  //   const permission = await this.findById(id); // Check if permission exists
+  //   await this.permissionRepository.remove(permission);
+  // }
 }

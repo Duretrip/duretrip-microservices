@@ -6,7 +6,7 @@ import { PermissionsService } from './permissions.service';
 
 @ApiTags('Permissions')
 @Controller('permissions')
-export class PermissionController {
+export class PermissionsController {
   constructor(private readonly permissionService: PermissionsService) {}
 
   @Get()
@@ -25,32 +25,32 @@ export class PermissionController {
     return this.permissionService.findById(id);
   }
 
-  @Post()
-  @ApiOperation({ summary: 'Create a new permission', description: 'Create a new permission.' })
-  @ApiResponse({ status: 201, description: 'Permission created successfully', type: Permission })
-  @ApiBadRequestResponse({ description: 'Invalid permission data' })
-  @ApiBody({ type: Permission })
-  async create(@Body() permissionData: Permission): Promise<Permission> {
-    return this.permissionService.create(permissionData);
-  }
+  // @Post()
+  // @ApiOperation({ summary: 'Create a new permission', description: 'Create a new permission.' })
+  // @ApiResponse({ status: 201, description: 'Permission created successfully', type: Permission })
+  // @ApiBadRequestResponse({ description: 'Invalid permission data' })
+  // @ApiBody({ type: Permission })
+  // async create(@Body() permissionData: Permission): Promise<Permission> {
+  //   return this.permissionService.create(permissionData);
+  // }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Update a permission by ID', description: 'Update an existing permission by its ID.' })
-  @ApiResponse({ status: 200, description: 'Permission updated successfully', type: Permission })
-  @ApiBadRequestResponse({ description: 'Invalid permission data' })
-  @ApiNotFoundResponse({ description: 'Permission not found' })
-  @ApiParam({ name: 'id', description: 'Permission ID', type: Number })
-  @ApiBody({ type: Permission })
-  async update(@Param('id') id: number, @Body() permissionData: Permission): Promise<Permission> {
-    return this.permissionService.update(id, permissionData);
-  }
+  // @Put(':id')
+  // @ApiOperation({ summary: 'Update a permission by ID', description: 'Update an existing permission by its ID.' })
+  // @ApiResponse({ status: 200, description: 'Permission updated successfully', type: Permission })
+  // @ApiBadRequestResponse({ description: 'Invalid permission data' })
+  // @ApiNotFoundResponse({ description: 'Permission not found' })
+  // @ApiParam({ name: 'id', description: 'Permission ID', type: Number })
+  // @ApiBody({ type: Permission })
+  // async update(@Param('id') id: number, @Body() permissionData: Permission): Promise<Permission> {
+  //   return this.permissionService.update(id, permissionData);
+  // }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a permission by ID', description: 'Delete an existing permission by its ID.' })
-  @ApiResponse({ status: 204, description: 'Permission deleted successfully' })
-  @ApiNotFoundResponse({ description: 'Permission not found' })
-  @ApiParam({ name: 'id', description: 'Permission ID', type: Number })
-  async delete(@Param('id') id: number): Promise<void> {
-    return this.permissionService.delete(id);
-  }
+  // @Delete(':id')
+  // @ApiOperation({ summary: 'Delete a permission by ID', description: 'Delete an existing permission by its ID.' })
+  // @ApiResponse({ status: 204, description: 'Permission deleted successfully' })
+  // @ApiNotFoundResponse({ description: 'Permission not found' })
+  // @ApiParam({ name: 'id', description: 'Permission ID', type: Number })
+  // async delete(@Param('id') id: number): Promise<void> {
+  //   return this.permissionService.delete(id);
+  // }
 }
