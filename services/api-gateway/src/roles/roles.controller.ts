@@ -68,7 +68,7 @@ export class RolesController {
     return await this.roleService.addPermissionToRole(roleId, permissionId);
   }
 
-  @Patch(':roleId/remove-permission/ :permissionId')
+  @Patch(':roleId/remove-permission/:permissionId')
   @ApiOperation({ summary: 'Remove permission from role', description: 'Remove a permission from a role.' })
   @ApiResponse({ status: 200, description: 'Permission removed successfully', type: Role })
   @ApiBadRequestResponse({ description: 'Role not found' })

@@ -4,15 +4,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getManager } from 'typeorm';
 import { Role } from './entities/role.entity';
-import { Permission } from 'src/permissions/entities/permission.entity'; // Update the import path
+import { PermissionsService } from 'src/permissions/permissions.service';
 
 @Injectable()
 export class RoleService {
   constructor(
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
-    @InjectRepository(Permission)
-    private readonly permissionRepository: Repository<Permission>,
+    private readonly permissionsService: PermissionsService, // Add PermissionService
   ) { }
 
   async findAll(): Promise<Role[]> {
@@ -62,11 +61,7 @@ export class RoleService {
         id: roleId
       }
     });
-    const permission = await this.permissionRepository.findOne({
-      where: {
-        id: permissionId
-      }
-    });
+    const permission = await this.permissionsService.findById(permissionId);
 
     if (!role || !permission) {
       throw new NotFoundException('Role or permission not found');

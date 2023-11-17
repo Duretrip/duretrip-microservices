@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePermissionDto } from './dto/create-permission.dto';
-import { UpdatePermissionDto } from './dto/update-permission.dto';
+// permission.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Permission } from './entities/permission.entity';
 
 @Injectable()
 export class PermissionsService {
-  create(createPermissionDto: CreatePermissionDto) {
-    return 'This action adds a new permission';
+  constructor(
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
+  ) {}
+
+  async findAll(): Promise<Permission[]> {
+    return this.permissionRepository.find();
   }
 
-  findAll() {
-    return `This action returns all permissions`;
+  async findById(id: number): Promise<Permission> {
+    const permission = await this.permissionRepository.findOne({
+      where:{
+        id
+      }
+    });
+    if (!permission) {
+      throw new NotFoundException(`Permission with ID ${id} not found`);
+    }
+    return permission;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} permission`;
+  async create(permissionData: Permission): Promise<Permission> {
+    const newPermission = this.permissionRepository.create(permissionData);
+    return this.permissionRepository.save(newPermission);
   }
 
-  update(id: number, updatePermissionDto: UpdatePermissionDto) {
-    return `This action updates a #${id} permission`;
+  async update(id: number, permissionData: Permission): Promise<Permission> {
+    await this.findById(id); // Check if permission exists
+    await this.permissionRepository.update(id, permissionData);
+    return this.findById(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} permission`;
+  async delete(id: number): Promise<void> {
+    const permission = await this.findById(id); // Check if permission exists
+    await this.permissionRepository.remove(permission);
   }
 }
