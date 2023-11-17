@@ -117,10 +117,7 @@ spec:
                   key: RABBITMQ_AUTH_QUEUE
 
             - name: RABBITMQ_API_GATEWAY_QUEUE
-              valueFrom:
-                configMapKeyRef:
-                  name: rabbitmq-config
-                  key: RABBITMQ_API_GATEWAY_QUEUE
+              value: api-gateway-queue
             
             - name: RABBITMQ_HOTEL_QUEUE
               valueFrom:

@@ -66,5 +66,5 @@ data:
   RABBITMQ_PAYMENT_QUEUE: payment-queue
   RABBITMQ_HOTEL_QUEUE: hotel-queue
   RABBITMQ_JET_QUEUE: jet-queue
-  RABBITMQ_API_GATEWAY_QUEUE: RABBITMQ_API_GATEWAY_QUEUE
+  RABBITMQ_API_GATEWAY_QUEUE: api-gateway-queue
   # Add other variables as needed
