@@ -18,7 +18,6 @@
     "schema:drop:server": "npm run typeorm:server -- --dataSource=src/database/data-source.ts schema:drop",
     "seed:create": "hygen seeds create",
     "seed:run": "ts-node -r tsconfig-paths/register ./src/database/seeds/run-seed.ts",
-    "seed:run:server": "ts-node -r tsconfig-paths/register ./src/database/seeds/run-seed.ts",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

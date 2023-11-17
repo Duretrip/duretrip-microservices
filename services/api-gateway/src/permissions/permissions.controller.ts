@@ -1,14 +1,18 @@
 // permission.controller.ts
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiNotFoundResponse, ApiParam, ApiBadRequestResponse, ApiBody } from '@nestjs/swagger';
 import { Permission } from './entities/permission.entity';
 import { PermissionsService } from './permissions.service';
+import { PermissionGuard } from './guards/permission.guard';
+import {Permissions} from 'src/permissions/decorators/permission.decorator'
 
 @ApiTags('Permissions')
+@UseGuards(PermissionGuard) 
 @Controller('permissions')
 export class PermissionsController {
   constructor(private readonly permissionService: PermissionsService) {}
 
+  @Permissions('VIEW_ROLE')
   @Get()
   @ApiOperation({ summary: 'Get all permissions', description: 'Retrieve a list of all permissions.' })
   @ApiResponse({ status: 200, description: 'Permissions fetched successfully', type: Permission, isArray: true })
@@ -16,6 +20,7 @@ export class PermissionsController {
     return this.permissionService.findAll();
   }
 
+  @Permissions('VIEW_ROLE')
   @Get(':id')
   @ApiOperation({ summary: 'Get permission by ID', description: 'Retrieve a permission by its ID.' })
   @ApiResponse({ status: 200, description: 'Permission fetched successfully', type: Permission })

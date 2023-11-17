@@ -47,8 +47,6 @@ export class AuthService {
     const user = await this.usersService.findOne({
       email: loginDto.email,
     });
-    console.log({user});
-    
 
     if (!user) {
       throw new HttpException(

@@ -1,6 +1,6 @@
 // role.entity.ts
 
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow, IsNumber, IsString, IsNotEmpty, IsArray, ArrayNotEmpty } from 'class-validator';
 import { EntityHelper } from 'src/utils/entity-helper';
@@ -21,9 +21,9 @@ export class Role extends EntityHelper {
   name?: string;
 
   @ApiProperty({ type: () => [Permission] })
-  @ManyToMany(() => Permission, (permission) => permission.roles)
+  @ManyToMany(() => Permission, (permission) => permission.role, { cascade: true })
   @JoinTable()
   @IsArray()
   @ArrayNotEmpty()
-  permissions: Permission[];
+  permissions?: Permission[];
 }

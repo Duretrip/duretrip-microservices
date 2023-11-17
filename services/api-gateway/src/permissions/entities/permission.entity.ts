@@ -5,9 +5,10 @@ import {
     PrimaryGeneratedColumn,
     ManyToMany,
     JoinTable,
+    ManyToOne,
   } from 'typeorm';
-import { Role } from 'src/roles/entities/role.entity';
 import { EntityHelper } from 'src/utils/entity-helper';
+import { Role } from 'src/roles/entities/role.entity';
   
   @Entity()
   export class Permission extends EntityHelper {
@@ -15,10 +16,9 @@ import { EntityHelper } from 'src/utils/entity-helper';
     id: number;
   
     @Column({ unique: true })
-    name: string;
-  
+    name?: string;
+
     @ManyToMany(() => Role, (role) => role.permissions)
-    @JoinTable()
-    roles: Role[];
+    role?: Role;
   }
   
