@@ -16,6 +16,7 @@ import { PermissionGuard } from 'src/permissions/guards/permission.guard';
 import { CreateJetDto } from './dto/create-jet.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateJetDto } from './dto/update-jet.dto';
+import {Permissions} from 'src/permissions/decorators/permission.decorator'
 
 function generateUniqueId() {
   return uuidv4();
@@ -43,6 +44,7 @@ export class JetController {
     ]);
   }
 
+  @Permissions('GET_ALL_JETS')
   @Get()
   async getAllJets(@Body() credentials: any, @Req() req, @Res() res) {
     const correlationId = generateUniqueId();
@@ -182,6 +184,7 @@ export class JetController {
     }
   }
 
+  @Permissions('CREATE_JET')
   @Post()
   async createAllJet(
     @Body() credentials: CreateJetDto,
@@ -217,6 +220,7 @@ export class JetController {
     }
   }
 
+  @Permissions('UPDATE_JET')
   @Patch(':id')
   async updateJet(
     @Param('id') id: string,
@@ -253,6 +257,7 @@ export class JetController {
     }
   }
 
+  @Permissions('DELETE_JET')
   @Delete(':id')
   async deleteJet(@Param('id') id: string, @Req() req, @Res() res) {
     const correlationId = generateUniqueId();
@@ -284,6 +289,7 @@ export class JetController {
     }
   }
 
+  @Permissions('GET_ONE_JET')
   @Get(':id')
   async getOneJet(@Param('id') id: string, @Req() req, @Res() res) {
     const correlationId = generateUniqueId();

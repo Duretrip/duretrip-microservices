@@ -16,22 +16,57 @@ export class RoleSeedService {
 
   async run() {
     // Check if the permissions exist
-    const viewJetsPermission = await this.permissionRepository.findOne({ where: { name: 'VIEW_JETS' } });
-    const bookJetsPermission = await this.permissionRepository.findOne({ where: { name: 'BOOK_JETS' } });
-
+    const CREATE_ROLE = await this.permissionRepository.findOne({ where: { name: 'CREATE_ROLE' } });
+    const CREATE_USER = await this.permissionRepository.findOne({ where: { name: 'CREATE_USER' } });
+    const ADD_ROLE_TO_USER = await this.permissionRepository.findOne({ where: { name: 'ADD_ROLE_TO_USER' } });
+    const ADD_PERMISSIONS_TO_ROLE = await this.permissionRepository.findOne({ where: { name: 'ADD_PERMISSIONS_TO_ROLE' } });
+    const VIEW_ROLE = await this.permissionRepository.findOne({ where: { name: 'VIEW_ROLE' } });
+    const VIEW_PERMISSIONS = await this.permissionRepository.findOne({ where: { name: 'VIEW_PERMISSIONS' } });
     // Create permissions if they don't exist
-    if (!viewJetsPermission) {
+    if (!CREATE_ROLE) {
       await this.permissionRepository.save(
         this.permissionRepository.create({
-          name: 'VIEW_JETS',
+          name: 'CREATE_ROLE',
         }),
       );
     }
 
-    if (!bookJetsPermission) {
+    if (!CREATE_USER) {
       await this.permissionRepository.save(
         this.permissionRepository.create({
-          name: 'BOOK_JETS',
+          name: 'CREATE_USER',
+        }),
+      );
+    }
+
+    if (!ADD_ROLE_TO_USER) {
+      await this.permissionRepository.save(
+        this.permissionRepository.create({
+          name: 'ADD_ROLE_TO_USER',
+        }),
+      );
+    }
+
+    if (!ADD_PERMISSIONS_TO_ROLE) {
+      await this.permissionRepository.save(
+        this.permissionRepository.create({
+          name: 'ADD_PERMISSIONS_TO_ROLE',
+        }),
+      );
+    }
+
+    if (!VIEW_ROLE) {
+      await this.permissionRepository.save(
+        this.permissionRepository.create({
+          name: 'VIEW_ROLE',
+        }),
+      );
+    }
+
+    if (!VIEW_PERMISSIONS) {
+      await this.permissionRepository.save(
+        this.permissionRepository.create({
+          name: 'VIEW_PERMISSIONS',
         }),
       );
     }
@@ -53,15 +88,15 @@ export class RoleSeedService {
 
     const countAdmin = await this.repository.count({
       where: {
-        id: RoleEnum.admin,
+        id: RoleEnum.super_admin,
       },
     });
-
+    
     if (!countAdmin) {
       // Create Admin role without permissions
       const adminRole = this.repository.create({
-        id: RoleEnum.admin,
-        name: 'Admin',
+        id: RoleEnum.super_admin,
+        name: 'Super Admin',
       });
 
       // Save Admin role without permissions
@@ -69,13 +104,12 @@ export class RoleSeedService {
 
       // Assign permissions to the Admin role
       const permissions = await this.permissionRepository.find({
-        where: { name: In(['VIEW_JETS', 'BOOK_JETS']) },
+        where: { name: In(['CREATE_ROLE', 'CREATE_USER', 'VIEW_ROLE', 'ADD_ROLE_TO_USER', 'ADD_PERMISSIONS_TO_ROLE', 'VIEW_PERMISSIONS']) },
       });
       
       savedAdminRole.permissions = permissions;
-      
       // Save the Admin role with assigned permissions
-      const finalResult = await this.repository.save(savedAdminRole);
+      await this.repository.save(savedAdminRole);
     }
   }
 }

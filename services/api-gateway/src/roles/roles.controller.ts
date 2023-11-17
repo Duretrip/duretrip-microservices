@@ -1,14 +1,19 @@
 // roles.controller.ts
 
-import { Controller, Param, Post, Body, Get, Put, Patch, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Param, Post, Body, Get, Put, Patch, Delete, NotFoundException, UseGuards } from '@nestjs/common';
 import { RoleService } from './roles.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiNotFoundResponse, ApiParam, ApiBadRequestResponse, ApiBody } from '@nestjs/swagger';
 import { Role } from './entities/role.entity';
+import { PermissionGuard } from 'src/permissions/guards/permission.guard';
+import {Permissions} from 'src/permissions/decorators/permission.decorator'
 
 @ApiTags('Roles')
+@UseGuards(PermissionGuard) 
 @Controller('roles')
 export class RolesController {
   constructor(private readonly roleService: RoleService) { }
+
+  @Permissions('VIEW_ROLE')
   @Get()
   @ApiOperation({ summary: 'Get all roles', description: 'Retrieve a list of all roles with their associated permissions.' })
   @ApiResponse({ status: 200, description: 'Roles fetched successfully', type: Role, isArray: true })
@@ -16,6 +21,7 @@ export class RolesController {
     return await this.roleService.findAll();
   }
 
+  @Permissions('VIEW_ROLE')
   @Get(':id')
   @ApiOperation({ summary: 'Get role by ID', description: 'Retrieve a role by its ID with associated permissions.' })
   @ApiResponse({ status: 200, description: 'Role fetched successfully', type: Role })
@@ -29,6 +35,7 @@ export class RolesController {
     return role;
   }
 
+  @Permissions('CREATE_ROLE')
   @Post()
   @ApiOperation({ summary: 'Create a new role', description: 'Create a new role with optional permissions.' })
   @ApiResponse({ status: 201, description: 'Role created successfully', type: Role })
@@ -38,6 +45,7 @@ export class RolesController {
     return this.roleService.create(roleData);
   }
 
+  @Permissions('CREATE_ROLE')
   @Put(':id')
   @ApiOperation({ summary: 'Update a role by ID', description: 'Update an existing role by its ID.' })
   @ApiResponse({ status: 200, description: 'Role updated successfully', type: Role })
@@ -49,6 +57,7 @@ export class RolesController {
     return await this.roleService.update(id, roleData);
   }
 
+  @Permissions('CREATE_ROLE')
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a role by ID', description: 'Delete an existing role by its ID.' })
   @ApiResponse({ status: 204, description: 'Role deleted successfully' })
@@ -58,6 +67,7 @@ export class RolesController {
     return await this.roleService.delete(id);
   }
 
+  @Permissions('CREATE_ROLE')
   @Patch(':roleId/add-permission/:permissionId')
   @ApiOperation({ summary: 'Add permission to role', description: 'Add a permission to a role.' })
   @ApiResponse({ status: 200, description: 'Permission added successfully', type: Role })
@@ -68,6 +78,7 @@ export class RolesController {
     return await this.roleService.addPermissionToRole(roleId, permissionId);
   }
 
+  @Permissions('CREATE_ROLE')
   @Patch(':roleId/remove-permission/:permissionId')
   @ApiOperation({ summary: 'Remove permission from role', description: 'Remove a permission from a role.' })
   @ApiResponse({ status: 200, description: 'Permission removed successfully', type: Role })
