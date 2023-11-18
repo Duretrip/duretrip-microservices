@@ -49,4 +49,20 @@ export class RabbitMQService {
       );
     });
   }
+
+  public async waitForResponseWithTimeout(
+    correlationId: string,
+  ): Promise<any> {
+    const RESPONSE_TIMEOUT = 5000; // Timeout in milliseconds (adjust as needed)
+
+    return Promise.race([
+      this.waitForResponse(correlationId),
+      new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error('Timeout waiting for response')),
+          RESPONSE_TIMEOUT,
+        ),
+      ),
+    ]);
+  }
 }
