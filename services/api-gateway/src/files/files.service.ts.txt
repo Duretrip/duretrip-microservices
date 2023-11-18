@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { AllConfigType } from 'src/config/config.type';
 import fs from 'fs'
 import { DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import * as urlModule from 'url';
+import path from 'path';
 
 @Injectable()
 export class FilesService {
@@ -68,7 +68,7 @@ export class FilesService {
     if (this.configService.getOrThrow('file.driver', { infer: true }) === 'local') {
       // Local file deletion logic
       try {
-        fs.unlinkSync(absoluteFilePath);
+        fs.unlinkSync(absolutefilePath);
       } catch (error) {
         console.error(`Error deleting file: ${error.message}`);
         throw new HttpException(
