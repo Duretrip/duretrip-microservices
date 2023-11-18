@@ -11,7 +11,7 @@ export class FilesService {
     private readonly configService: ConfigService<AllConfigType>,
     @InjectRepository(FileEntity)
     private readonly fileRepository: Repository<FileEntity>,
-  ) {}
+  ) { }
 
   async uploadFile(
     file: Express.Multer.File | Express.MulterS3.File,
@@ -29,7 +29,10 @@ export class FilesService {
     }
 
     const path = {
-      local: `/${this.configService.get('app.apiPrefix', { infer: true })}/v1/${
+      // local: `/${this.configService.get('app.apiPrefix', { infer: true })}/v1/${
+      //   file.path
+      // }`,
+      local: `/${
         file.path
       }`,
       s3: (file as Express.MulterS3.File).location,
