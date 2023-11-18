@@ -45,8 +45,6 @@ export class FilesController {
 
   @Get(':path')
   download(@Param('path') path, @Response() response) {
-    console.log({path});
-    
     return response.sendFile(path, { root: './files' });
   }
 }
