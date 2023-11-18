@@ -24,14 +24,14 @@ export class MailController {
         const message = {
             action: 'send_mail',
             payload: {
-                to: 'eaadeboye@gmail.com',
+                to: 'falilatwerepe@gmail.com',
                 subject: 'I am sending this email because I love you',
                 text: process.env.FRONTEND_DOMAIN,
                 templateContent,
                 context: {
-                    title: 'Do you love me',
+                    title: 'Do you really love me',
                     url: `${process.env.FRONTEND_DOMAIN}/password-change?hash=replacingtheurltextinthetemplate`,
-                    actionTitle: 'God is good',
+                    actionTitle: 'Feed my sheep',
                     app_name: 'DureTrip',
                     text1: 'I am to replace text one in the template',
                     text2: 'I am to replace text two in the template',
@@ -44,8 +44,8 @@ export class MailController {
             // Publish the login message to the RabbitMQ queue
             this.rabbitMQService
                 .publishMessage(process.env.RABBITMQ_MAILER_QUEUE, message)
-                .then(() => console.log('email sent'))
-                .catch(() => console.log('email not sent'));
+                .then(() => console.log('email sent to queue from jet'))
+                .catch(() => console.log('email not sent to queue from jet'));
             res.status(200).send('Hello World')
 
         } catch (err) {

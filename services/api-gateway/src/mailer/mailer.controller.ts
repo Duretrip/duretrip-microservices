@@ -8,14 +8,13 @@ export class MailerController {
         private readonly rabbitMQService: RabbitMQService,
         private readonly mailerService: MailerService
     ) { }
-    async onModuleInit(
-
-    ) {
+    async onModuleInit() {
         await this.rabbitMQService.connectToRabbitMQ();
         if (!process.env.RABBITMQ_MAILER_QUEUE) return
-
         try {
-            this.rabbitMQService.consumeMessages(process.env.RABBITMQ_MAILER_QUEUE, async (message) => {
+            console.log(process.env.RABBITMQ_MAILER_QUEUE);
+            
+            await this.rabbitMQService.consumeMessages(process.env.RABBITMQ_MAILER_QUEUE, async (message) => {
                 // Find All Jets
                 if (message.action === 'send_mail') {
                     const { templateContent, context, ...mailOptions } = message.payload;
