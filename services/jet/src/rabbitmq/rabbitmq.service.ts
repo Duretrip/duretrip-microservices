@@ -33,7 +33,7 @@ export class RabbitMQService {
     return new Promise(async (resolve) => {
       // Create a new consumer for each request
       const { consumerTag } = await this.channel.consume(
-        'api-gateway-queue',
+        process.env.RABBITMQ_API_GATEWAY_QUEUE,
         (msg) => {
           const message = JSON.parse(msg.content.toString());
           if (message.correlationId === correlationId) {
@@ -48,5 +48,21 @@ export class RabbitMQService {
         },
       );
     });
+  }
+
+  public async waitForResponseWithTimeout(
+    correlationId: string,
+  ): Promise<any> {
+    const RESPONSE_TIMEOUT = 5000; // Timeout in milliseconds (adjust as needed)
+
+    return Promise.race([
+      this.waitForResponse(correlationId),
+      new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error('Timeout waiting for response')),
+          RESPONSE_TIMEOUT,
+        ),
+      ),
+    ]);
   }
 }
