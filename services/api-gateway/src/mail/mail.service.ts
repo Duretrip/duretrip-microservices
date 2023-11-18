@@ -23,7 +23,7 @@ export class MailService {
     let text4: MaybeType<string>;
 
     if (i18n) {
-      [emailConfirmTitle, text1, text2, text3] = await Promise.all([
+      [emailConfirmTitle, text1, text2, text3, text4] = await Promise.all([
         i18n.t('common.confirmEmail'),
         i18n.t('confirm-email.text1'),
         i18n.t('confirm-email.text2'),
