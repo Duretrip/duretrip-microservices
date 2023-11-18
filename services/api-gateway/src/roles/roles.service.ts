@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getManager } from 'typeorm';
 import { Role } from './entities/role.entity';
 import { PermissionsService } from 'src/permissions/permissions.service';
+import { RoleCreateDto } from './dto/role-create.dto';
 
 @Injectable()
 export class RoleService {
@@ -32,12 +33,12 @@ export class RoleService {
     return role[0];
   }
 
-  async create(roleData: Role): Promise<Role> {
+  async create(roleData: RoleCreateDto): Promise<Role> {
     const role = this.roleRepository.create(roleData);
     return await this.roleRepository.save(role);
   }
 
-  async update(id: number, roleData: Role): Promise<Role> {
+  async update(id: number, roleData: RoleCreateDto): Promise<Role> {
     const existingRole = await this.findById(id); // Check if role exists
 
     if (!existingRole) {
