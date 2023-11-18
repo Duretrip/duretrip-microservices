@@ -93,7 +93,7 @@ import { RolesModule } from './roles/roles.module';
     MailerModule,
     HomeModule,
     PermissionsModule,
-    RolesModule
+    RolesModule,
   ],
   providers: [RabbitMQService],
   controllers: [JetController],

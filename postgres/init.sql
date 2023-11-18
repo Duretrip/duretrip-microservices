@@ -22,3 +22,19 @@ GRANT ALL PRIVILEGES ON DATABASE hotel_db TO "durehotel";
 ALTER USER "durehotel" WITH CREATEDB;
 GRANT ALL ON SCHEMA public TO durehotel;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durehotel;
+
+-- Create booking user and grant privileges
+CREATE DATABASE booking_db;
+CREATE USER "durebooking" WITH ENCRYPTED PASSWORD 'dureBooking2023';
+GRANT ALL PRIVILEGES ON DATABASE booking_db TO "durebooking";
+ALTER USER "durebooking" WITH CREATEDB;
+GRANT ALL ON SCHEMA public TO durebooking;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durebooking;
+
+-- Create payment user and grant privileges
+CREATE DATABASE payment_db;
+CREATE USER "durepayment" WITH ENCRYPTED PASSWORD 'durePayment2023';
+GRANT ALL PRIVILEGES ON DATABASE payment_db TO "durepayment";
+ALTER USER "durepayment" WITH CREATEDB;
+GRANT ALL ON SCHEMA public TO durepayment;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durepayment;
