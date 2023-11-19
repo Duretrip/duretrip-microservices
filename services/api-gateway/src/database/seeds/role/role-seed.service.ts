@@ -71,31 +71,16 @@ export class RoleSeedService {
       );
     }
 
-    const countUser = await this.repository.count({
-      where: {
-        id: RoleEnum.user,
-      },
-    });
-
-    if (!countUser) {
-      await this.repository.save(
-        this.repository.create({
-          id: RoleEnum.user,
-          name: 'User',
-        }),
-      );
-    }
-
     const countAdmin = await this.repository.count({
       where: {
-        id: RoleEnum.super_admin,
+        name: RoleEnum.super_admin,
       },
     });
-    
+
     if (!countAdmin) {
       // Create Admin role without permissions
       const adminRole = this.repository.create({
-        id: RoleEnum.super_admin,
+        // id: RoleEnum.super_admin,
         name: 'Super Admin',
       });
 
@@ -106,10 +91,26 @@ export class RoleSeedService {
       const permissions = await this.permissionRepository.find({
         where: { name: In(['CREATE_ROLE', 'CREATE_USER', 'VIEW_ROLE', 'ADD_ROLE_TO_USER', 'ADD_PERMISSIONS_TO_ROLE', 'VIEW_PERMISSIONS']) },
       });
-      
+
       savedAdminRole.permissions = permissions;
       // Save the Admin role with assigned permissions
       await this.repository.save(savedAdminRole);
+    }
+
+
+    const countUser = await this.repository.count({
+      where: {
+        name: RoleEnum.user,
+      },
+    });
+
+    if (!countUser) {
+      await this.repository.save(
+        this.repository.create({
+          // id: RoleEnum.user,
+          name: 'User',
+        }),
+      );
     }
   }
 }

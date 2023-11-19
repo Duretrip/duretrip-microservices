@@ -28,7 +28,6 @@ export class User extends EntityHelper {
   id: number;
 
   @Column({ type: String, unique: true, nullable: true })
-  @Expose({ groups: ['me', 'admin'] })
   email: string | null;
 
   @Column({ nullable: true })
@@ -53,21 +52,18 @@ export class User extends EntityHelper {
   }
 
   @Column({ default: AuthProvidersEnum.email })
-  @Expose({ groups: ['me', 'admin'] })
   provider: string;
 
   @Column({ type: String, nullable: true })
-  @Expose({ groups: ['me', 'admin'] })
   socialId: string | null;
 
   @Column({ type: String, nullable: true })
   @Index()
-  @Expose({ groups: ['me', 'admin'] })
   firstName: string | null;
 
   @Column({ type: String, nullable: true })
   @Index()
-  @Expose({ groups: ['me', 'admin'] })
+  // @Expose({ groups: ['me', 'admin'] })
   lastName: string | null;
 
   @ManyToOne(() => FileEntity, {

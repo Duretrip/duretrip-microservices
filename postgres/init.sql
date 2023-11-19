@@ -38,3 +38,10 @@ GRANT ALL PRIVILEGES ON DATABASE payment_db TO "durepayment";
 ALTER USER "durepayment" WITH CREATEDB;
 GRANT ALL ON SCHEMA public TO durepayment;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durepayment;
+-- Create hotel user and grant privileges
+CREATE DATABASE integrations_db;
+CREATE USER "dureintegrations" WITH ENCRYPTED PASSWORD 'dureIntegrations2023';
+GRANT ALL PRIVILEGES ON DATABASE integrations_db TO "integrations_db";
+ALTER USER "dureintegrations" WITH CREATEDB;
+GRANT ALL ON SCHEMA public TO durehotel;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durehotel;

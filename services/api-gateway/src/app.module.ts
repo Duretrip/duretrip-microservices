@@ -32,6 +32,7 @@ import { RabbitMQService } from './rabbitmq/rabbitmq.service';
 import { JetController } from './jet/jet.controller';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
+import { AirlinesController } from './airlines/airlines.controller';
 
 @Module({
   imports: [
@@ -96,6 +97,6 @@ import { RolesModule } from './roles/roles.module';
     RolesModule,
   ],
   providers: [RabbitMQService],
-  controllers: [JetController],
+  controllers: [JetController, AirlinesController],
 })
 export class AppModule {}

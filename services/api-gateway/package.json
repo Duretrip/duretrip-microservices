@@ -30,7 +30,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "env-cmd jest --config ./test/jest-e2e.json"
+    "test:e2e": "env-cmd jest --config ./test/jest-e2e.json",
+    "migrate:generate": "npm run migration:generate -- src/database/migrations/latest"
   },
   "dependencies": {
     "@aws-sdk/abort-controller": "^3.374.0",
@@ -52,6 +53,7 @@
     "bcryptjs": "2.4.3",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
+    "dotenv": "^16.3.1",
     "fb": "2.0.0",
     "google-auth-library": "9.2.0",
     "handlebars": "4.7.8",

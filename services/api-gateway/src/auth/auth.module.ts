@@ -13,9 +13,15 @@ import { IsNotExist } from 'src/utils/validators/is-not-exists.validator';
 import { SessionModule } from 'src/session/session.module';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { RabbitMQService } from 'src/rabbitmq/rabbitmq.service';
+import { RoleService } from 'src/roles/roles.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Role } from 'src/roles/entities/role.entity';
+import { PermissionsService } from 'src/permissions/permissions.service';
+import { Permission } from 'src/permissions/entities/permission.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Role, Permission]),
     UsersModule,
     ForgotModule,
     SessionModule,
@@ -32,6 +38,8 @@ import { RabbitMQService } from 'src/rabbitmq/rabbitmq.service';
     JwtRefreshStrategy,
     AnonymousStrategy,
     RabbitMQService,
+    RoleService,
+    PermissionsService
   ],
   exports: [AuthService],
 })

@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -46,5 +47,11 @@ export class FilesController {
   @Get(':path')
   download(@Param('path') path, @Response() response) {
     return response.sendFile(path, { root: './files' });
+  }
+
+  @Delete(':id')
+  async deleteFile(@Param('id') fileId: string): Promise<{ message: string }> {
+    await this.filesService.deleteFile(fileId);
+    return { message: 'File deleted successfully' };
   }
 }

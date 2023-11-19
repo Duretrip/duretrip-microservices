@@ -133,7 +133,7 @@ jobs:
           cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
           location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
 
-      # - name: Get MySQL Pod
+      # - name: Get Postgres Pod
       #   id: get-postgres-pod
       #   run: |
       #     export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
@@ -189,6 +189,7 @@ jobs:
         run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" services/api-gateway/docker-compose.yaml
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" services/jet/docker-compose.yaml
+          sed -i "s|image: duretrip/integrations:latest|image: duretrip/integrations:${{ github.sha }}|" services/integrations/docker-compose.yaml
 
       - name: Build Docker images
         env:
@@ -198,6 +199,8 @@ jobs:
           docker-compose -f services/api-gateway/docker-compose.yaml push
           docker-compose -f services/jet/docker-compose.yaml build
           docker-compose -f services/jet/docker-compose.yaml push
+          docker-compose -f services/integrations/docker-compose.yaml build
+          docker-compose -f services/integrations/docker-compose.yaml push
         working-directory: .
 
 
@@ -238,7 +241,8 @@ jobs:
       run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" k8s/api-gateway.yml
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" k8s/jet.yml
-    
+          sed -i "s|image: duretrip/integrations:latest|image: duretrip/integrations:${{ github.sha }}|" k8s/integrations.yml
+
     - name: Deploy on the GKE
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -249,6 +253,6 @@ jobs:
         kubectl apply -f k8s/ingress/ingress-service-dev.yml
         kubectl apply -f k8s/api-gateway.yml
         kubectl apply -f k8s/jet.yml
-
+        kubectl apply -f k8s/integrations.yml
     
        

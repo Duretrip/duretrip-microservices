@@ -11,15 +11,16 @@ export class MailerController {
   async onModuleInit() {
     await this.rabbitMQService.connectToRabbitMQ();
     if (!process.env.RABBITMQ_MAILER_QUEUE) return;
-
     try {
-      this.rabbitMQService.consumeMessages(
+      console.log(process.env.RABBITMQ_MAILER_QUEUE);
+
+      await this.rabbitMQService.consumeMessages(
         process.env.RABBITMQ_MAILER_QUEUE,
-          async (message) => { 
+        async (message) => {
           // Find All Jets
           if (message.action === 'send_mail') {
             const { templateContent, context, ...mailOptions } =
-                message.payload;
+              message.payload;
             await this.mailerService.sendMail({
               templateContent,
               context,

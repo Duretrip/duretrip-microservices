@@ -23,30 +23,12 @@ function generateUniqueId() {
   return uuidv4();
 }
 
-const RESPONSE_TIMEOUT = 5000; // Timeout in milliseconds (adjust as needed)
-
 @Controller('jet')
 @ApiTags('Jets')
 @UseGuards(AuthGuard('jwt'), PermissionGuard)
 
 export class JetController {
   constructor(private readonly rabbitMQService: RabbitMQService) {}
-
-  private async waitForResponseWithTimeout(
-    correlationId: string,
-  ): Promise<any> {
-    return Promise.race([
-      this.rabbitMQService.waitForResponse(correlationId),
-      new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error('Timeout waiting for response')),
-          RESPONSE_TIMEOUT,
-        ),
-      ),
-    ]);
-  }
-
-  @Permissions('GET_ALL_JETS')
   @Get()
   async getAllJets(@Body() credentials: any, @Req() req, @Res() res) {
     const correlationId = generateUniqueId();
@@ -63,7 +45,7 @@ export class JetController {
       await this.rabbitMQService.publishMessage('jet-queue', message);
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'jet_find_all') {
         res.status(200).json({
@@ -97,7 +79,7 @@ export class JetController {
       await this.rabbitMQService.publishMessage('jet-queue', message);
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'facility_find_all') {
         res.status(200).json({
@@ -134,7 +116,7 @@ export class JetController {
         .catch(() => console.log('not sent'));
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'capacity_find_all') {
         res.status(200).json({
@@ -168,7 +150,7 @@ export class JetController {
       await this.rabbitMQService.publishMessage('jet-queue', message);
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'range_find_all') {
         res.status(200).json({
@@ -207,7 +189,7 @@ export class JetController {
       await this.rabbitMQService.publishMessage('jet-queue', message);
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'jet_created') {
         res.status(200).json('Jet created successfully');
@@ -244,7 +226,7 @@ export class JetController {
       await this.rabbitMQService.publishMessage('jet-queue', message);
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'jet_updated') {
         res.status(200).json('Jet updated successfully');
@@ -276,7 +258,7 @@ export class JetController {
       await this.rabbitMQService.publishMessage('jet-queue', message);
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'jet_deleted') {
         res.status(200).json('Jet deleted successfully');
@@ -308,7 +290,7 @@ export class JetController {
       await this.rabbitMQService.publishMessage('jet-queue', message);
 
       // Listen for the response with the specified correlation ID
-      const response = await this.waitForResponseWithTimeout(correlationId);
+      const response = await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'jet_find_one') {
         res.status(200).json({
