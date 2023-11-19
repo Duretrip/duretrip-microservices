@@ -30,7 +30,6 @@ function generateUniqueId() {
 export class JetController {
   constructor(private readonly rabbitMQService: RabbitMQService) {}
 
-  @Permissions('GET_ALL_JETS')
   @Get()
   async getAllJets(@Body() credentials: any, @Req() req, @Res() res) {
     const correlationId = generateUniqueId();
