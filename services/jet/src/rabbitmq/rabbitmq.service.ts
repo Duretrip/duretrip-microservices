@@ -31,22 +31,24 @@ export class RabbitMQService {
 
   async waitForResponse(correlationId: string): Promise<any> {
     return new Promise(async (resolve) => {
+      let consumerTag; // Declare consumerTag outside the callback
+  
       // Create a new consumer for each request
-      const { consumerTag } = await this.channel.consume(
+      ({ consumerTag } = await this.channel.consume(
         process.env.RABBITMQ_API_GATEWAY_QUEUE,
         (msg) => {
           const message = JSON.parse(msg.content.toString());
           if (message.correlationId === correlationId) {
             resolve(message);
-
+  
             // Acknowledge the message
             this.channel.ack(msg);
-
+  
             // Cancel the consumer after resolving the message
             this.channel.cancel(consumerTag);
           }
         },
-      );
+      ));
     });
   }
 

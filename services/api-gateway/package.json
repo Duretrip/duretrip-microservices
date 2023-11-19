@@ -30,7 +30,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "env-cmd jest --config ./test/jest-e2e.json"
+    "test:e2e": "env-cmd jest --config ./test/jest-e2e.json",
+    "migrate:generate": "npm run migration:generate -- src/database/migrations/latest"
   },
   "dependencies": {
     "@aws-sdk/abort-controller": "^3.374.0",
