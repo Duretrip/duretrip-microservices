@@ -200,7 +200,7 @@ spec:
               value: secret
 
             - name: AUTH_JWT_TOKEN_EXPIRES_IN
-              value: '15m'
+              value: '10080m'
 
             - name: AUTH_REFRESH_SECRET
               value: secret_for_refresh
