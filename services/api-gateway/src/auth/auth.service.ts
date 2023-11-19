@@ -32,6 +32,7 @@ import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.ty
 import { Session } from 'src/session/entities/session.entity';
 import { JwtPayloadType } from './strategies/types/jwt-payload.type';
 import { RoleIdDto } from 'src/roles/dto/role-id.dto';
+import { RoleService } from 'src/roles/roles.service';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
     private sessionService: SessionService,
     private mailService: MailService,
     private configService: ConfigService<AllConfigType>,
-  ) { }
+    private readonly roleService: RoleService) { }
 
   async validateLogin(loginDto: AuthEmailLoginDto): Promise<LoginResponseType> {
     const user = await this.usersService.findOne({
@@ -199,11 +200,13 @@ export class AuthService {
       .update(randomStringGenerator())
       .digest('hex');
 
+    const userRole = await this.roleService.findByName(RoleEnum.user);
+
     await this.usersService.create({
       ...dto,
       email: dto.email,
       role: {
-        id: RoleEnum.user,
+        id: userRole?.id,
       } as RoleIdDto,
       status: {
         id: StatusEnum.inactive,
@@ -414,6 +417,8 @@ export class AuthService {
       id: data.sessionId,
     });
   }
+
+  public async findOne() { }
 
   private async getTokensData(data: {
     id: User['id'];

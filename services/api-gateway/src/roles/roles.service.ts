@@ -33,6 +33,20 @@ export class RoleService {
     return role[0];
   }
 
+  async findByName(name: string): Promise<Role | undefined> {
+    const role = await this.roleRepository.find({
+      where: { name },
+      relations: ['permissions']
+    });
+
+    if (!role || role.length === 0) {
+      throw new NotFoundException(`Role with ID ${name} not found`);
+    }
+
+    // Assuming you only expect one role, you might want to return the first element
+    return role[0];
+  }
+
   async create(roleData: RoleCreateDto): Promise<Role> {
     const role = this.roleRepository.create(roleData);
     return await this.roleRepository.save(role);
