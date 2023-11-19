@@ -68,7 +68,7 @@ spec:
                   key: username
 
             - name: DATABASE_USERNAME
-              value: dureauth
+              value: postgres
 
             - name: DATABASE_PASSWORD
               valueFrom:
