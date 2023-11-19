@@ -8,6 +8,7 @@ import { PermissionGuard } from 'src/permissions/guards/permission.guard';
 import { Permissions } from 'src/permissions/decorators/permission.decorator'
 import { AuthGuard } from '@nestjs/passport';
 import { RoleCreateDto } from './dto/role-create.dto';
+import { RolePermissionDto } from './dto/role-permission.dto';
 
 @ApiTags('Roles')
 @UseGuards(AuthGuard('jwt'), PermissionGuard)
@@ -70,14 +71,14 @@ export class RolesController {
   }
 
   @Permissions('CREATE_ROLE')
-  @Patch(':roleId/add-permission/:permissionId')
-  @ApiOperation({ summary: 'Add permission to role', description: 'Add a permission to a role.' })
-  @ApiResponse({ status: 200, description: 'Permission added successfully', type: Role })
-  @ApiBadRequestResponse({ description: 'Role or permission not found' })
+  @Patch(':roleId/add-permissions')
+  @ApiOperation({ summary: 'Add permissions to role', description: 'Add permissions to a role.' })
+  @ApiBadRequestResponse({ description: 'Role or permissions not found' })
   @ApiParam({ name: 'roleId', description: 'Role ID', type: Number })
-  @ApiParam({ name: 'permissionId', description: 'Permission ID', type: Number })
-  async addPermissionToRole(@Param('roleId') roleId: number, @Param('permissionId') permissionId: number): Promise<Role> {
-    return await this.roleService.addPermissionToRole(roleId, permissionId);
+  @ApiBody({ type: [Number], description: 'Array of permission IDs' })
+  async addPermissionsToRole(@Param('roleId') roleId: number, @Body() permissions: RolePermissionDto ): Promise<Role> {
+    const permissionIds = permissions.permissionIds
+    return await this.roleService.addPermissionsToRole(roleId, permissionIds);
   }
 
   @Permissions('CREATE_ROLE')

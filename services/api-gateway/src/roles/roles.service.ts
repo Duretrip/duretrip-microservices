@@ -1,6 +1,6 @@
 // role.service.ts
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getManager } from 'typeorm';
 import { Role } from './entities/role.entity';
@@ -70,21 +70,31 @@ export class RoleService {
     }
   }
 
-  async addPermissionToRole(roleId: number, permissionId: number): Promise<Role> {
+  async addPermissionsToRole(roleId: number, permissionIds: number[]): Promise<Role> {
     const role = await this.roleRepository.findOne({
       where: {
         id: roleId
       }
     });
-    const permission = await this.permissionsService.findById(permissionId);
-
-    if (!role || !permission) {
-      throw new NotFoundException('Role or permission not found');
+  
+    if (!role) {
+      throw new NotFoundException('Role not found');
     }
-
-    role.permissions = role.permissions ? [...role.permissions, permission] : [permission];
+  
+    if (!Array.isArray(permissionIds)) {
+      throw new BadRequestException('Invalid format for permissionIds. Expected an array.');
+    }
+  
+    const permissions = await Promise.all(permissionIds.map(permissionId => this.permissionsService.findById(permissionId)));
+  
+    if (permissions.some(permission => !permission)) {
+      throw new NotFoundException('One or more permissions not found');
+    }
+  
+    role.permissions = role.permissions ? [...role.permissions, ...permissions] : permissions;
     return await this.roleRepository.save(role);
   }
+  
 
   async removePermissionFromRole(roleId: number, permissionId: number): Promise<Role> {
     const role = await this.roleRepository.findOne({

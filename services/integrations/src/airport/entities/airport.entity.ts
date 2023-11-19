@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 @Entity()
-export class Airport {
+export class Airport{
   @ApiProperty({ example: 1 })
   @PrimaryGeneratedColumn()
   id: number;

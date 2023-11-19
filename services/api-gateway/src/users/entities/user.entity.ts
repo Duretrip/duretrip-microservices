@@ -28,7 +28,6 @@ export class User extends EntityHelper {
   id: number;
 
   @Column({ type: String, unique: true, nullable: true })
-  @Expose({ groups: ['me', 'admin'] })
   email: string | null;
 
   @Column({ nullable: true })
