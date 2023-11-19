@@ -16,7 +16,7 @@ import { MailModule } from './mail/mail.module';
     FacilityModule,
     RangeModule,
     CapacityModule,
-    MailModule
+    MailModule,
   ],
   controllers: [AppController],
   providers: [RabbitMQService, AppService],
