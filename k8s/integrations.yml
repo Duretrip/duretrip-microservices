@@ -47,7 +47,10 @@ spec:
               value: "5432"
 
             - name: DATABASE_USERNAME
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: username
 
             - name: DATABASE_PASSWORD
               valueFrom:
