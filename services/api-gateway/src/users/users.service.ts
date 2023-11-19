@@ -36,8 +36,6 @@ export class UsersService {
         id: role.id,
       }));
     }
-console.log({where});
-
     return this.usersRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
