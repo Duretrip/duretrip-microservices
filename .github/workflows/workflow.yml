@@ -133,7 +133,7 @@ jobs:
           cluster_name: ${{ secrets.GKE_DEV_CLUSTER_NAME }}
           location: ${{ secrets.GKE_DEV_CLUSTER_ZONE }}
 
-      # - name: Get MySQL Pod
+      # - name: Get Postgres Pod
       #   id: get-postgres-pod
       #   run: |
       #     export POD_NAME=$(kubectl get pod -l app=postgres -o jsonpath="{.items[0].metadata.name}")
