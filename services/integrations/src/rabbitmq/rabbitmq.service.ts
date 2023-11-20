@@ -44,9 +44,6 @@ export class RabbitMQService {
   
               // Acknowledge the message
               this.channel.ack(msg);
-  
-              // Cancel the consumer after resolving the message
-              this.channel.cancel(consumerTag);
             }
           }
         },
@@ -54,6 +51,9 @@ export class RabbitMQService {
   
       // Set the consumerTag variable
       consumerTag = tag;
+  
+      // Cancel the consumer outside of the callback
+      this.channel.cancel(consumerTag);
     });
   }
 
