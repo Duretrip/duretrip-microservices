@@ -9,7 +9,7 @@ services:
     image: duretrip/integrations:latest
     restart: always
     ports:
-      - 8008:8008
+      - 8009:8009
     # volumes:
     #   - ./wait-for-it.sh:/opt/wait-for-it.sh  # Mount init.sql as an initialization script
     #   - ./startup.docker.sh:/docker-entrypoint-initdb.d/startup.docker.sh  # Mount init.sql as an initialization script
