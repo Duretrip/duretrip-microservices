@@ -1,9 +1,0 @@
-apiVersion : v1
-kind : ConfigMap
-metadata:
-  name : db-config
-data:
-  host : "34.28.62.57"
-  chost : "34.28.62.57"
-  port : "5432"
-  username: dureauth
