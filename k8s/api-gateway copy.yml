@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway-new
+  name: api-gateway-app
   labels:
-    app: api-gateway-new
+    app: api-gateway-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-new
+      app: api-gateway-app
   template:
     metadata:
       labels:
-        app: api-gateway-new
+        app: api-gateway-app
     spec:
       containers:
-        - name: api-gateway-new
+        - name: api-gateway-app
           image: duretrip/api-gateway:latest
           imagePullPolicy: Always
           ports:
@@ -215,7 +215,7 @@ metadata:
   name: api-gateway-svc
 spec:
   selector:
-    app: api-gateway-new
+    app: api-gateway-app
   type: NodePort
   ports:
     - name: http
