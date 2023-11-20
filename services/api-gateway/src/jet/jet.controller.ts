@@ -163,10 +163,12 @@ export class JetController {
         await this.rabbitMQService.waitForResponseWithTimeout(correlationId);
 
       if (response.action === 'facility_created') {
-        res.status(200).json({
-          message: 'Facility created successfully',
-          data: response.response,
-        });
+        console.log({ response });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { message, error, statusCode } = response?.response;
+        res
+          .status(statusCode ? statusCode : 500)
+          .send(message ? message : 'Internal Server Error');
       } else {
         res.status(response.status ? response?.status : 500).json({
           message: response.message ? response.message : 'An error occurred',
