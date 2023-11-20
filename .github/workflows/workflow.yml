@@ -119,7 +119,8 @@ jobs:
       run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" k8s/api-gateway.yml
           sed -i "s|image: duretrip/jet:latest|image: duretrip/jet:${{ github.sha }}|" k8s/jet.yml
-    
+          sed -i "s|image: duretrip/integrations:latest|image: duretrip/integrations:${{ github.sha }}|" k8s/integrations.yml
+
     - name: Deploy on the GKE
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
