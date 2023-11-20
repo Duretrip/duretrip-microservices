@@ -74,6 +74,7 @@ jobs:
       AUTH_DB_USER: ${{ secrets.AUTH_DB_USER }}
       AUTH_DB_PASS: ${{ secrets.AUTH_DB_PASS }}
       AUTH_DB_NAME: ${{ secrets.AUTH_DB_NAME }}
+      AUTH_DB_HOST: ${{ secrets.AUTH_DB_HOST }}
 
       INTEGRATIONS_DB_NAME: ${{ secrets.INTEGRATIONS_DB_NAME }}
       INTEGRATIONS_DB_USER: ${{ secrets.INTEGRATIONS_DB_USER }}
@@ -109,6 +110,7 @@ jobs:
           sed -i "s/{{AUTH_DB_USER}}/${AUTH_DB_USER}/g" k8s/api-gateway.yml
           sed -i "s/{{AUTH_DB_PASS}}/${AUTH_DB_PASS}/g" k8s/api-gateway.yml
           sed -i "s/{{AUTH_DB_NAME}}/${AUTH_DB_NAME}/g" k8s/api-gateway.yml
+          sed -i "s/{{AUTH_DB_HOST}}/${AUTH_DB_HOST}/g" k8s/api-gateway.yml
 
           sed -i "s/{{INTEGRATIONS_DB_NAME}}/${INTEGRATIONS_DB_NAME}/g" k8s/integrations.yml
           sed -i "s/{{INTEGRATIONS_DB_USER}}/${INTEGRATIONS_DB_USER}/g" k8s/integrations.yml
