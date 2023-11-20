@@ -127,6 +127,8 @@ export class JetsService {
   }
 
   async findOne(id: number) {
+    console.log({id});
+    
     const jet = await this.prisma.jet.findFirst({
       where: {
         id,

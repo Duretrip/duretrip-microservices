@@ -10,13 +10,13 @@ export class FacilityService {
 
   async create(createFacilityDto: CreateFacilityDto): Promise<FacilityModel> {
     try {
-      const jet = await this.prisma.facility.findUnique({
+      const facility = await this.prisma.facility.findUnique({
         where: {
           name: createFacilityDto.name,
         },
       });
 
-      if (jet) {
+      if (facility) {
         throw new ConflictException('Name already exist!');
       }
       return await this.prisma.facility.create({
@@ -43,13 +43,26 @@ export class FacilityService {
   }
 
   async update(id: number, updateFacilityDto: UpdateFacilityDto) {
-    return await this.prisma.facility.update({
-      where: { id },
-      data: {
-        name: updateFacilityDto.name,
-        url: updateFacilityDto.url,
-      },
-    });
+    try {
+      const facility = await this.prisma.facility.findUnique({
+        where: {
+          name: updateFacilityDto.name,
+        },
+      });
+
+      if (facility) {
+        throw new ConflictException('Name already exist!');
+      }
+      return await this.prisma.facility.update({
+        where: { id },
+        data: {
+          name: updateFacilityDto.name,
+          url: updateFacilityDto.url,
+        },
+      });
+    } catch (error) {
+      return error.response;
+    }
   }
 
   async remove(id: number) {
