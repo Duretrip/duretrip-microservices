@@ -69,6 +69,15 @@ jobs:
     env:
       AUTH_DB_USER: ${{ secrets.AUTH_DB_USER }}
       AUTH_DB_PASS: ${{ secrets.AUTH_DB_PASS }}
+      AUTH_DB_NAME: ${{ secrets.AUTH_DB_NAME }}
+
+      INTEGRATIONS_DB_NAME: ${{ secrets.INTEGRATIONS_DB_NAME }}
+      INTEGRATIONS_DB_USER: ${{ secrets.INTEGRATIONS_DB_USER }}
+      INTEGRATIONS_DB_PASS: ${{ secrets.INTEGRATIONS_DB_PASS }}
+
+      JET_DB_USER: ${{ secrets.JET_DB_USER }}
+      JET_DB_PASS: ${{ secrets.JET_DB_PASS }}
+      JET_DB_NAME: ${{ secrets.JET_DB_NAME }}
 
     steps:
     - name: Checkout
@@ -95,7 +104,16 @@ jobs:
 
           sed -i "s/{{AUTH_DB_USER}}/${AUTH_DB_USER}/g" k8s/api-gateway.yml
           sed -i "s/{{AUTH_DB_PASS}}/${AUTH_DB_PASS}/g" k8s/api-gateway.yml
-    
+          sed -i "s/{{AUTH_DB_NAME}}/${AUTH_DB_NAME}/g" k8s/api-gateway.yml
+
+          sed -i "s/{{INTEGRATIONS_DB_NAME}}/${INTEGRATIONS_DB_NAME}/g" k8s/integrations.yml
+          sed -i "s/{{INTEGRATIONS_DB_USER}}/${INTEGRATIONS_DB_USER}/g" k8s/integrations.yml
+          sed -i "s/{{INTEGRATIONS_DB_PASS}}/${INTEGRATIONS_DB_PASS}/g" k8s/integrations.yml
+
+          sed -i "s/{{JET_DB_USER}}/${JET_DB_USER}/g" k8s/jet.yml
+          sed -i "s/{{JET_DB_PASS}}/${JET_DB_PASS}/g" k8s/jet.yml
+          sed -i "s/{{JET_DB_NAME}}/${JET_DB_NAME}/g" k8s/jet.yml
+
     - name: Replace placeholders Image in YML script
       run: |
           sed -i "s|image: duretrip/api-gateway:latest|image: duretrip/api-gateway:${{ github.sha }}|" k8s/api-gateway.yml

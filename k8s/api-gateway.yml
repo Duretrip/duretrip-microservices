@@ -47,7 +47,7 @@ spec:
               value: postgres
 
             - name: DATABASE_NAME
-              value: auth_dbb
+              value: {{AUTH_DB_NAME}}
 
             - name: DATABASE_HOST
               value: "duretrip-postgres-postgresql.default.svc.cluster.local"

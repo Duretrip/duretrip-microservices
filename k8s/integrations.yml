@@ -38,22 +38,19 @@ spec:
               value: postgres
 
             - name: DATABASE_NAME
-              value: integrations_db
+              value: {{INTEGRATIONS_DB_NAME}}
 
             - name: DATABASE_HOST
-              value: postgress-svc
+              value: duretrip-postgres-postgresql.default.svc.cluster.local
 
             - name: DATABASE_PORT
               value: "5432"
 
             - name: DATABASE_USERNAME
-              value: postgres
+              value: {{INTEGRATIONS_DB_USER}}
 
             - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: password
+              value: {{INTEGRATIONS_DB_PASS}}
 
             - name: FRONTEND_DOMAIN
               value: http://dev.duretrip.com
@@ -96,7 +93,7 @@ metadata:
 spec:
   selector:
     app: integrations-app
-  type: NodePort
+  type: ClusterIP
   ports:
     - name: http
       port: 8009
