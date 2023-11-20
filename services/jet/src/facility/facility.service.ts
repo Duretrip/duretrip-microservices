@@ -6,12 +6,13 @@ import { Facility as FacilityModel } from '@prisma/client';
 
 @Injectable()
 export class FacilityService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createFacilityDto: CreateFacilityDto): Promise<FacilityModel> {
     return await this.prisma.facility.create({
       data: {
         name: createFacilityDto.name,
+        url: createFacilityDto.url,
       },
     });
   }
@@ -29,11 +30,11 @@ export class FacilityService {
   }
 
   async update(id: number, updateFacilityDto: UpdateFacilityDto) {
-
     return await this.prisma.facility.update({
       where: { id },
       data: {
         name: updateFacilityDto.name,
+        url: updateFacilityDto.url,
       },
     });
   }
