@@ -32,17 +32,6 @@ spec:
               value: postgres
             - name: DATABASE_NAME
               value: jet_db
-            - name: DATABASE_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: chost
-
-            - name: DATABASE_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: port
 
             - name: JET_DATABASE_URL  # Setting Database name from configMap
               value: "postgres://{{JET_DB_USER}}:{{JET_DB_PASS}}@duretrip-postgres-postgresql.default.svc.cluster.local:5432/{{JET_DB_NAME}}"

@@ -129,7 +129,6 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         CT_TYPE: "api"
       run: |-
-        kubectl apply -f k8s/Postgress/postgress-configMap.yml
         kubectl apply -f k8s/Postgress/postgress-secrets.yml 
         kubectl apply -f k8s/ingress/ingress-service-dev.yml
         kubectl apply -f k8s/api-gateway.yml
