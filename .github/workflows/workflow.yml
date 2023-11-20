@@ -130,6 +130,6 @@ jobs:
         kubectl apply -f k8s/ingress/ingress-service-dev.yml
         kubectl apply -f k8s/api-gateway.yml
         kubectl apply -f k8s/jet.yml
-
+        kubectl apply -f k8s/integrations.yml
     
        
