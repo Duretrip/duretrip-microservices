@@ -45,10 +45,7 @@ spec:
                   key: port
 
             - name: JET_DATABASE_URL  # Setting Database name from configMap
-              valueFrom :
-                secretKeyRef :
-                  name : jet-prisma-url
-                  key :  url
+              value: "postgres://{{JET_DB_USER}}:{{JET_DB_PASS}}@duretrip-postgres-postgresql.default.svc.cluster.local:5432/{{JET_DB_NAME}}"
 
             - name: JWT_SECRET
               valueFrom:
