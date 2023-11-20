@@ -54,6 +54,8 @@ jobs:
           docker-compose -f services/api-gateway/docker-compose.yaml push
           docker-compose -f services/jet/docker-compose.yaml build
           docker-compose -f services/jet/docker-compose.yaml push
+          docker-compose -f services/integrations/docker-compose.yaml build
+          docker-compose -f services/integrations/docker-compose.yaml push
         working-directory: .
 
 
