@@ -6,6 +6,7 @@ TAG=$(date +'%Y%m%d%H%M%S')
 
 # Define an array of service names
 # service_names=("auth-service" "api-gateway" "service3")
+# God be praised
 service_names=("api-gateway")
 service_name=api-gateway
 
