@@ -4,4 +4,8 @@ export class CreateFacilityDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  url: string;
 }

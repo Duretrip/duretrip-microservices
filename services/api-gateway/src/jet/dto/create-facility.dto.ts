@@ -6,4 +6,9 @@ export class CreateFacilityDto {
   @ApiProperty({ example: 'testing' })
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @ApiProperty({ example: 'url' })
+  @IsNotEmpty()
+  url: string;
 }
