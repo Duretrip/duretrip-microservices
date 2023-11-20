@@ -98,6 +98,57 @@ export class AppController {
             response,
           });
         }
+        // Find One Facility
+        if (message.action === 'find_one_facility') {
+          const payload = message.payload;
+
+          const response = await this.facilityService.findOne(payload);
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'facility_find_one',
+            response,
+          });
+        }
+        // Create Facility
+        if (message.action === 'create_facility') {
+          const payload = message.payload;
+
+          const response = await this.facilityService.create(payload);
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'facility_created',
+            response,
+          });
+        }
+        // Update Facility
+        if (message.action === 'update_facility') {
+          const payload = message.payload;
+
+          const response = await this.facilityService.update(
+            Number(payload.id),
+            payload.credentials,
+          );
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'facility_updated',
+            response,
+          });
+        }
+        // Delete Facility
+        if (message.action === 'delete_facility') {
+          const payload = message.payload;
+
+          const response = await this.facilityService.remove(Number(payload));
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'facility_deleted',
+            response,
+          });
+        }
         // Find All Ranges
         if (message.action === 'find_all_range') {
           const payload = message.payload;
@@ -111,6 +162,58 @@ export class AppController {
           });
         }
 
+        // Find One Range
+        if (message.action === 'find_one_range') {
+          const payload = message.payload;
+
+          const response = await this.rangeService.findOne(payload);
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'range_find_one',
+            response,
+          });
+        }
+        // Create range
+        if (message.action === 'create_range') {
+          const payload = message.payload;
+
+          const response = await this.rangeService.create(payload);
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'range_created',
+            response,
+          });
+        }
+        // Update range
+        if (message.action === 'update_range') {
+          const payload = message.payload;
+
+          const response = await this.rangeService.update(
+            Number(payload.id),
+            payload.credentials,
+          );
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'range_updated',
+            response,
+          });
+        }
+        // Delete range
+        if (message.action === 'delete_range') {
+          const payload = message.payload;
+
+          const response = await this.rangeService.remove(Number(payload));
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'range_deleted',
+            response,
+          });
+        }
+
         // Find All Capacities
         if (message.action === 'find_all_capacity') {
           const payload = message.payload;
@@ -120,6 +223,57 @@ export class AppController {
           this.rabbitMQService.publishMessage('api-gateway-queue', {
             correlationId: message?.correlationId,
             action: 'capacity_find_all',
+            response,
+          });
+        }
+        // Find One Capacity
+        if (message.action === 'find_one_capacity') {
+          const payload = message.payload;
+
+          const response = await this.capacityService.findOne(payload);
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'capacity_find_one',
+            response,
+          });
+        }
+        // Create capacity
+        if (message.action === 'create_capacity') {
+          const payload = message.payload;
+
+          const response = await this.capacityService.create(payload);
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'capacity_created',
+            response,
+          });
+        }
+        // Update capacity
+        if (message.action === 'update_capacity') {
+          const payload = message.payload;
+
+          const response = await this.capacityService.update(
+            Number(payload.id),
+            payload.credentials,
+          );
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'capacity_updated',
+            response,
+          });
+        }
+        // Delete capacity
+        if (message.action === 'delete_capacity') {
+          const payload = message.payload;
+
+          const response = await this.capacityService.remove(Number(payload));
+
+          this.rabbitMQService.publishMessage('api-gateway-queue', {
+            correlationId: message?.correlationId,
+            action: 'capacity_deleted',
             response,
           });
         }

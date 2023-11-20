@@ -29,6 +29,7 @@ export class FacilityService {
   }
 
   async update(id: number, updateFacilityDto: UpdateFacilityDto) {
+
     return await this.prisma.facility.update({
       where: { id },
       data: {
