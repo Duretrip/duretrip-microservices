@@ -2,14 +2,14 @@ version: '3.7'
 
 services:
   main:
-    container_name: auth
-    build:
-      context: .
-      dockerfile: Dockerfile
-    # image: duretrip/api-gateway:131dca173117cd7bd9ad35b8728d4e60fd699a26
+    container_name: auth-test
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: duretrip/api-gateway:086a8ddb7d6c2ccc5fbba13f3ce39cba311467a1
     restart: always
     ports:
-      - 8006:8006
+      - 8010:8010
     env_file:
       - .env.docker
     # volumes:
