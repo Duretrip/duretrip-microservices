@@ -19,7 +19,7 @@ spec:
           image: duretrip/integrations:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8006
+            - containerPort: 8009
           resources:
             requests:
               memory: "500Mi"
