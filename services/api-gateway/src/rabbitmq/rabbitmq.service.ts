@@ -64,7 +64,7 @@ export class RabbitMQService {
   }
 
   public async waitForResponseWithTimeout(correlationId: string): Promise<any> {
-    const RESPONSE_TIMEOUT = 5000; // Timeout in milliseconds (adjust as needed)
+    const RESPONSE_TIMEOUT = 15000; // Timeout in milliseconds (adjust as needed)
 
     return Promise.race([
       this.waitForResponse(correlationId),
