@@ -16,7 +16,6 @@ env:
 jobs:
 
   create-image-and-push-to-dockerhub:
-    needs: [migrate_database_permission]
 
     name: Create Image and Push to Dockerhub
     runs-on: ubuntu-latest

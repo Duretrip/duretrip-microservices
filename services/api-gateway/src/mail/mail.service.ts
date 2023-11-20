@@ -6,6 +6,7 @@ import { AllConfigType } from 'src/config/config.type';
 import { MaybeType } from '../utils/types/maybe.type';
 import { MailerService } from 'src/mailer/mailer.service';
 import path from 'path';
+import fs from 'node:fs/promises';
 
 @Injectable()
 export class MailService {
@@ -23,7 +24,7 @@ export class MailService {
     let text4: MaybeType<string>;
 
     if (i18n) {
-      [emailConfirmTitle, text1, text2, text3] = await Promise.all([
+      [emailConfirmTitle, text1, text2, text3, text4] = await Promise.all([
         i18n.t('common.confirmEmail'),
         i18n.t('confirm-email.text1'),
         i18n.t('confirm-email.text2'),
@@ -32,21 +33,25 @@ export class MailService {
       ]);
     }
 
+    const templatePath = path.join(
+      this.configService.getOrThrow('app.workingDirectory', {
+        infer: true,
+      }),
+      'src',
+      'mail',
+      'mail-templates',
+      'activation.hbs',
+    );
+
+    const templateContent = await fs.readFile(templatePath, 'utf-8');
+
     await this.mailerService.sendMail({
       to: mailData.to,
       subject: emailConfirmTitle,
       text: `${this.configService.get('app.frontendDomain', {
         infer: true,
       })}/confirm-email?hash=${mailData.data.hash} ${emailConfirmTitle}`,
-      templatePath: path.join(
-        this.configService.getOrThrow('app.workingDirectory', {
-          infer: true,
-        }),
-        'src',
-        'mail',
-        'mail-templates',
-        'activation.hbs',
-      ),
+      templateContent,
       context: {
         title: emailConfirmTitle,
         url: `${this.configService.get('app.frontendDomain', {
@@ -80,21 +85,25 @@ export class MailService {
       ]);
     }
 
+    const templatePath = path.join(
+      this.configService.getOrThrow('app.workingDirectory', {
+        infer: true,
+      }),
+      'src',
+      'mail',
+      'mail-templates',
+      'reset-password.hbs',
+    );
+
+    const templateContent = await fs.readFile(templatePath, 'utf-8');
+
     await this.mailerService.sendMail({
       to: mailData.to,
       subject: resetPasswordTitle,
       text: `${this.configService.get('app.frontendDomain', {
         infer: true,
       })}/password-change?hash=${mailData.data.hash} ${resetPasswordTitle}`,
-      templatePath: path.join(
-        this.configService.getOrThrow('app.workingDirectory', {
-          infer: true,
-        }),
-        'src',
-        'mail',
-        'mail-templates',
-        'reset-password.hbs',
-      ),
+      templateContent,
       context: {
         title: resetPasswordTitle,
         url: `${this.configService.get('app.frontendDomain', {

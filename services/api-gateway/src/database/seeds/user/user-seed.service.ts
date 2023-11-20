@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from 'src/roles/entities/role.entity';
 import { RoleEnum } from 'src/roles/roles.enum';
+import { RoleService } from 'src/roles/roles.service';
 import { StatusEnum } from 'src/statuses/statuses.enum';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -10,61 +12,42 @@ export class UserSeedService {
   constructor(
     @InjectRepository(User)
     private repository: Repository<User>,
-  ) {}
+    private roleService: RoleService
+  ) { }
 
   async run() {
-    const countAdmin = await this.repository.count({
-      where: {
+    const findAdmin = await this.roleService.findByName(RoleEnum.super_admin);
+
+    await this.repository.save(
+      this.repository.create({
+        firstName: 'Super',
+        lastName: 'Admin',
+        email: 'admin@duretrip.com',
+        password: 'P@ssWord_123',
         role: {
-          id: RoleEnum.admin,
+          id: findAdmin?.id,
         },
-      },
-    });
+        status: {
+          id: StatusEnum.active,
+        },
+      }),
+    );
 
-    if (!countAdmin) {
-      await this.repository.save(
-        this.repository.create({
-          firstName: 'Super',
-          lastName: 'Admin',
-          email: 'admin@example.com',
-          password: 'secret',
-          role: {
-            id: RoleEnum.admin,
-            name: 'Admin',
-          },
-          status: {
-            id: StatusEnum.active,
-            name: 'Active',
-          },
-        }),
-      );
-    }
+    const findUser = await this.roleService.findByName(RoleEnum.user);
 
-    const countUser = await this.repository.count({
-      where: {
+    await this.repository.save(
+      this.repository.create({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'secret',
         role: {
-          id: RoleEnum.user,
+          id: findUser?.id,
         },
-      },
-    });
-
-    if (!countUser) {
-      await this.repository.save(
-        this.repository.create({
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@example.com',
-          password: 'secret',
-          role: {
-            id: RoleEnum.user,
-            name: 'Admin',
-          },
-          status: {
-            id: StatusEnum.active,
-            name: 'Active',
-          },
-        }),
-      );
-    }
+        status: {
+          id: StatusEnum.active,
+        },
+      }),
+    );
   }
 }

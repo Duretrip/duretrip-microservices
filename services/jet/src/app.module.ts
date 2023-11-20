@@ -7,6 +7,7 @@ import { JetsModule } from './jets/jets.module';
 import { CapacityModule } from './capacity/capacity.module';
 import { RangeModule } from './range/range.module';
 import { FacilityModule } from './facility/facility.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { FacilityModule } from './facility/facility.module';
     FacilityModule,
     RangeModule,
     CapacityModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [RabbitMQService, AppService],

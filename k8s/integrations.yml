@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: integrations-app
+  labels:
+    app: integrations-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: integrations-app
+  template:
+    metadata:
+      labels:
+        app: integrations-app
+    spec:
+      containers:
+        - name: integrations-app
+          image: duretrip/integrations:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8006
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "0.2"
+            limits:
+              memory: "1Gi"
+              cpu: "0.5"
+          env:
+            - name: NODE_OPTIONS
+              value: "--max-old-space-size=4096"
+
+            - name: NODE_ENV
+              value: production
+
+            - name: DATABASE_TYPE
+              value: postgres
+
+            - name: DATABASE_NAME
+              value: integrations_db
+
+            - name: DATABASE_HOST
+              value: postgress-svc
+
+            - name: DATABASE_PORT
+              value: "5432"
+
+            - name: DATABASE_USERNAME
+              value: postgres
+
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: password
+
+            - name: FRONTEND_DOMAIN
+              value: http://dev.duretrip.com
+
+            - name: BACKEND_DOMAIN
+              value: http://dev-api.duretrip.com
+
+            - name: APP_NAME
+              value: Duretrip
+
+            - name: API_PREFIX
+              value: ""
+
+            - name: APP_FALLBACK_LANGUAGE
+              value: en
+
+            - name: APP_HEADER_LANGUAGE
+              value: x-custom-lang
+
+            - name: RABBITMQ_CONECTION_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_URL
+
+            - name: RABBITMQ_API_GATEWAY_QUEUE
+              value: api-gateway-queue
+
+            - name: RABBITMQ_INTEGRATIONS_QUEUE
+              value: integration_queue
+
+            - name: APP_PORT
+              value: "8009"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: integrations
+spec:
+  selector:
+    app: integrations-app
+  type: NodePort
+  ports:
+    - name: http
+      port: 8009
+      targetPort: 8009
+      protocol: TCP

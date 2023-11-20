@@ -22,3 +22,11 @@ GRANT ALL PRIVILEGES ON DATABASE hotel_db TO "durehotel";
 ALTER USER "durehotel" WITH CREATEDB;
 GRANT ALL ON SCHEMA public TO durehotel;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durehotel;
+
+-- Create hotel user and grant privileges
+CREATE DATABASE integrations_db;
+CREATE USER "dureintegrations" WITH ENCRYPTED PASSWORD '${PASSWORDE}';
+GRANT ALL PRIVILEGES ON DATABASE integrations_db TO "integrations_db";
+ALTER USER "dureintegrations" WITH CREATEDB;
+GRANT ALL ON SCHEMA public TO durehotel;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durehotel;

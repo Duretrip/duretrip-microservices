@@ -16,15 +16,17 @@ export class PermissionSeedService {
 
     if (!countPermissions) {
       const permissions = [
-        { name: 'VIEW_JETS' },
-        { name: 'BOOK_JETS' },
-        { name: 'VIEW_HOTELS' },
-        { name: 'BOOK_HOTELS' },
-        { name: 'VIEW_MIRACLES' },
-        { name: 'LOVE_GOD' },
-        { name: 'ENJOY_GRACE' },
-        { name: 'LIVE_LONG' },
-        // Add more permissions as needed
+        { name: 'CREATE_ROLE' },
+        { name: 'CREATE_USER' },
+        { name: 'ADD_ROLE_TO_USER' },
+        { name: 'VIEW_PERMISSIONS' },
+        { name: 'VIEW_ROLE' },
+        { name: 'ADD_PERMISSIONS_TO_ROLE' },
+        { name: 'CREATE_JET' },
+        { name: 'UPDATE_JET' },
+        { name: 'DELETE_JET' },
+        { name: 'GET_ALL_JETS' },
+        { name: 'GET_ONE_JET' }
       ];
 
       await this.repository.save(this.repository.create(permissions));

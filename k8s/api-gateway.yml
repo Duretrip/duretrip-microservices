@@ -68,7 +68,7 @@ spec:
                   key: username
 
             - name: DATABASE_USERNAME
-              value: dureauth
+              value: postgres
 
             - name: DATABASE_PASSWORD
               valueFrom:
@@ -101,7 +101,7 @@ spec:
               value: "info@duretrip.com"
 
             - name: MAIL_DEFAULT_NAME
-              value: "Api"
+              value: "DureTrip"
 
             - name: MAIL_CLIENT_PORT
               value: "80"
@@ -200,7 +200,7 @@ spec:
               value: secret
 
             - name: AUTH_JWT_TOKEN_EXPIRES_IN
-              value: '15m'
+              value: '10080m'
 
             - name: AUTH_REFRESH_SECRET
               value: secret_for_refresh

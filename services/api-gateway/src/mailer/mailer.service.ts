@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import fs from 'node:fs/promises';
 import { ConfigService } from '@nestjs/config';
 import nodemailer from 'nodemailer';
 import Handlebars from 'handlebars';
@@ -23,17 +22,16 @@ export class MailerService {
   }
 
   async sendMail({
-    templatePath,
+    templateContent,
     context,
     ...mailOptions
   }: nodemailer.SendMailOptions & {
-    templatePath: string;
+    templateContent: string;
     context: Record<string, unknown>;
   }): Promise<void> {
     let html: string | undefined;
-    if (templatePath) {
-      const template = await fs.readFile(templatePath, 'utf-8');
-      html = Handlebars.compile(template, {
+    if (templateContent) {
+      html = Handlebars.compile(templateContent, {
         strict: true,
       })(context);
     }

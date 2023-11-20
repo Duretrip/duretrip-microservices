@@ -5,10 +5,10 @@ import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(private readonly reflector: Reflector) { }
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredPermission = this.reflector.get<string>('permissions', context.getHandler());
+    const requiredPermission = this.reflector.get<string>('permission', context.getHandler());
 
     if (!requiredPermission) {
       return true; // No permission required

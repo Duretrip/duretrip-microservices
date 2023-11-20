@@ -25,10 +25,11 @@ import { User } from './entities/user.entity';
 import { InfinityPaginationResultType } from '../utils/types/infinity-pagination-result.type';
 import { NullableType } from '../utils/types/nullable.type';
 import { QueryUserDto } from './dto/query-user.dto';
+import {Permissions} from 'src/permissions/decorators/permission.decorator'
+import { PermissionGuard } from 'src/permissions/guards/permission.guard';
 
 @ApiBearerAuth()
-@Roles(RoleEnum.admin)
-@UseGuards(AuthGuard('jwt'), RolesGuard)
+@UseGuards(AuthGuard('jwt'), PermissionGuard)
 @ApiTags('Users')
 @Controller({
   path: 'users',
@@ -36,19 +37,17 @@ import { QueryUserDto } from './dto/query-user.dto';
 })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  
 
-  @SerializeOptions({
-    groups: ['admin'],
-  })
+  @Permissions('CREATE_USER')
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createProfileDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createProfileDto);
   }
 
-  @SerializeOptions({
-    groups: ['admin'],
-  })
+
+  @Permissions('CREATE_USER')
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll(
@@ -73,18 +72,16 @@ export class UsersController {
     );
   }
 
-  @SerializeOptions({
-    groups: ['admin'],
-  })
+
+  @Permissions('CREATE_USER')
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id') id: string): Promise<NullableType<User>> {
     return this.usersService.findOne({ id: +id });
   }
 
-  @SerializeOptions({
-    groups: ['admin'],
-  })
+
+  @Permissions('CREATE_USER')
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   update(
@@ -95,6 +92,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Permissions('CREATE_USER')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: number): Promise<void> {
     return this.usersService.softDelete(id);
