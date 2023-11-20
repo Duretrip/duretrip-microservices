@@ -94,7 +94,7 @@ import { AirlinesController } from './airlines/airlines.controller';
     MailerModule,
     HomeModule,
     PermissionsModule,
-    RolesModule
+    RolesModule,
   ],
   providers: [RabbitMQService],
   controllers: [JetController, AirlinesController],

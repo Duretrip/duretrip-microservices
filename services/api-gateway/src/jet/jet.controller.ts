@@ -16,7 +16,7 @@ import { PermissionGuard } from 'src/permissions/guards/permission.guard';
 import { CreateJetDto } from './dto/create-jet.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateJetDto } from './dto/update-jet.dto';
-import {Permissions} from 'src/permissions/decorators/permission.decorator'
+import { Permissions } from 'src/permissions/decorators/permission.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
 function generateUniqueId() {
