@@ -56,12 +56,12 @@ metadata:
   name: rabbitmq-config
 data:
   # Define your environment variables here, e.g.:
-  RABBITMQ_DEFAULT_USER: guest
-  RABBITMQ_DEFAULT_PASS: guest
-  RABBITMQ_USER: guest
-  RABBITMQ_PASS: guest
+  RABBITMQ_DEFAULT_USER: ${USERNAME}
+  RABBITMQ_DEFAULT_PASS: ${PASSWORDE}
+  RABBITMQ_USER: ${USERNAME}
+  RABBITMQ_PASS: ${PASSWORDE}
   RABBITMQ_HOST: rabbitmq-service:5672
-  RABBITMQ_URL: amqp://guest:guest@rabbitmq-service:5672
+  RABBITMQ_URL: amqp://${USERNAME}:${PASSWORDE}@rabbitmq-service:5672
   RABBITMQ_AUTH_QUEUE: auth-queue
   RABBITMQ_PAYMENT_QUEUE: payment-queue
   RABBITMQ_HOTEL_QUEUE: hotel-queue
