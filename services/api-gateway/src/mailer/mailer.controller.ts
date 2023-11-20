@@ -12,8 +12,6 @@ export class MailerController {
         await this.rabbitMQService.connectToRabbitMQ();
         if (!process.env.RABBITMQ_MAILER_QUEUE) return
         try {
-            console.log(process.env.RABBITMQ_MAILER_QUEUE);
-            
             await this.rabbitMQService.consumeMessages(process.env.RABBITMQ_MAILER_QUEUE, async (message) => {
                 // Find All Jets
                 if (message.action === 'send_mail') {
