@@ -35,30 +35,6 @@ export class RabbitMQService {
     });
   }
 
-  // async waitForResponse(correlationId: string): Promise<any> {
-  //   return new Promise(async (resolve) => {
-  //     let consumerTag; // Declare consumerTag outside the callback
-
-  //     // Create a new consumer for each request
-  //     // eslint-disable-next-line prefer-const
-  //     ({ consumerTag } = await this.channel.consume(
-  //       String(process.env.RABBITMQ_API_GATEWAY_QUEUE),
-  //       (msg) => {
-  //         const message = JSON.parse(msg!.content.toString());
-  //         if (message.correlationId === correlationId) {
-  //           resolve(message);
-
-  //           // Acknowledge the message
-  //           this.channel.ack(msg!);
-
-  //           // Cancel the consumer after resolving the message
-  //           this.channel.cancel(consumerTag);
-  //         }
-  //       },
-  //     ));
-  //   });
-  // }
-
   async waitForResponse(correlationId: string): Promise<any> {
     return new Promise(async (resolve) => {
       let consumerTag;
@@ -74,9 +50,6 @@ export class RabbitMQService {
   
               // Acknowledge the message
               this.channel.ack(msg);
-  
-              // Cancel the consumer after resolving the message
-              this.channel.cancel(consumerTag);
             }
           }
         },
@@ -84,6 +57,9 @@ export class RabbitMQService {
   
       // Set the consumerTag variable
       consumerTag = tag;
+  
+      // Cancel the consumer outside of the callback
+      this.channel.cancel(consumerTag);
     });
   }
 
