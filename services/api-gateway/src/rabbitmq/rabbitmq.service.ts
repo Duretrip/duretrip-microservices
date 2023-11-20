@@ -35,38 +35,61 @@ export class RabbitMQService {
     });
   }
 
+  // async waitForResponse(correlationId: string): Promise<any> {
+  //   return new Promise(async (resolve) => {
+  //     let consumerTag; // Declare consumerTag outside the callback
+
+  //     // Create a new consumer for each request
+  //     // eslint-disable-next-line prefer-const
+  //     ({ consumerTag } = await this.channel.consume(
+  //       String(process.env.RABBITMQ_API_GATEWAY_QUEUE),
+  //       (msg) => {
+  //         const message = JSON.parse(msg!.content.toString());
+  //         if (message.correlationId === correlationId) {
+  //           resolve(message);
+
+  //           // Acknowledge the message
+  //           this.channel.ack(msg!);
+
+  //           // Cancel the consumer after resolving the message
+  //           this.channel.cancel(consumerTag);
+  //         }
+  //       },
+  //     ));
+  //   });
+  // }
+
   async waitForResponse(correlationId: string): Promise<any> {
     return new Promise(async (resolve) => {
-      let consumerTag; // Declare consumerTag outside the callback
-
       // Create a new consumer for each request
-      // eslint-disable-next-line prefer-const
-      ({ consumerTag } = await this.channel.consume(
-        String(process.env.RABBITMQ_API_GATEWAY_QUEUE),
+      const { consumerTag } = await this.channel.consume(
+        'api-gateway-queue',
         (msg) => {
-          const message = JSON.parse(msg!.content.toString());
-          if (message.correlationId === correlationId) {
-            resolve(message);
+          if (msg) {
+            const message = JSON.parse(msg.content.toString());
+            if (message.correlationId === correlationId) {
+              resolve(message);
 
-            // Acknowledge the message
-            this.channel.ack(msg!);
+              // Acknowledge the message
+              this.channel.ack(msg);
 
-            // Cancel the consumer after resolving the message
-            this.channel.cancel(consumerTag);
+              // Cancel the consumer after resolving the message
+              this.channel.cancel(consumerTag);
+            }
           }
         },
-      ));
+      );
     });
   }
 
   public async waitForResponseWithTimeout(correlationId: string): Promise<any> {
-    const RESPONSE_TIMEOUT = 10000; // Timeout in milliseconds (adjust as needed)
+    const RESPONSE_TIMEOUT = 5000; // Timeout in milliseconds (adjust as needed)
 
     return Promise.race([
       this.waitForResponse(correlationId),
       new Promise((_, reject) =>
         setTimeout(
-          () => reject(new Error('Timeout waiting for response')),
+          () => reject('Timeout waiting for response'),
           RESPONSE_TIMEOUT,
         ),
       ),

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { UpdateFacilityDto } from './dto/update-facility.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,12 +9,25 @@ export class FacilityService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createFacilityDto: CreateFacilityDto): Promise<FacilityModel> {
-    return await this.prisma.facility.create({
-      data: {
-        name: createFacilityDto.name,
-        url: createFacilityDto.url,
-      },
-    });
+    try {
+      const jet = await this.prisma.facility.findUnique({
+        where: {
+          name: createFacilityDto.name,
+        },
+      });
+
+      if (jet) {
+        throw new ConflictException('Name already exist!');
+      }
+      return await this.prisma.facility.create({
+        data: {
+          name: createFacilityDto.name,
+          url: createFacilityDto.url,
+        },
+      });
+    } catch (error) {
+      return error.response;
+    }
   }
 
   async findAll() {
