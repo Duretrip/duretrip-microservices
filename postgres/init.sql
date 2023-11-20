@@ -5,6 +5,8 @@ GRANT ALL PRIVILEGES ON DATABASE auth_db TO "dureauth";
 ALTER USER "dureauth" WITH CREATEDB;
 GRANT ALL ON SCHEMA public TO dureauth;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO dureauth;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dureauth;
+GRANT ALL PRIVILEGES ON SCHEMA public TO dureauth;
 -- GRANT USAGE ON SCHEMA public TO dureauth;
 
 -- Create users and grant privileges
@@ -14,6 +16,8 @@ GRANT ALL PRIVILEGES ON DATABASE jet_db TO "durejet";
 ALTER USER "durejet" WITH CREATEDB;
 GRANT ALL ON SCHEMA public TO durejet;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO durejet;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO durejet;
+GRANT ALL PRIVILEGES ON SCHEMA public TO durejet;
 
 -- Create hotel user and grant privileges
 CREATE DATABASE hotel_db;
