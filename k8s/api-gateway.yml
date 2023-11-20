@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway-new
+  name: api-gateway-app
   labels:
-    app: api-gateway-new
+    app: api-gateway-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-new
+      app: api-gateway-app
   template:
     metadata:
       labels:
-        app: api-gateway-new
+        app: api-gateway-app
     spec:
       containers:
-        - name: api-gateway-new
+        - name: api-gateway-app
           image: duretrip/api-gateway:latest
           imagePullPolicy: Always
           ports:
@@ -50,7 +50,7 @@ spec:
               value: {{AUTH_DB_NAME}}
 
             - name: DATABASE_HOST
-              value: "duretrip-postgres-postgresql.default.svc.cluster.local"
+              value: {{AUTH_DB_HOST}}
 
             - name: DATABASE_USERNAME
               value: {{AUTH_DB_USER}}
@@ -60,12 +60,6 @@ spec:
 
             - name: DATABASE_PORT
               value: "5432"
-
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: auth-prisma-url
-                  key: url
 
             - name: JWT_SECRET
               valueFrom:
@@ -215,7 +209,7 @@ metadata:
   name: api-gateway-svc
 spec:
   selector:
-    app: api-gateway-new
+    app: api-gateway-app
   type: NodePort
   ports:
     - name: http
